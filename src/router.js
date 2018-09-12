@@ -1,12 +1,30 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+<<<<<<< HEAD
 import Index from "./routes/index";
+=======
+import store from './store.js';
+import login from './components/app/login.vue';
+import reg from './components/app/reg.vue';
+import info from './components/app/info.vue';
+
+>>>>>>> e73d6cfe77feac224b439534611893821e1caee4
 
 Vue.use(Router);
 
 export default new Router({
     routes: [
+        {
+            path: '/',
+            name: 'login',
+            component: login
+        },
+        {
+            path: '/reg',
+            name: 'reg',
+            component: reg
+        },
         {
             path: "/index",
             component: Index,
