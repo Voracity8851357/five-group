@@ -50,13 +50,18 @@
         height: 100%;
         background: #efefef;
     }
-    .header{
+
+    .header {
         background: #fff;
     }
+
     .aside-menu {
         height: 100%;
     }
-    .content-container{
+
+    .content-container {
         background: #fff content-box;
+        padding: 0;
+        margin: 20px;
     }
 </style>
