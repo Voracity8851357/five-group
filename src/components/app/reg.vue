@@ -7,10 +7,10 @@
                         <el-input v-model="userName" style="width: 300px"></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
-                        <el-input style="width: 300px"></el-input>
+                        <el-input style="width: 300px" type="password"></el-input>
                     </el-form-item>
                     <el-form-item label="确认密码">
-                        <el-input style="width: 300px"></el-input>
+                        <el-input style="width: 300px" type="password"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号">
                         <el-input style="width: 300px"></el-input>
