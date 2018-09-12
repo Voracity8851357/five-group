@@ -1,20 +1,45 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import store from './store.js';
-
+import Index from "./routes/index";
 
 Vue.use(Router);
 
 export default new Router({
     routes: [
-        // {
-        //     path: '/about',
-        //     name: 'about',
-        //     // route level code-splitting
-        //     // this generates a separate chunk (about.[hash].js) for this route
-        //     // which is lazy-loaded when the route is visited.
-        //     component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-        // }
+        {
+            path: "/index",
+            component: Index,
+            children: [
+                {
+                    path: '/index/userAccount',
+                    // component: UserAccount,
+                },
+                {
+                    path: '/index/shopName',
+                    // component: ShopName,
+                },
+                {
+                    path: '/index/applyForShop',
+                    // component: ApplyForShop,
+                },
+                {
+                    path: '/index/goodsName',
+                    // component: GoodsName,
+                },
+                {
+                    path: '/index/serviceName',
+                    // component: ServiceName,
+                },
+                {
+                    path: '/index/petOwners',
+                    // component: PetOwners,
+                },
+                {
+                    path: '/index/orderManagement',
+                    // component: OrderManagement,
+                },
+            ]
+        }
     ]
 })
