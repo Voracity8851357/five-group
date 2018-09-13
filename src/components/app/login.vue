@@ -30,21 +30,6 @@
                 password: '',
             }
         },
-        // watch: {
-        //     isLogin: function (val, oldVal) {
-        //         if (val) {
-        //             this.$alert('登陆成功！', '注册', {
-        //                 confirmButtonText: '确定',
-        //                 callback: this.$router.push('index')
-        //             });
-        //         }
-        //     },
-        //     err: function (val, oldVal) {
-        //         this.$alert('登陆失败！', '登录', {
-        //             confirmButtonText: '确定',
-        //         });
-        //     }
-        // },
         computed: {
             ...mapState('app', ['isLogin', 'userType', 'userStatus'])
         },

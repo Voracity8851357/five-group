@@ -1,8 +1,80 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="padding: 20px">
         <el-tab-pane label="用户管理" name="first">
-            <el-button type="primary" icon="el-icon-edit">添加</el-button>
-            <el-button type="primary" icon="el-icon-search">搜索</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">添加</el-button>
+            <!--搜索-->
+            <div style="margin-top: 15px;">
+                <el-input placeholder="请输入内容" v-model="search" class="input-with-select" style="width: 500px">
+                    <el-select v-model="searchSelect" slot="prepend" placeholder="请选择" style="width: 100px">
+                        <el-option label="账号" value="userAcount"></el-option>
+                        <el-option label="手机" value="userPhone"></el-option>
+                        <el-option label="邮箱" value="userMail"></el-option>
+                    </el-select>
+                    <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+                </el-input>
+            </div>
+
+            <!--添加窗口-->
+            <el-dialog title="添加用户" :visible.sync="dialogFormVisible">
+                <el-form :model="form">
+                    <el-form-item label="姓名" label-width="120px">
+                        <el-input v-model="form.userName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="账号" label-width="120px">
+                        <el-input v-model="form.userAcount" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" label-width="120px">
+                        <el-input v-model="form.userPwd" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机" label-width="120px">
+                        <el-input v-model="form.userPhone" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱" label-width="120px">
+                        <el-input v-model="form.userMail" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色" label-width="120px">
+                        <el-select v-model="form.userType" placeholder="请选择角色" value="">
+                            <el-option label="平台管理员" value="0"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="postUser">确 定</el-button>
+                </div>
+            </el-dialog>
+
+            <!--修改窗口-->
+            <el-dialog title="修改用户" :visible.sync="dialogAmendVisible">
+                <el-form :model="amend">
+                    <el-form-item label="姓名" label-width="120px">
+                        <el-input v-model="amend.userName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="账号" label-width="120px">
+                        <el-input v-model="amend.userAcount" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" label-width="120px">
+                        <el-input v-model="amend.userPwd" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机" label-width="120px">
+                        <el-input v-model="amend.userPhone" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱" label-width="120px">
+                        <el-input v-model="amend.userMail" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色" label-width="120px">
+                        <el-select v-model="amend.userType" placeholder="请选择角色" value="">
+                            <el-option label="平台管理员" value="0"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogAmendVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="putUser">确 定</el-button>
+                </div>
+            </el-dialog>
+
+            <!--表格-->
             <el-table
                     :data="list"
                     border
@@ -76,7 +148,30 @@
         name: "userAccount",
         data() {
             return {
-                activeName: 'first'
+                search: '',
+                searchSelect: '',
+                activeName: 'first',
+                dialogFormVisible: false,
+                dialogAmendVisible: false,
+                form: {
+                    userName: '',
+                    userAcount: '',
+                    userPwd: '',
+                    userPhone: '',
+                    userMail: '',
+                    userType: '0',
+                    userStatus: '1'
+                },
+                amend: {
+                    userName: '',
+                    userAcount: '',
+                    userPwd: '',
+                    userPhone: '',
+                    userMail: '',
+                    userType: '0',
+                    userStatus: '1',
+                    _id: ''
+                }
             };
         },
         mounted: function () {
@@ -86,16 +181,62 @@
             ...mapState('userAccount', ['list'])
         },
         methods: {
+            async searchBtn() {
+                console.log(this.search, this.searchSelect);
+                await this.async_searchUsers({
+                    search: this.search,
+                    searchSelect: this.searchSelect
+                })
+            },
+
+            async putUser() {
+                await this.async_putUser({
+                    userName: this.amend.userName,
+                    userAcount: this.amend.userAcount,
+                    userPwd: this.amend.userPwd,
+                    userPhone: this.amend.userPhone,
+                    userMail: this.amend.userMail,
+                    userType: this.amend.userType,
+                    userStatus: this.amend.userStatus,
+                    _id: this.amend._id
+                });
+                this.dialogAmendVisible = false;
+                this.async_getUsers()
+            },
+            async postUser() {
+                await this.async_postUser({
+                    userName: this.form.userName,
+                    userAcount: this.form.userAcount,
+                    userPwd: this.form.userPwd,
+                    userPhone: this.form.userPhone,
+                    userMail: this.form.userMail,
+                    userType: '0',
+                    userStatus: '1'
+                });
+                this.dialogFormVisible = false;
+                this.async_getUsers()
+            },
             handleClick(tab, event) {
                 console.log(tab, event);
             },
             handleEdit(index, row) {
-                console.log(index, row)
+                this.amend.userName = row.userName;
+                this.amend.userAcount = row.userAcount;
+                this.amend.userPwd = row.userPwd;
+                this.amend.userPhone = row.userPhone;
+                this.amend.userMail = row.userMail;
+                this.amend.userType = row.userType;
+                this.amend.userStatus = row.userStatus;
+                this.amend._id = row._id;
+                this.dialogAmendVisible = true;
             },
-            handleDelete(index, row) {
-                console.log(index, row)
+            async handleDelete(index, row) {
+                await this.async_DeleteUsers({
+                    _id: row._id
+                });
+                this.async_getUsers();
             },
-            ...mapActions('userAccount', ['async_getUsers'])
+            ...mapActions('userAccount', ['async_getUsers', 'async_postUser', 'async_DeleteUsers', 'async_putUser', 'async_searchUsers'])
         }
     }
 </script>

@@ -46,15 +46,14 @@ export default {
             return 'success'
         },
         //注册 添加账号至数据库
-        async async_postUser(context, {userAcount, userPwd, userPhone, userMail, userName} = {}) {
-            console.log(userAcount, userPwd, userPhone, userMail, userName);
+        async async_postUser(context, {userAcount, userPwd, userPhone, userMail, userName, userType, userStatus} = {}) {
             const data = await fetch('/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userAcount, userPwd, userPhone, userMail, userName
+                    userAcount, userPwd, userPhone, userMail, userName, userType, userStatus
                 })
             }).then(response => {
                 return response.json()
