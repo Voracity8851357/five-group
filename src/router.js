@@ -5,6 +5,7 @@ import Index from "./routes/index";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
+import UserAccount from './components/userAccount/userAccount';     
 
 Vue.use(Router);
 
@@ -31,7 +32,7 @@ export default new Router({
             children: [
                 {
                     path: '/index/userAccount',
-                    // component: UserAccount,
+                    component: UserAccount,
                 },
                 {
                     path: '/index/shopName',
