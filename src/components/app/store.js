@@ -1,21 +1,35 @@
 export default {
+    namespaced: true,
     state: {
-        userAcount: ''
+        isRepeat: '',
+        userAcount: '',
+        isLogin: false,
+        userType: '',
+        userStatus: '',
     },
     mutations: {
-        getUserAcount(state, payload) {
+        setState(state, payload) {
             Object.assign(state, payload);
         }
     },
     actions: {
         //登录
-        async async_login(context, {userAcount, password}, fn) {
+        async async_login(context, {userAcount, password}) {
             const data = await fetch(`/users/login?userAcount=${userAcount}&password=${password}`)
                 .then(response => {
                     return response.json()
                 });
-            console.log(context,userAcount,password,fn);
-            // fn(data);
+            if (data.length > 0) {
+                context.commit('setState', {
+                    isLogin: true,
+                    userType: data[0].userType,
+                    userStatus: data[0].userStatus
+                });
+            } else {
+                context.commit('setState', {
+                    isLogin: false
+                });
+            }
             return 'success'
         },
         //验证账号重复
@@ -24,8 +38,11 @@ export default {
             const data = await fetch(`/users?userName=${userName}`).then(response => {
                 return response.json()
             });
-            console.log(data);
-            context.commit('getUserAcount', data);
+            if (data.length > 0) {
+                context.commit('setState', {isRepeat: true});
+            } else {
+                context.commit('setState', {isRepeat: false});
+            }
             return 'success'
         },
         //注册 添加账号至数据库

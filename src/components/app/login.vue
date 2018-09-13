@@ -27,31 +27,66 @@
         data() {
             return {
                 userAcount: '',
-                password: ''
+                password: '',
             }
+        },
+        // watch: {
+        //     isLogin: function (val, oldVal) {
+        //         if (val) {
+        //             this.$alert('登陆成功！', '注册', {
+        //                 confirmButtonText: '确定',
+        //                 callback: this.$router.push('index')
+        //             });
+        //         }
+        //     },
+        //     err: function (val, oldVal) {
+        //         this.$alert('登陆失败！', '登录', {
+        //             confirmButtonText: '确定',
+        //         });
+        //     }
+        // },
+        computed: {
+            ...mapState('app', ['isLogin', 'userType', 'userStatus'])
         },
         methods: {
             reg() {
                 this.$router.push('reg')
             },
-            login() {
-                this.async_login({
+            async login() {
+                await this.async_login({
                     userAcount: this.userAcount,
                     password: this.password
-                }, (data) => {
-                    if (data.length > 0) {
-                        this.$alert('注册成功！', '注册', {
+                });
+                console.log(this.isLogin, this.userType, this.userStatus);
+                if (this.isLogin) {
+                    if (this.userType === '0') {
+                        this.$alert('登陆成功！', '登录', {
                             confirmButtonText: '确定',
                             callback: this.$router.push('index')
                         });
+                    } else if (this.userType === '1') {
+                        if (this.userStatus === '0') {
+                            this.$alert('账号审核中！', '登录', {
+                                confirmButtonText: '确定',
+                            });
+                        } else if (this.userStatus === '1') {
+                            this.$alert('登陆成功！', '登录', {
+                                confirmButtonText: '确定',
+                                callback: this.$router.push('index')
+                            });
+                        } else if (this.userStatus === '2') {
+                            this.$alert('审核失败！请重新注册', '登录', {
+                                confirmButtonText: '确定',
+                            });
+                        }
                     } else {
                         this.$alert('登陆失败！', '登录', {
                             confirmButtonText: '确定',
                         });
                     }
-                });
+                }
             },
-            ...mapActions(['async_login'])
+            ...mapActions('app', ['async_login']),
         }
     }
 </script>

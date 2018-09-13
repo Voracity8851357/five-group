@@ -37,12 +37,16 @@
     export default {
         name: "reg",
         data() {
-            let checkUserAcount = (rule, value, callback) => {
+            let checkUserAcount = async (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入账号'));
                 } else {
-                    this.async_getUserAcount(this.ruleForm2.UserAcount);
-                    callback();
+                    await this.async_getUserAcount(this.ruleForm2.UserAcount);
+                    if (this.isRepeat) {
+                        callback(new Error('账号已存在！请重新输入'));
+                    }else {
+                        callback();
+                    }
                 }
             };
             let validatePass = (rule, value, callback) => {
@@ -87,7 +91,7 @@
             };
         },
         computed: {
-            ...mapState(['userAcount'])
+            ...mapState('app', ['userAcount', 'isRepeat'])
         },
         methods: {
             submitForm(formName) {
@@ -110,7 +114,7 @@
                     }
                 });
             },
-            ...mapActions(['async_getUserAcount', 'async_postUser'])
+            ...mapActions('app', ['async_getUserAcount', 'async_postUser'])
         }
     }
 </script>
