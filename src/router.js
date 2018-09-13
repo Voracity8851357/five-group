@@ -5,7 +5,8 @@ import Index from "./routes/index";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
-
+import ApplyForShop from './components/applyForShop/applyForShop.vue';
+import ShopName from './components/shopName/shopName.vue'
 Vue.use(Router);
 
 export default new Router({
@@ -30,11 +31,11 @@ export default new Router({
                 },
                 {
                     path: '/index/shopName',
-                    // component: ShopName,
+                    component: ShopName,
                 },
                 {
                     path: '/index/applyForShop',
-                    // component: ApplyForShop,
+                    component: ApplyForShop,
                 },
                 {
                     path: '/index/goodsName',
