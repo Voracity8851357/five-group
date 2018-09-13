@@ -6,6 +6,8 @@ import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
 
+import GoodsContainer from "./components/goodsManagement/goodsContainer";
+
 Vue.use(Router);
 
 export default new Router({
@@ -38,7 +40,7 @@ export default new Router({
                 },
                 {
                     path: '/index/goodsName',
-                    // component: GoodsName,
+                    component: GoodsContainer,
                 },
                 {
                     path: '/index/serviceName',
