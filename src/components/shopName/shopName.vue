@@ -132,6 +132,7 @@
 </template>
 <script>
   export default {
+     name:"shopName",
     data() {
       return {
         dialogTableVisible: false,
