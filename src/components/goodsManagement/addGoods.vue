@@ -154,14 +154,14 @@
 
 <script>
     import moment from "moment";
-
+    import {mapActions} from "vuex"
     import getLocation from "./utils/getLocation";
 
     export default {
         data() {
             return {
                 //弹出框条件
-                dialogVisible: true,
+                dialogVisible: false,
                 //城市级联数组
                 location: [],
                 //级联数组匹配项
@@ -194,7 +194,7 @@
                 rules: {
                     goodsName: [
                         {required: true, message: '请输入商品', trigger: 'blur'},
-                        {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'},
+                        {min: 2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur'},
                     ],
                     goodsType: [
                         {required: true, message: '请输入种类', trigger: 'blur'},
@@ -298,6 +298,7 @@
                 getLocation();
         },
         methods: {
+            ...mapActions("goodsManagement", ["addGoods"]),
             handleDialogOpen() {
                 this.dialogVisible = true;
             },
@@ -352,7 +353,12 @@
             onSubmit() {
                 this.$refs.goodAddForm.validate(state => {
                     if (state) {
-
+                        const location = [
+                            this.location[this.good.goodsRegion[0]].label,
+                            this.location[this.good.goodsRegion[0]].cities[this.good.goodsRegion[1]].label,
+                            this.location[this.good.goodsRegion[0]].cities[this.good.goodsRegion[1]].cities[this.good.goodsRegion[2]].label,
+                        ];
+                        this.addGoods({...this.good, goodsRegion: location});
                     }
                 });
             },

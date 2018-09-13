@@ -18,6 +18,11 @@ export default new Router({
             component: login
         },
         {
+            path: '/login:userAcount',
+            name: 'login',
+            component: login
+        },
+        {
             path: '/reg',
             name: 'reg',
             component: reg
