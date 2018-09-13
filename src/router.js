@@ -5,6 +5,7 @@ import Index from "./routes/index";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
+import UserAccount from './components/userAccount/userAccount';     
 
 import GoodsContainer from "./components/goodsManagement/goodsContainer";
 
@@ -33,7 +34,7 @@ export default new Router({
             children: [
                 {
                     path: '/index/userAccount',
-                    // component: UserAccount,
+                    component: UserAccount,
                 },
                 {
                     path: '/index/shopName',

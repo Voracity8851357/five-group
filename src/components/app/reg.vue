@@ -44,7 +44,7 @@
                     await this.async_getUserAcount(this.ruleForm2.UserAcount);
                     if (this.isRepeat) {
                         callback(new Error('账号已存在！请重新输入'));
-                    }else {
+                    } else {
                         callback();
                     }
                 }
@@ -102,7 +102,9 @@
                             userPwd: this.ruleForm2.pass,
                             userPhone: this.userPhone,
                             userMail: this.userMail,
-                            userName: this.userName
+                            userName: this.userName,
+                            userType: '1',
+                            userStatus: '0'
                         });
                         this.$alert('注册成功！', '注册', {
                             confirmButtonText: '确定',
