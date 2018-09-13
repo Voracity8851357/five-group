@@ -1,6 +1,3 @@
-const baseUrl = "http://localhost:8081";
-import parseParams from "./utils/parseParams";
-
 export default {
     namespaced: true,
     state: {
@@ -14,11 +11,18 @@ export default {
         addGoods(state, data) {
             Object.assign(state, data)
         },
+        setCurrentPage(state, currentPage) {
+            state.curpage = currentPage;
+        },
+        setPageSize(state, pageSize) {
+            state.eachpage = pageSize;
+        }
     },
     actions: {
         async addGoods(context, data) {
+            console.log(context);
             const {page, rows} = context.rootState.goodsManagement;
-            const tempData = await fetch(baseUrl + "/goodsManagement/addGoods", {
+            const tempData = await fetch("/goodsManagement/addGoods", {
                 method: "post",
                 headers: {
                     'content-type': 'application/json'
@@ -31,11 +35,12 @@ export default {
             }).then(res => res.json());
             context.commit("addGoods", tempData);
         },
-        async getGoods({commit}, options) {
-            const {page = 1, rows = 10} = options || {};
-            const params = parseParams({page, rows});
-            const tempData = await fetch(baseUrl + "/goodsManagement" + params).then(res => res.json());
+        async getGoodsAsync({commit, state}, callback) {
+            const {curpage, eachpage} = state;
+            const tempData = await fetch(`/goodsManagement?page=${curpage}&rows=${eachpage}`).then(res => res.json());
             commit("addGoods", tempData);
+            if (callback)
+                callback();
         }
     }
 }
