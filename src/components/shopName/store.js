@@ -7,9 +7,7 @@ export default {
       eachPage:10,
       maxPage:0, 
       total:0, 
-      rows:[],
-      seachType:'',
-      seachText:''
+      rows:[]
       },
       mutations: {
         getShopByPage(state, payload) {
@@ -17,11 +15,23 @@ export default {
         },
         addShop(state,payload){
           Object.assign(state, payload)
+        },
+        delete_shop(state,payload){
+          Object.assign(state,payload)
+        },
+        edit_shop(state,payload){
+          Object.assign(state,payload)
         }
       },
       actions: {
-        async asyncGetShopByPage(context,{curPage=1, eachPage=10}={}) {
-         let data=await fetch(`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}`, {
+        async asyncGetShopByPage(context,{curPage=1, eachPage='',searchType="",searchText=""}={}) {
+          let url="";
+          if(searchType!=''&searchText!=''){
+            url=`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&row=${eachPage}&seachType=${searchType}&seachText=${searchText}`
+          }else{
+            url=`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&row=${eachPage}`
+          }
+          const data=await fetch(url, {
             headers: {
               "Content-Type": "application/json"
             },
@@ -31,8 +41,8 @@ export default {
           context.commit("getShopByPage",data)
           console.log(data)
         },
-        async getAddShop(context,payload){
-            fetch("http://localhost:8081/shopManagement/add", {
+        async asyncGetAddShop(context,payload){
+         const data=await fetch("http://localhost:8081/shopManagement/add", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json"
@@ -41,30 +51,40 @@ export default {
             }).then(response => {
               return response.json();
             });
-            context.commit("addShop")
+            context.commit("addShop",data)
           },
           async deleteShop(context,payload){
-          await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
+            const data= await fetch(`http://localhost:8081/shopManagement/`+payload._id, {
               method: "DELETE",
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify(payload)
+              body: JSON.stringify({
+                page:context.state.curPage,
+                rows:context.state.eachPage
+              })
             }).then(response => {
               return response.json();
             });
+            context.commit('delete_shop',data)
           },
-          async eitShop(context,payload){
-            let data=await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
+          async asyncEditShop(context,payload){
+            const data=await fetch('http://localhost:8081/shopManagement/'+payload._id, {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                  editShop: payload,
+                  pageObj: {
+                      page: context.state.curpage,
+                      rows: context.state.eachpage
+                  }
+              })
               }).then(response => {
                 return response.json();
               });
-              context.commit("eitShop",data)
+              context.commit("edit_shop",data)
             }
     
       }

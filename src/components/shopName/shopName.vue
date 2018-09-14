@@ -1,9 +1,23 @@
 <template>
 <div style="width:100%">
   <!-- 增加按钮 -->
- <el-button type="success" @click="dialogFormVisible = true">增加</el-button>
+ <el-button type="success" @click="addFormVisible = true">增加</el-button>
+   <el-button type="primary" @click="()=>{
+                searchText=encodeURI(this.search);
+                asyncGetShopByPage({
+                searchType:this.select,
+                searchText,
+              })
+            }" icon="el-icon-search">搜索</el-button>
+    <el-input placeholder="请输入内容" v-model="search" style="width:500px">
+    <el-select v-model="select" style='width:110px' slot="prepend" placeholder="请选择">
+      <el-option label="门店名称" value="shopName"></el-option>
+      <el-option label="门店地点" value="shopAdd"></el-option>
+      <el-option label="特色" value="shopFeature"></el-option>
+    </el-select>
+  </el-input>
  <!-- 增加弹窗 -->
-<el-dialog title="增加门店" :visible.sync="dialogFormVisible">
+<el-dialog title="增加门店" :visible.sync="addFormVisible">
   <el-form :model="form" label-width="110px" class="demo-formData">
     <el-form-item label="门店名称" :label-width="formLabelWidth">
       <el-input v-model="form.shopName" auto-complete="off"></el-input>
@@ -64,8 +78,9 @@
 					</el-form-item>
   </el-form>
   <div slot="footer" class="dialog-footer">
-    <el-button  @click="dialogFormVisible = false" >取 消</el-button>
+    <el-button  @click="addFormVisible = false" >取 消</el-button>
     <el-button type="primary"  @click="()=>{
+      addFormVisible=false
       this.addShop()
       }">确 定</el-button>
   </div>
@@ -153,13 +168,13 @@
       :total="total">
     </el-pagination>
     <!-- 编辑弹框 -->
-    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
-            <el-form :model="form" label-width="110px" class="demo-formData">
+    <el-dialog title="编辑" :visible.sync="editFormVisible">
+            <el-form :model="editShop" label-width="110px" class="demo-formData">
     <el-form-item label="门店名称" :label-width="formLabelWidth">
-      <el-input v-model="form.shopName" auto-complete="off"></el-input>
+      <el-input v-model="editShop.shopName" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item label="营业执照号码" :label-width="formLabelWidth">
-      <el-input v-model="form.shopLicenceNum" auto-complete="off"></el-input>
+      <el-input v-model="editShop.shopLicenceNum" auto-complete="off"></el-input>
     </el-form-item>
     	<el-form-item label="营业执照图片">
 						<el-upload
@@ -176,7 +191,7 @@
           	<el-form-item label="详细地址" prop="shopAdd">
 							<el-autocomplete
                              popper-class="my-autocomplete"
-                              v-model="form.shopAdd"
+                              v-model="editShop.shopAdd"
                             :fetch-suggestions="querySearch"
                             placeholder="请输入内容"
                              @select="handleSelect">
@@ -192,7 +207,7 @@
 						<span>当前城市</span>
 					</el-form-item>
      <el-form-item label="法人" :label-width="formLabelWidth">
-      <el-input v-model="form.shopCorporate" auto-complete="off"></el-input>
+      <el-input v-model="editShop.shopCorporate" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item label="联系电话" prop="phone">
 						<el-input maxLength="11"></el-input>
@@ -210,12 +225,12 @@
 </el-dialog>
 					</el-form-item>
           	<el-form-item label="店铺特点" style="white-space: nowrap;" prop="shopFeature">
-						<el-input v-model="form.shopFeature"></el-input>
+						<el-input v-model="editShop.shopFeature"></el-input>
 					</el-form-item>
   </el-form>
   <div slot="footer" class="dialog-footer">
-    <el-button  @click="dialogFormVisible = false" >取 消</el-button>
-    <el-button type="primary" >确 定</el-button>
+    <el-button  @click="editFormVisible = false" >取 消</el-button>
+    <el-button type="primary" @click="confirmEdit">确 定</el-button>
   </div>
         </el-dialog>
   </div>
@@ -238,13 +253,27 @@ import { mapActions, mapState, mapMutations } from "vuex";
         shopFeature: "",
         shopCorporate:""
         },
+         deleteID: "",
+         editID: "",
+          search: "",
+           select: "",
         formLabelWidth: '120px',
         dialogImageUrl: '',
         dialogTableVisible: false,
-        dialogFormVisible: false,
-         dialogVisible: false,
-         restaurants: [], 
-       }
+        addFormVisible: false,
+        dialogVisible: false,
+        editFormVisible:false,
+       restaurants: [], 
+        editShop: {
+         shopName: "", //店铺名称
+        shopAdd: "", //地址
+        shopLicenceNum: "",
+        description: "", //介绍
+        shopTel: "",
+        shopFeature: "",
+        shopCorporate:""
+      }
+     }
      },
      computed: {
     ...mapState("shopName", ["curPage", "eachPage", "maxPage", "total", "rows"])
@@ -253,17 +282,23 @@ import { mapActions, mapState, mapMutations } from "vuex";
     this.restaurants = this.loadAll();
   },
     methods:{
-      ...mapActions('shopName',["getAddShop","asyncGetShopByPage","deleteShop","eitShop"]),
-      ...mapMutations('shopName',['setCurPage',"setEachPage"]),
+      ...mapActions('shopName',["asyncGetAddShop","asyncGetShopByPage","deleteShop","asyncEditShop"]),
+      ...mapMutations('shopName',['getShopByPage',"addShop","delete_shop","edit_shop"]),
+      // 分页
       handleSizeChange(val) {
        this.asyncGetShopByPage({eachPage:val})
       },
       handleCurrentChange(val) {
        this.asyncGetShopByPage({curPage:val})
       },
+      // 图片
        handleRemove(file, fileList) {
         console.log(file, fileList);
       },
+      handlePictureCardPreview(file, fileList){
+         console.log(file, fileList)
+      },
+      // 删除
       handleDelete(index, row){
        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -283,20 +318,26 @@ import { mapActions, mapState, mapMutations } from "vuex";
           });
         });
       },
+      // 修改
       handleEdit(index, row) {
-         this.form.shopName=row.shopName,
-         this.form.shopAdd=row.shopAdd, //地址
-         this.form.shopLicenceNum=row.shopLicenceNum,
-         this.form.delivery_mode=row.delivery_mode, //介绍
-         this.form.shopTel=row.shopTel,
-         this.form.shopFeature=row.shopFeature,
-         this.form.shopCorporate=row.shopCorporate    
+        console.log(row,index)
+         this.editFormVisible = true;
+         this.editShop= Object.assign({}, row); 
             },
-            
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
+             //确认修改
+       confirmEdit: function() {
+      this.editFormVisible = false;
+      this.asyncEditShop({
+        _id: this.editShop._id,
+        shopName: this.editShop.shopName,
+        shopAdd: this.editShop.shopAdd, //地址
+        shopLicenceNum: this.editShop.shopLicenceNum,
+        description: this.editShop.delivery_mode, //介绍
+        shopTel: this.editShop.shopTel,
+        shopFeature: this.editShop.shopFeature,
+        shopCorporate:this.editShop.shopCorporate
+      });
+    },
        querySearch(queryString, cb) {
       var restaurants = this.restaurants;
       var results = queryString
@@ -363,8 +404,7 @@ import { mapActions, mapState, mapMutations } from "vuex";
       console.log(ev);
     },
     addShop: function() {
-       dialogFormVisible = false
-      this.getAddShop({
+      this.asyncGetAddShop({
         shopName: this.form.shopName,
         shopAdd: this.form.shopAdd, //地址
         shopLicenceNum: this.form.shopLicenceNum,
