@@ -40,15 +40,15 @@ export default new Router({
             component: IndexPlatform,
             children: [
                 {
-                    path: '/index/userAccount',
+                    path: '/indexPlatform/userAccount',
                     component: UserAccount,
                 },
                 {
-                    path: '/index/shopName',
+                    path: '/indexPlatform/shopName',
                     component: ShopName,
                 },
                 {
-                    path: '/index/petOwners',
+                    path: '/indexPlatform/petOwners',
                     // component: PetOwners,
                 },
             ]
@@ -58,20 +58,20 @@ export default new Router({
             component: IndexStore,
             children: [
                 {
-                    path: '/index/applyForShop',
+                    path: '/indexStore/applyForShop',
                     component: ApplyForShop,
                 },
                 {
-                    path: '/index/goodsName',
+                    path: '/indexStore/goodsName',
                     component: GoodsContainer,
                 },
                 {
-                    path: '/index/serviceManage',
+                    path: '/indexStore/serviceManage',
                     name:'serviceManage',
                     component: ServiceManage,
                 },
                 {
-                    path: '/index/orderManagement',
+                    path: '/indexStore/orderManagement',
                     // component: OrderManagement,
                 },
             ]

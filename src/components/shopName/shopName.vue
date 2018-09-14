@@ -159,11 +159,11 @@
     </el-table-column>
   </el-table>
    <el-pagination
-     @size-change="handleSizeChange"
+      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="curPage"
       :page-sizes="[10, 20, 30, 40]"
-      :page-size="100"
+      :page-size="eachPage"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
@@ -414,12 +414,6 @@ import { mapActions, mapState, mapMutations } from "vuex";
         shopCorporate:this.form.shopCorporate
       })
     },
-      firstPage() {
-      this.asyncGetEmpByPage({ curPage: 1 });
-    },
-    lastPage() {
-      this.asyncGetEmpByPage({ curPage: this.maxPage });
-    } 
     }
   };
 </script>

@@ -24,7 +24,7 @@ export default {
         }
       },
       actions: {
-        async asyncGetShopByPage(context,{curPage=1, eachPage='',searchType="",searchText=""}={}) {
+        async asyncGetShopByPage(context,{curPage=1, eachPage=10,searchType="",searchText=""}={}) {
           let url="";
           if(searchType!=''&searchText!=''){
             url=`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&row=${eachPage}&seachType=${searchType}&seachText=${searchText}`
