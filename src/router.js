@@ -5,7 +5,7 @@ import Index from "./routes/index";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
-
+import petOwners from './components/petowners/pet';
 Vue.use(Router);
 
 export default new Router({
@@ -46,7 +46,7 @@ export default new Router({
                 },
                 {
                     path: '/index/petOwners',
-                    // component: PetOwners,
+                    component: petOwners,
                 },
                 {
                     path: '/index/orderManagement',

@@ -57,6 +57,8 @@
         height: 100%;
     }
     .content-container{
-        background: #fff content-box;
+        background: #fff;
+        padding: 0px;
+        margin: 20px;
     }
 </style>
