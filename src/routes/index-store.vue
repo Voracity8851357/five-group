@@ -4,19 +4,19 @@
         <el-container>
             <el-aside width="200px">
                 <el-menu class="aside-menu" router>
-                    <el-menu-item index="/index/applyForShop">
+                    <el-menu-item index="/indexStore/applyForShop">
                         <i class="el-icon-menu"></i>
                         <span slot="title">门店申请</span>
                     </el-menu-item>
-                    <el-menu-item index="/index/goodsName">
+                    <el-menu-item index="/indexStore/goodsName">
                         <i class="el-icon-menu"></i>
                         <span slot="title">商品管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/index/serviceManage">
+                    <el-menu-item index="/indexStore/serviceManage">
                         <i class="el-icon-menu"></i>
                         <span slot="title">服务管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/index/orderManagement">
+                    <el-menu-item index="/indexStore/orderManagement">
                         <i class="el-icon-menu"></i>
                         <span slot="title">订单管理</span>
                     </el-menu-item>
