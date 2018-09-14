@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Index from "./routes/index";
+import IndexPlatform from "./routes/index-platform";
+import IndexStore from "./routes/index-store";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
@@ -29,8 +30,8 @@ export default new Router({
             component: reg
         },
         {
-            path: "/index",
-            component: Index,
+            path: "/indexPlatform",
+            component: IndexPlatform,
             children: [
                 {
                     path: '/index/userAccount',
@@ -40,6 +41,16 @@ export default new Router({
                     path: '/index/shopName',
                     // component: ShopName,
                 },
+                {
+                    path: '/index/petOwners',
+                    // component: PetOwners,
+                },
+            ]
+        },
+        {
+            path: "/indexStore",
+            component: IndexStore,
+            children: [
                 {
                     path: '/index/applyForShop',
                     // component: ApplyForShop,
@@ -51,10 +62,6 @@ export default new Router({
                 {
                     path: '/index/serviceName',
                     // component: ServiceName,
-                },
-                {
-                    path: '/index/petOwners',
-                    // component: PetOwners,
                 },
                 {
                     path: '/index/orderManagement',

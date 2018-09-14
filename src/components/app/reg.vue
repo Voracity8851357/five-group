@@ -8,10 +8,12 @@
                         <el-input v-model="ruleForm2.UserAcount" placeholder="请输入账号"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="pass">
-                        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="请输入密码"></el-input>
+                        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"
+                                  placeholder="请输入密码"></el-input>
                     </el-form-item>
                     <el-form-item label="确认密码" prop="checkPass">
-                        <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="请确认密码"></el-input>
+                        <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"
+                                  placeholder="请确认密码"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号" prop="phone">
                         <el-input required="true" v-model.number="ruleForm2.phone" style="width: 300px"
@@ -125,7 +127,7 @@
                             userAcount: this.ruleForm2.UserAcount,
                             userPwd: this.ruleForm2.pass,
                             userPhone: this.ruleForm2.phone,
-                            userMail: this.userMail,
+                            userMail: this.ruleForm2.email,
                             userName: this.userName,
                             userType: '1',
                             userStatus: '0'
