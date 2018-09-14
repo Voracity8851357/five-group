@@ -1,6 +1,6 @@
 export default {
     namespaced: true,
-    // 增加
+    // 申请
     actions:{
         async getAddShop(context,payload){
             fetch("http://localhost:8081/shopManagement/add", {
@@ -8,7 +8,7 @@ export default {
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify({payload})
+              body: JSON.stringify(payload)
             }).then(response => {
               return response.json();
             });

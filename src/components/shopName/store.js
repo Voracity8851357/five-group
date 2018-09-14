@@ -2,39 +2,34 @@ export default {
     namespaced: true,
     // 门店管理列表
     state: {
-        curPage: 1,
-        eachPage: 10,
-        rows: [],
-        maxPage: 0,
-        count: 0
+      _id:0,
+      curPage:1,
+      eachPage:10,
+      maxPage:0, 
+      total:0, 
+      rows:[],
+      seachType:'',
+      seachText:''
       },
       mutations: {
-        getEmpByPage(state, payload) {
+        getShopByPage(state, payload) {
           Object.assign(state, payload)
         },
-        setCurPage(state, payload) {
-          state.curPage = payload
-          
-        },
-        setEachPage(state, payload) {
-          state.eachPage = payload
+        getEitShop(state, payload){
+          Object.assign(state, payload)
         }
       },
       actions: {
-        async asyncGetEmpByPage(context, { curPage, eachPage } = {}) {
-           fetch("http://localhost:8081/shopManagement/getEmpByPage", {
-            method: "POST",
+        async asyncGetShopByPage(context,{curPage=1, eachPage=10}={}) {
+         let data=await fetch(`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}`, {
             headers: {
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-              curPage: curPage || context.state.curPage,
-              eachPage: eachPage || context.state.eachPage
-            })
           }).then(response => {
             return response.json();
           });
-          context.commit("getEmpByPage")
+          context.commit("getShopByPage",data)
+          console.log(data)
         },
         async getAddShop(context,payload){
             fetch("http://localhost:8081/shopManagement/add", {
@@ -42,11 +37,46 @@ export default {
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify({payload})
+              body: JSON.stringify(payload)
             }).then(response => {
               return response.json();
             });
-          }
+            context.commit("addShop")
+          },
+          async deleteShop(context,payload){
+          await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(payload)
+            }).then(response => {
+              return response.json();
+            });
+          },
+          async getShopId(context,payload){
+           let data=await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
+              headers: {
+                "Content-Type": "application/json"
+              },
+            }).then(response => {
+              return response.json();
+            });
+            context.commit("getEitShop",data)
+            console.log(data)
+          },
+          async eitShop(context,payload){
+            let data=await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+              }).then(response => {
+                return response.json();
+              });
+              context.commit("eitShop",data)
+            }
     
       }
 }

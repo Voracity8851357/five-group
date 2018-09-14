@@ -63,28 +63,28 @@
 							>
 						</el-time-select>
 					</el-form-item>
-                   <el-form-item label="上传营业执照">
+                   <el-form-item label="上传头图">
 			<el-upload
-  action="https://jsonplaceholder.typicode.com/posts/"
+  action="http://localhost:8081//shopManagement/upload"
   list-type="picture-card"
   :on-preview="handlePictureCardPreview"
   :on-remove="handleRemove">
   <i class="el-icon-plus"></i>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="dialogImageUrl" alt="">
+  <img width="100%" :src="shopImg" alt="">
 </el-dialog>
                    </el-form-item>
 					<el-form-item label="上传营业执照">
 					<el-upload
-  action="https://jsonplaceholder.typicode.com/posts1/"
+  action="http://localhost:8081//shopManagement/upload"
   list-type="picture-card"
   :on-preview="handlePictureCardPreview"
   :on-remove="handleRemove">
   <i class="el-icon-plus"></i>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="dialogImageUrl" alt="">
+  <img width="100%" :src="shopLicenceImg" alt="">
 </el-dialog>
 					</el-form-item>
 					<el-form-item class="button_submit">
@@ -113,7 +113,8 @@ export default {
         endTime: "",
         shopFeature: ""
       },
-     dialogImageUrl: '',
+     shopLicenceImg: '',
+     shopImg:'',
     dialogVisible: false,
       restaurants: [],
       rules: {
@@ -155,45 +156,45 @@ export default {
     },
     loadAll() {
       return [
-        { shopAdd: "长宁区新渔路144号" },
-        { shopAdd: "上海市长宁区淞虹路661号" },
-        { shopAdd: "上海市普陀区真北路988号创邑金沙谷6号楼113" },
-        { shopAdd: "天山西路438号" },
-        { shopAdd: "上海市长宁区金钟路968号1幢18号楼一层商铺18-101" },
-        { shopAdd: "上海市长宁区金钟路633号" },
-        { shopAdd: "上海市嘉定区曹安公路曹安路1685号" },
-        { shopAdd: "上海市普陀区同普路1435号" },
-        { shopAdd: "上海市北翟路1444弄81号B幢-107" },
-        { shopAdd: "上海市嘉定区新郁路817号" },
-        { shopAdd: "嘉定区曹安路1611号" },
-        { shopAdd: "嘉定区曹安公路2383弄55号" },
-        { shopAdd: "嘉定区江桥镇曹安公路2409号1F，2383弄62号1F" },
-        { shopAdd: "上海长宁区金钟路968号9号楼地下一层" },
-        { shopAdd: "上海市长宁区天山西路119号" },
-        { shopAdd: "上海市长宁区仙霞西路" },
-        { shopAdd: "上海市长宁区天山西路567号1层R117号店铺" },
-        { shopAdd: "上海市普陀区光复西路丹巴路28弄6号楼819" },
-        { shopAdd: "上海市长宁区仙霞西路88号第一层G05-F01-1-306" },
-        { shopAdd: "上海市普陀区棕榈路" },
-        { shopAdd: "元丰天山花园(东门) 双流路267号" },
-        { shopAdd: "上海市长宁区天山西路" },
-        { shopAdd: "上海市长宁区通协路" },
-        { shopAdd: "上海市长宁区新泾镇金钟路999号2幢（B幢）第01层第1-02A单元" },
-        { shopAdd: "长宁区仙霞西路88号1305室" },
+        { "shopAdd": "长宁区新渔路144号" },
+        { "shopAdd": "上海市长宁区淞虹路661号" },
+        { "shopAdd": "上海市普陀区真北路988号创邑金沙谷6号楼113" },
+        { "shopAdd": "天山西路438号" },
+        { "shopAdd": "上海市长宁区金钟路968号1幢18号楼一层商铺18-101" },
+        { "shopAdd": "上海市长宁区金钟路633号" },
+        { "shopAdd": "上海市嘉定区曹安公路曹安路1685号" },
+        { "shopAdd": "上海市普陀区同普路1435号" },
+        { "shopAdd": "上海市北翟路1444弄81号B幢-107" },
+        { "shopAdd": "上海市嘉定区新郁路817号" },
+        { "shopAdd": "嘉定区曹安路1611号" },
+        { "shopAdd": "嘉定区曹安公路2383弄55号" },
+        { "shopAdd": "嘉定区江桥镇曹安公路2409号1F，2383弄62号1F" },
+        { "shopAdd": "上海长宁区金钟路968号9号楼地下一层" },
+        { "shopAdd": "上海市长宁区天山西路119号" },
+        { "shopAdd": "上海市长宁区仙霞西路" },
+        { "shopAdd": "上海市长宁区天山西路567号1层R117号店铺" },
+        { "shopAdd": "上海市普陀区光复西路丹巴路28弄6号楼819" },
+        { "shopAdd": "上海市长宁区仙霞西路88号第一层G05-F01-1-306" },
+        { "shopAdd": "上海市普陀区棕榈路" },
+        { "shopAdd": "元丰天山花园(东门) 双流路267号" },
+        { "shopAdd": "上海市长宁区天山西路" },
+        { "shopAdd": "上海市长宁区通协路" },
+        { "shopAdd": "上海市长宁区新泾镇金钟路999号2幢（B幢）第01层第1-02A单元" },
+        { "shopAdd": "长宁区仙霞西路88号1305室" },
         {
-          shopAdd:
+          "shopAdd":
             "上海市普陀区真北路818号近铁城市广场北区地下二楼N-B2-O2-C商铺"
         },
-        { shopAdd: "普陀区金沙江路2239号金沙和美广场B1-10-6" },
-        { shopAdd: "上海市长宁区威宁路天山路341号" },
-        { shopAdd: "上海市嘉定区丰庄路240号" },
-        { shopAdd: "长宁区新渔路144号" },
-        { shopAdd: "长宁区淞虹路148号" },
-        { shopAdd: "上海市普陀区老真北路160号" },
-        { shopAdd: "上海市长宁区金钟路968号15楼15-105室" },
-        { shopAdd: "剑河路443-1" },
-        { shopAdd: "长宁区北新泾街道天山西路490-1号" },
-        { shopAdd: "上海市长宁区金钟路968号9号楼地下一层9-83室" }
+        { "shopAdd": "普陀区金沙江路2239号金沙和美广场B1-10-6" },
+        { "shopAdd": "上海市长宁区威宁路天山路341号" },
+        { "shopAdd": "上海市嘉定区丰庄路240号" },
+        { "shopAdd": "长宁区新渔路144号" },
+        { "shopAdd": "长宁区淞虹路148号" },
+        { "shopAdd": "上海市普陀区老真北路160号" },
+        { "shopAdd": "上海市长宁区金钟路968号15楼15-105室" },
+        { "shopAdd": "剑河路443-1" },
+        { "shopAdd": "长宁区北新泾街道天山西路490-1号" },
+        { "shopAdd": "上海市长宁区金钟路968号9号楼地下一层9-83室" }
       ];
     },
     handleSelect(item) {
@@ -211,7 +212,9 @@ export default {
         shopTel: this.formData.shopTel,
         startTime: this.formData.startTime,
         endTime: this.formData.endTime,
-        shopFeature: this.formData.shopFeature
+        shopFeature: this.formData.shopFeature,
+        shopLicenceImg:this.shopLicenceImg.src,
+         shopImg:this.shopImg.src
       });
     }, 
   
