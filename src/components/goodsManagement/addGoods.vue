@@ -358,6 +358,7 @@
                             this.location[this.good.goodsRegion[0]].cities[this.good.goodsRegion[1]].label,
                             this.location[this.good.goodsRegion[0]].cities[this.good.goodsRegion[1]].cities[this.good.goodsRegion[2]].label,
                         ];
+
                         this.addGoods({...this.good, goodsRegion: location});
                     }
                 });

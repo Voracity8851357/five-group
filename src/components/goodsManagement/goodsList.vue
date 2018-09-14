@@ -9,41 +9,85 @@
                 style="width: 100%">
             <el-table-column type="expand">
                 <template slot-scope="props">
-                    <el-form label-position="left" inline class="goods-table-expand" size="small">
-                        <el-form-item label="商品名称:">
-                            <el-input v-if="isAllowEdit(props.$index)" v-model="tempGood.goodsName"/>
-                            <span v-else>{{ props.row.goodsName }}</span>
+                    <el-form
+                            label-width="110px"
+                            inline
+                            class="goods-table-expand"
+                            size="small"
+                            key="inputForm"
+                            :rules="rules"
+                            :model="tempGood"
+                            v-if="isAllowEdit(props.$index)">
+                        <el-form-item label="商品名称:" prop="goodsName">
+                            <el-input v-model="tempGood.goodsName"/>
                         </el-form-item>
-                        <el-form-item label="商品种类:">
-                            <el-input v-if="isAllowEdit(props.$index)" v-model="tempGood.goodsType"/>
-                            <span v-else>{{ props.row.goodsType }}</span>
+                        <el-form-item label="商品种类:" prop="goodsType">
+                            <el-input v-model="tempGood.goodsType"/>
                         </el-form-item>
                         <el-form-item label="商品材质:">
-                            <el-input v-if="isAllowEdit(props.$index)" v-model="tempGood.goodsMaterial"/>
-                            <span v-else>{{ props.row.goodsMaterial }}</span>
+                            <el-input v-model="tempGood.goodsMaterial"/>
                         </el-form-item>
-                        <el-form-item label="适用规格:">
-                            <el-input v-if="isAllowEdit(props.$index)" v-model="tempGood.goodsCanFor"/>
-                            <span v-else>{{ props.row.goodsCanFor }}</span>
+                        <el-form-item label="适用规格:" prop="goodsCanFor">
+                            <el-input v-model="tempGood.goodsCanFor"/>
                         </el-form-item>
                         <el-form-item label="专属规格:">
-                            <el-input v-if="isAllowEdit(props.$index)" v-model="tempGood.goodsOnlyFor"/>
-                            <span v-else>{{ props.row.goodsOnlyFor }}</span>
+                            <el-input v-model="tempGood.goodsOnlyFor"/>
                         </el-form-item>
-                        <el-form-item label="包装规格(kg):">
-                            <el-input-number v-if="isAllowEdit(props.$index)" controls-position="right"
+                        <el-form-item label="包装规格(kg):" prop="goodsSize">
+                            <el-input-number controls-position="right"
                                              v-model="tempGood.goodsSize"
                                              :precision="1"
                                              :step="0.1" :min="0" :max="12"/>
-                            <span v-else>{{ props.row.goodsSize }}</span>
                         </el-form-item>
                         <el-form-item label="口味:">
-                            <el-input v-if="isAllowEdit(props.$index)" v-model="tempGood.goodsTaste"/>
-                            <span v-else>{{ props.row.goodsTaste }}</span>
+                            <el-input v-model="tempGood.goodsTaste"/>
                         </el-form-item>
                         <el-form-item label="特殊功能:">
-                            <el-input v-if="isAllowEdit(props.$index)" v-model="tempGood.goodsSpecial"/>
-                            <span v-else>{{ props.row.goodsSpecial }}</span>
+                            <el-input v-model="tempGood.goodsSpecial"/>
+                        </el-form-item>
+                        <el-form-item label="出厂日期:">
+                            <span>{{ props.row.goodsDate }}</span>
+                        </el-form-item>
+                        <el-form-item label="保质期:">
+                            <span>{{ props.row.goodsTime }}</span>
+                        </el-form-item>
+                        <el-form-item label="产地:">
+                            <span>{{ props.row.goodsRegion.join(" / ") }}</span>
+                        </el-form-item>
+                        <el-form-item label="价格(元):" prop="goodsPrice">
+                            <el-input v-model="tempGood.goodsPrice"/>
+                        </el-form-item>
+                    </el-form>
+                    <el-form
+                            label-width="110px"
+                            inline
+                            key="showForm"
+                            class="goods-table-expand"
+                            size="small"
+                            v-else>
+                        <el-form-item label="商品名称:">
+                            <span>{{ props.row.goodsName }}</span>
+                        </el-form-item>
+                        <el-form-item label="商品种类:">
+                            <span>{{ props.row.goodsType }}</span>
+                        </el-form-item>
+                        <el-form-item label="商品材质:">
+                            <span>{{ props.row.goodsMaterial }}</span>
+                        </el-form-item>
+                        <el-form-item label="适用规格:">
+                            <span>{{ props.row.goodsCanFor }}</span>
+                        </el-form-item>
+                        <el-form-item label="专属规格:">
+                            <span>{{ props.row.goodsOnlyFor }}</span>
+                        </el-form-item>
+                        <el-form-item label="包装规格(kg):">
+                            <span>{{ props.row.goodsSize }}</span>
+                        </el-form-item>
+                        <el-form-item label="口味:">
+                            <span>{{ props.row.goodsTaste }}</span>
+                        </el-form-item>
+                        <el-form-item label="特殊功能:">
+                            <span>{{ props.row.goodsSpecial }}</span>
                         </el-form-item>
                         <el-form-item label="出厂日期:">
                             <span>{{ props.row.goodsDate }}</span>
@@ -55,13 +99,12 @@
                             <span>{{ props.row.goodsRegion.join(" / ") }}</span>
                         </el-form-item>
                         <el-form-item label="价格(元):">
-                            <el-input v-if="isAllowEdit(props.$index)" v-model="tempGood.goodsPrice"/>
-                            <span v-else>{{ props.row.goodsPrice }}</span>
+                            <span>{{ props.row.goodsPrice }}</span>
                         </el-form-item>
                     </el-form>
                     <el-button-group>
                         <el-button @click="enableEdit(props.$index)">修改</el-button>
-                        <el-button>提交</el-button>
+                        <el-button @click="onSubmit">提交</el-button>
                         <el-button @click="disableEdit">取消</el-button>
                     </el-button-group>
                 </template>
@@ -105,7 +148,72 @@
                 editIndex: -1,
                 editable: false,
                 isLoading: true,
-                tempGood: {},
+                tempGood: {
+                    goodsName: "",
+                    goodsType: "",
+                    goodsMaterial: "",
+                    goodsCanFor: "",
+                    goodsOnlyFor: "",
+                    goodsSize: 0,
+                    goodsTaste: "",
+                    goodsSpecial: "",
+                    goodsRegion: [],
+                    goodsDate: "",
+                    goodsTime: "",
+                    goodsIntro: [],
+                    goodsPrice: "",
+                    goodsImg: [],
+                },
+                rules: {
+                    goodsName: [
+                        {required: true, message: '请输入商品', trigger: 'blur'},
+                        {min: 2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur'},
+                    ],
+                    goodsType: [
+                        {required: true, message: '请输入种类', trigger: 'blur'},
+                    ],
+                    goodsCanFor: [
+                        {required: true, message: '请输入规格', trigger: 'blur'},
+                    ],
+                    goodsSize: [
+                        {required: true, message: '请输入规格', trigger: 'blur'},
+                        {type: 'number', min: 0.1, message: '规格不能为 0',},
+                    ],
+                    goodsPrice: [
+                        {
+                            required: true,
+                            validator: (rule, value, callback) => {
+                                if (value.match(/\s/g)) {
+                                    return callback(new Error('格式不正确'));
+                                }
+                                if (+value < 0) {
+                                    return callback(new Error('请输入正确的价格'));
+                                }
+                                else if (+value === 0) {
+                                    if (value === "")
+                                        return callback(new Error('价格不能为空'));
+                                    else
+                                        return callback(new Error('价格不能为 0'));
+                                }
+                                callback();
+                            },
+                            trigger: 'blur',
+                        },
+                    ],
+                    goodsImg: [
+                        {
+                            required: true,
+                            validator: (rule, value, callback) => {
+                                if (value.length === 0) {
+                                    return callback(new Error("请上传商品图片"))
+                                }
+                                callback();
+                            },
+                            trigger: 'change',
+                        },
+                    ],
+                },
+
             }
         },
         computed: {
@@ -132,7 +240,7 @@
             },
             enableEdit(index) {
                 const row = this.rows.find((value, rowIndex) => rowIndex === index);
-                this.tempGood = JSON.parse(JSON.stringify(row));
+                Object.assign(this.tempGood, JSON.parse(JSON.stringify(row)));
                 this.$refs.goodsTable.toggleRowExpansion(2, true);
                 this.editIndex = index;
                 this.editable = true;
@@ -142,19 +250,12 @@
                 this.editIndex = -1;
                 this.editable = false;
             },
+            onSubmit() {
+                console.log(this.tempGood);
+            },
             console() {
                 console.log(arguments);
             }
-        },
-        watch: {
-            // rows(oldRows, newRows) {
-            //     oldRows.map(rows => {
-            //         this.$set(rows, "edit", false);
-            //     });
-            //     newRows.map(rows => {
-            //         this.$set(rows, "edit", false);
-            //     });
-            // }
         },
         mounted() {
             this.getGoodsAsync(this.loadingCompleted);
@@ -162,7 +263,7 @@
     }
 </script>
 
-<style scoped>
+<style>
     .goods-pagination {
         text-align: center;
     }
@@ -171,14 +272,13 @@
         font-size: 0;
     }
 
-    .goods-table-expand label {
+    .goods-table-expand .el-form-item__label {
         width: 90px;
         color: #99a9bf;
     }
 
     .goods-table-expand .el-form-item {
-        margin-right: 0;
-        margin-bottom: 0;
+        margin-right: 0 !important;
         width: 50%;
     }
 </style>
