@@ -5,7 +5,7 @@ import Index from "./routes/index";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
-import UserAccount from './components/userAccount/userAccount';     
+import UserAccount from './components/userAccount/userAccount';
 
 import GoodsContainer from "./components/goodsManagement/goodsContainer";
 
@@ -19,7 +19,7 @@ export default new Router({
             component: login
         },
         {
-            path: '/login:userAcount',
+            path: '/login',
             name: 'login',
             component: login
         },
