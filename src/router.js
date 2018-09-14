@@ -5,7 +5,7 @@ import Index from "./routes/index";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
-
+import ServiceManage from './components/serviceManage/serviceManage.vue'
 Vue.use(Router);
 
 export default new Router({
@@ -41,8 +41,9 @@ export default new Router({
                     // component: GoodsName,
                 },
                 {
-                    path: '/index/serviceName',
-                    // component: ServiceName,
+                    path: '/index/serviceManage',
+                    name:'serviceManage',
+                    component: ServiceManage,
                 },
                 {
                     path: '/index/petOwners',
