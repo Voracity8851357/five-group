@@ -1,7 +1,8 @@
 export default {
     namespaced: true,
     state: {
-        list: []
+        list: [],
+        audit: []
     },
     mutations: {
         setState(state, payload) {
@@ -91,6 +92,27 @@ export default {
                 }
             });
             context.commit('setState', {list: data});
+            return 'success'
+        },
+        //获取审核数据
+        async async_getAudit(context) {
+            const data = await fetch('/users/getAudit').then(response => {
+                return response.json()
+            });
+            context.commit('setState', {audit: data});
+            return 'success'
+        },
+        //审核
+        async async_putAudit(context, {userStatus, _id} = {}) {
+            await fetch('/users/audit', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userStatus, _id
+                })
+            });
             return 'success'
         },
     }
