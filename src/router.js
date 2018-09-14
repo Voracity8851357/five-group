@@ -6,11 +6,15 @@ import IndexStore from "./routes/index-store";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
+
+import ServiceManage from './components/serviceManage/serviceManage.vue'
+
 import ApplyForShop from './components/applyForShop/applyForShop.vue';
 import ShopName from './components/shopName/shopName.vue'
 import UserAccount from './components/userAccount/userAccount';     
 
 import GoodsContainer from "./components/goodsManagement/goodsContainer";
+
 
 Vue.use(Router);
 
@@ -62,8 +66,9 @@ export default new Router({
                     component: GoodsContainer,
                 },
                 {
-                    path: '/index/serviceName',
-                    // component: ServiceName,
+                    path: '/index/serviceManage',
+                    name:'serviceManage',
+                    component: ServiceManage,
                 },
                 {
                     path: '/index/orderManagement',
