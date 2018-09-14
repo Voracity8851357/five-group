@@ -136,7 +136,55 @@
             </el-table>
         </el-tab-pane>
         <el-tab-pane label="门店管理员审核" name="second">
-            门店管理员审核
+            <el-table
+                    :data="audit"
+                    border
+                    style="width: 100%;margin-top: 20px">
+                <el-table-column
+                        fixed
+                        prop="_id"
+                        label="ID"
+                        width="150">
+                </el-table-column>
+                <el-table-column
+                        prop="userName"
+                        label="姓名"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="userAcount"
+                        label="账号"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="userPwd"
+                        label="密码"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="userPhone"
+                        label="手机"
+                        width="120">
+                </el-table-column>
+                <el-table-column
+                        prop="userMail"
+                        label="邮箱"
+                        width="200">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button
+                                size="mini"
+                                @click="handleAllow(scope.$index, scope.row)">通过
+                        </el-button>
+                        <el-button
+                                size="mini"
+                                type="danger"
+                                @click="handleDeny(scope.$index, scope.row)">拒绝
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
         </el-tab-pane>
     </el-tabs>
 </template>
@@ -175,12 +223,29 @@
             };
         },
         mounted: function () {
-            this.async_getUsers()
+            this.async_getUsers();
+            this.async_getAudit();
         },
         computed: {
-            ...mapState('userAccount', ['list'])
+            ...mapState('userAccount', ['list', 'audit'])
         },
         methods: {
+            async handleAllow(index, row) {
+                this.async_putAudit({
+                    userStatus: '1',
+                    _id: row._id
+                });
+                this.async_getAudit();
+                this.async_getUsers();
+            },
+            async handleDeny(index, row) {
+                this.async_putAudit({
+                    userStatus: '2',
+                    _id: row._id
+                });
+                this.async_getAudit();
+                this.async_getUsers();
+            },
             async searchBtn() {
                 console.log(this.search, this.searchSelect);
                 await this.async_searchUsers({
@@ -190,13 +255,24 @@
             },
 
             async putUser() {
+                switch (this.amend.userStatus) {
+                    case "申请中":
+                        this.amend.userStatus = "0";
+                        break;
+                    case "可用":
+                        this.amend.userStatus = "1";
+                        break;
+                    default:
+                        this.amend.userStatus = "2";
+                        break;
+                }
                 await this.async_putUser({
                     userName: this.amend.userName,
                     userAcount: this.amend.userAcount,
                     userPwd: this.amend.userPwd,
                     userPhone: this.amend.userPhone,
                     userMail: this.amend.userMail,
-                    userType: this.amend.userType,
+                    userType: this.amend.userType === "平台管理员" ? "0" : "1",
                     userStatus: this.amend.userStatus,
                     _id: this.amend._id
                 });
@@ -217,7 +293,7 @@
                 this.async_getUsers()
             },
             handleClick(tab, event) {
-                console.log(tab, event);
+                this.activeName = tab.name;
             },
             handleEdit(index, row) {
                 this.amend.userName = row.userName;
@@ -236,7 +312,15 @@
                 });
                 this.async_getUsers();
             },
-            ...mapActions('userAccount', ['async_getUsers', 'async_postUser', 'async_DeleteUsers', 'async_putUser', 'async_searchUsers'])
+            ...mapActions('userAccount', [
+                'async_getUsers',
+                'async_postUser',
+                'async_DeleteUsers',
+                'async_putUser',
+                'async_searchUsers',
+                'async_getAudit',
+                'async_putAudit'
+            ])
         }
     }
 </script>

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Index from "./routes/index";
+import IndexPlatform from "./routes/index-platform";
+import IndexStore from "./routes/index-store";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
@@ -9,6 +10,7 @@ import ApplyForShop from './components/applyForShop/applyForShop.vue';
 import ShopName from './components/shopName/shopName.vue'
 import UserAccount from './components/userAccount/userAccount';     
 
+import GoodsContainer from "./components/goodsManagement/goodsContainer";
 
 Vue.use(Router);
 
@@ -20,7 +22,7 @@ export default new Router({
             component: login
         },
         {
-            path: '/login:userAcount',
+            path: '/login',
             name: 'login',
             component: login
         },
@@ -30,8 +32,8 @@ export default new Router({
             component: reg
         },
         {
-            path: "/index",
-            component: Index,
+            path: "/indexPlatform",
+            component: IndexPlatform,
             children: [
                 {
                     path: '/index/userAccount',
@@ -42,20 +44,26 @@ export default new Router({
                     component: ShopName,
                 },
                 {
+                    path: '/index/petOwners',
+                    // component: PetOwners,
+                },
+            ]
+        },
+        {
+            path: "/indexStore",
+            component: IndexStore,
+            children: [
+                {
                     path: '/index/applyForShop',
                     component: ApplyForShop,
                 },
                 {
                     path: '/index/goodsName',
-                    // component: GoodsName,
+                    component: GoodsContainer,
                 },
                 {
                     path: '/index/serviceName',
                     // component: ServiceName,
-                },
-                {
-                    path: '/index/petOwners',
-                    // component: PetOwners,
                 },
                 {
                     path: '/index/orderManagement',

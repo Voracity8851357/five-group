@@ -5,22 +5,31 @@
                 <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
                          class="demo-ruleForm demo-dynamic">
                     <el-form-item label="账号" prop="UserAcount">
-                        <el-input v-model="ruleForm2.UserAcount"></el-input>
+                        <el-input v-model="ruleForm2.UserAcount" placeholder="请输入账号"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="pass">
-                        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+                        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"
+                                  placeholder="请输入密码"></el-input>
                     </el-form-item>
                     <el-form-item label="确认密码" prop="checkPass">
-                        <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+                        <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"
+                                  placeholder="请确认密码"></el-input>
                     </el-form-item>
-                    <el-form-item label="手机号">
-                        <el-input required="true" v-model="userPhone" style="width: 300px"></el-input>
+                    <el-form-item label="手机号" prop="phone">
+                        <el-input required="true" v-model.number="ruleForm2.phone" style="width: 300px"
+                                  auto-complete="off" placeholder="请输入手机号"></el-input>
                     </el-form-item>
-                    <el-form-item v-model="userMail" label="邮箱">
-                        <el-input style="width: 300px"></el-input>
+                    <el-form-item
+                            prop="email"
+                            label="邮箱"
+                            :rules="[
+                              { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                              { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+                            ]">
+                        <el-input v-model="ruleForm2.email" placeholder="请输入邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="真实姓名">
-                        <el-input v-model="userName" style="width: 300px"></el-input>
+                        <el-input v-model="userName" style="width: 300px" placeholder="请输入姓名"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm('ruleForm2')">注册</el-button>
@@ -37,6 +46,20 @@
     export default {
         name: "reg",
         data() {
+            let checkPhone = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('电话不能为空'));
+                }
+                if (!Number.isInteger(value)) {
+                    callback(new Error('请输入数字值'));
+                } else {
+                    if (value < 10000000000) {
+                        callback(new Error('必须是11位手机号'));
+                    } else {
+                        callback();
+                    }
+                }
+            };
             let checkUserAcount = async (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入账号'));
@@ -69,13 +92,13 @@
                 }
             };
             return {
-                userPhone: '',
-                userMail: '',
                 userName: '',
                 ruleForm2: {
                     pass: '',
                     checkPass: '',
-                    UserAcount: ''
+                    UserAcount: '',
+                    phone: '',
+                    email: ''
                 },
                 rules2: {
                     pass: [
@@ -86,6 +109,9 @@
                     ],
                     UserAcount: [
                         {validator: checkUserAcount, trigger: 'blur'}
+                    ],
+                    phone: [
+                        {validator: checkPhone, trigger: 'blur'}
                     ]
                 }
             };
@@ -100,8 +126,8 @@
                         this.async_postUser({
                             userAcount: this.ruleForm2.UserAcount,
                             userPwd: this.ruleForm2.pass,
-                            userPhone: this.userPhone,
-                            userMail: this.userMail,
+                            userPhone: this.ruleForm2.phone,
+                            userMail: this.ruleForm2.email,
                             userName: this.userName,
                             userType: '1',
                             userStatus: '0'
