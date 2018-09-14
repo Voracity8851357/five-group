@@ -15,7 +15,7 @@ export default {
         getShopByPage(state, payload) {
           Object.assign(state, payload)
         },
-        getEitShop(state, payload){
+        addShop(state,payload){
           Object.assign(state, payload)
         }
       },
@@ -53,17 +53,6 @@ export default {
             }).then(response => {
               return response.json();
             });
-          },
-          async getShopId(context,payload){
-           let data=await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
-              headers: {
-                "Content-Type": "application/json"
-              },
-            }).then(response => {
-              return response.json();
-            });
-            context.commit("getEitShop",data)
-            console.log(data)
           },
           async eitShop(context,payload){
             let data=await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {

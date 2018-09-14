@@ -66,7 +66,6 @@
   <div slot="footer" class="dialog-footer">
     <el-button  @click="dialogFormVisible = false" >取 消</el-button>
     <el-button type="primary"  @click="()=>{
-      dialogFormVisible = false
       this.addShop()
       }">确 定</el-button>
   </div>
@@ -216,10 +215,9 @@
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button  @click="dialogFormVisible = false" >取 消</el-button>
-    <el-button type="primary"  @click="saveEdit">确 定</el-button>
+    <el-button type="primary" >确 定</el-button>
   </div>
         </el-dialog>
-    </div>
   </div>
 </template>
 <script>
@@ -255,7 +253,7 @@ import { mapActions, mapState, mapMutations } from "vuex";
     this.restaurants = this.loadAll();
   },
     methods:{
-      ...mapActions('shopName',["getAddShop","asyncGetShopByPage","deleteShop","eitShop","getShopId"]),
+      ...mapActions('shopName',["getAddShop","asyncGetShopByPage","deleteShop","eitShop"]),
       ...mapMutations('shopName',['setCurPage',"setEachPage"]),
       handleSizeChange(val) {
        this.asyncGetShopByPage({eachPage:val})
@@ -286,31 +284,15 @@ import { mapActions, mapState, mapMutations } from "vuex";
         });
       },
       handleEdit(index, row) {
-              this.getShopId({
-                _id:row._id,
-                shopName: row.shopName,
-                 shopAdd: row.shopAdd, //地址
-                 shopLicenceNum: row.shopLicenceNum,
-                 description: row.delivery_mode, //介绍
-                 shopTel: row.shopTel,
-                 shopFeature: row.shopFeature,
-                 shopCorporate:row.shopCorporate
-              })
-              
+         this.form.shopName=row.shopName,
+         this.form.shopAdd=row.shopAdd, //地址
+         this.form.shopLicenceNum=row.shopLicenceNum,
+         this.form.delivery_mode=row.delivery_mode, //介绍
+         this.form.shopTel=row.shopTel,
+         this.form.shopFeature=row.shopFeature,
+         this.form.shopCorporate=row.shopCorporate    
             },
-            saveEdit(){
-                this.eitShop({
-                   shopName: this.form.shopName,
-                   shopAdd: this.form.shopAdd, //地址
-                  shopLicenceNum: this.form.shopLicenceNum,
-                  description: this.form.delivery_mode, //介绍
-                  shopTel: this.form.shopTel,
-                  shopFeature: this.form.shopFeature,
-                  shopCorporate:this.form.shopCorporate
-                })
-                this.dialogFormVisible = false;
-                this.$message.success(`修改第 ${this.id+1} 行成功`);
-            },
+            
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
@@ -381,6 +363,7 @@ import { mapActions, mapState, mapMutations } from "vuex";
       console.log(ev);
     },
     addShop: function() {
+       dialogFormVisible = false
       this.getAddShop({
         shopName: this.form.shopName,
         shopAdd: this.form.shopAdd, //地址
