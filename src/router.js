@@ -7,12 +7,20 @@ import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
 import ApplyForShop from './components/applyForShop/applyForShop.vue';
 import ShopName from './components/shopName/shopName.vue'
+import UserAccount from './components/userAccount/userAccount';     
+
+
 Vue.use(Router);
 
 export default new Router({
     routes: [
         {
             path: '/',
+            name: 'login',
+            component: login
+        },
+        {
+            path: '/login:userAcount',
             name: 'login',
             component: login
         },
@@ -27,7 +35,7 @@ export default new Router({
             children: [
                 {
                     path: '/index/userAccount',
-                    // component: UserAccount,
+                    component: UserAccount,
                 },
                 {
                     path: '/index/shopName',
