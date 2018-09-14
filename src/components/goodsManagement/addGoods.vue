@@ -345,7 +345,7 @@
                 this.$refs.pictureUpload.submit();
             },
 
-            onUploadSuccess(response, file, fileList) {
+            onUploadSuccess(response) {
                 this.good.goodsImg.push(...response.path);
                 this.$refs.goodAddForm.validateField("goodsImg");
             },

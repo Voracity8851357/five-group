@@ -19,9 +19,8 @@ export default {
         }
     },
     actions: {
-        async addGoods(context, data) {
-            console.log(context);
-            const {page, rows} = context.rootState.goodsManagement;
+        async addGoods({commit, state}, data) {
+            const {curpage, eachpage} = state;
             const tempData = await fetch("/goodsManagement/addGoods", {
                 method: "post",
                 headers: {
@@ -29,11 +28,11 @@ export default {
                 },
                 body: JSON.stringify({
                     data,
-                    page,
-                    rows,
+                    page: curpage,
+                    rows: eachpage,
                 }),
             }).then(res => res.json());
-            context.commit("addGoods", tempData);
+            commit("addGoods", tempData);
         },
         async getGoodsAsync({commit, state}, callback) {
             const {curpage, eachpage} = state;
@@ -41,6 +40,21 @@ export default {
             commit("addGoods", tempData);
             if (callback)
                 callback();
+        },
+        async updateGoodsAsync({commit, state}, data) {
+            const {curpage, eachpage} = state;
+            const tempData = await fetch(`/goodsManagement/editGoods`, {
+                method: "put",
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data,
+                    page: curpage,
+                    rows: eachpage,
+                }),
+            })
+                .then(res => res.json());
         }
     }
 }
