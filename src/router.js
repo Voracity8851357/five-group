@@ -6,9 +6,15 @@ import IndexStore from "./routes/index-store";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
-import UserAccount from './components/userAccount/userAccount';
+
+import ServiceManage from './components/serviceManage/serviceManage.vue'
+
+import ApplyForShop from './components/applyForShop/applyForShop.vue';
+import ShopName from './components/shopName/shopName.vue'
+import UserAccount from './components/userAccount/userAccount';     
 
 import GoodsContainer from "./components/goodsManagement/goodsContainer";
+
 
 Vue.use(Router);
 
@@ -34,15 +40,15 @@ export default new Router({
             component: IndexPlatform,
             children: [
                 {
-                    path: '/index/userAccount',
+                    path: '/indexPlatform/userAccount',
                     component: UserAccount,
                 },
                 {
-                    path: '/index/shopName',
-                    // component: ShopName,
+                    path: '/indexPlatform/shopName',
+                    component: ShopName,
                 },
                 {
-                    path: '/index/petOwners',
+                    path: '/indexPlatform/petOwners',
                     // component: PetOwners,
                 },
             ]
@@ -52,19 +58,20 @@ export default new Router({
             component: IndexStore,
             children: [
                 {
-                    path: '/index/applyForShop',
-                    // component: ApplyForShop,
+                    path: '/indexStore/applyForShop',
+                    component: ApplyForShop,
                 },
                 {
-                    path: '/index/goodsName',
+                    path: '/indexStore/goodsName',
                     component: GoodsContainer,
                 },
                 {
-                    path: '/index/serviceName',
-                    // component: ServiceName,
+                    path: '/indexStore/serviceManage',
+                    name:'serviceManage',
+                    component: ServiceManage,
                 },
                 {
-                    path: '/index/orderManagement',
+                    path: '/indexStore/orderManagement',
                     // component: OrderManagement,
                 },
             ]

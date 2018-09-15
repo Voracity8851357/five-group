@@ -1,22 +1,22 @@
 <template>
-    <el-container class="container">
+   <el-container class="container">
         <el-header class="header">Header</el-header>
         <el-container>
             <el-aside width="200px">
                 <el-menu class="aside-menu" router>
-                    <el-menu-item index="/index/applyForShop">
+                    <el-menu-item index="/indexStore/applyForShop">
                         <i class="el-icon-menu"></i>
                         <span slot="title">门店申请</span>
                     </el-menu-item>
-                    <el-menu-item index="/index/goodsName">
+                    <el-menu-item index="/indexStore/goodsName">
                         <i class="el-icon-menu"></i>
                         <span slot="title">商品管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/index/serviceName">
+                    <el-menu-item index="/indexStore/serviceManage">
                         <i class="el-icon-menu"></i>
-                        <span slot="title">服务</span>
+                        <span slot="title">服务管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/index/orderManagement">
+                    <el-menu-item index="/indexStore/orderManagement">
                         <i class="el-icon-menu"></i>
                         <span slot="title">订单管理</span>
                     </el-menu-item>
@@ -28,28 +28,27 @@
         </el-container>
     </el-container>
 </template>
-
 <script>
-    export default {}
+export default {};
 </script>
 
 <style scoped>
-    .container {
-        height: 100%;
-        background: #efefef;
-    }
+.container {
+  height: 100%;
+  background: #efefef;
+}
 
-    .header {
-        background: #fff;
-    }
+.header {
+  background: #fff;
+}
 
-    .aside-menu {
-        height: 100%;
-    }
+.aside-menu {
+  height: 100%;
+}
 
-    .content-container {
-        background: #fff content-box;
-        padding: 0;
-        margin: 20px;
-    }
+.content-container {
+  background: #fff content-box;
+  padding: 0;
+  margin: 20px;
+}
 </style>
