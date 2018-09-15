@@ -2,7 +2,6 @@ export default {
     namespaced: true,
     // 门店管理列表
     state: {
-      _id:0,
       curPage:1,
       eachPage:10,
       maxPage:0, 
@@ -27,9 +26,9 @@ export default {
         async asyncGetShopByPage(context,{curPage=1, eachPage=10,searchType="",searchText=""}={}) {
           let url="";
           if(searchType!=''&searchText!=''){
-            url=`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&row=${eachPage}&seachType=${searchType}&seachText=${searchText}`
+            url=`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}&type=${searchType}&text=${searchText}`
           }else{
-            url=`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&row=${eachPage}`
+            url=`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}`
           }
           const data=await fetch(url, {
             headers: {
@@ -39,7 +38,6 @@ export default {
             return response.json();
           });
           context.commit("getShopByPage",data)
-          console.log(data)
         },
         async asyncGetAddShop(context,payload){
          const data=await fetch("http://localhost:8081/shopManagement/add", {
@@ -53,9 +51,9 @@ export default {
             });
             context.commit("addShop",data)
           },
-          async deleteShop(context,payload){
-            const data= await fetch(`http://localhost:8081/shopManagement/`+payload._id, {
-              method: "DELETE",
+          async deleteShop(context,id){
+            const data= await fetch(`http://localhost:8081/shopManagement/`+id, {
+              method: "delete",
               headers: {
                 "Content-Type": "application/json"
               },
@@ -68,11 +66,11 @@ export default {
             });
             context.commit('delete_shop',data)
           },
-          async asyncEditShop(context,payload){
-            const data=await fetch('http://localhost:8081/shopManagement/'+payload._id, {
-                method: "PUT",
+          async asyncEditShop(context, payload) {
+           let data=await fetch(`http://localhost:8081/shopManagement/editShop/`+payload._id, {
+                method: 'PUT',
                 headers: {
-                  "Content-Type": "application/json"
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                   editShop: payload,
@@ -81,11 +79,12 @@ export default {
                       rows: context.state.eachpage
                   }
               })
-              }).then(response => {
-                return response.json();
-              });
-              context.commit("edit_shop",data)
-            }
+            })
+            .then(response => {
+              return response.json();
+          })
+           context.commit('edit_shop', data)
+        }
     
       }
 }
