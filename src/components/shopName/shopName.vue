@@ -31,6 +31,7 @@
   list-type="picture-card"
   :auto-upload="false"
    :multiple="true"
+    ref="shopLicenUpload"
   :on-preview="handlePictureCardPreview"
   :on-success="handUploadSuccess">
   <i class="el-icon-plus"></i>
@@ -53,13 +54,18 @@
 					</el-form-item>
           <el-form-item label="上传店铺头像">
 							<el-upload
-  action="https://localhost:8081/shopManagement/upload"
+  action="http://localhost:8081/shopManagement/uploadPrice"
   list-type="picture-card"
    :auto-upload="false"
    :multiple="true"
-  :on-preview="handlePictureCardPreview"
+    ref="shopUpload"
  :on-success="onUploadSuccess">
-  <i class="el-icon-plus"></i>
+    <el-button style="margin-right: 10px;" slot="trigger" size="small" type="primary">
+                                浏览<i class="el-icon-document el-icon--right"></i>
+                            </el-button>
+                            <el-button size="small" type="success" @click="onClickUpload">
+                                上传<i class="el-icon-upload el-icon--right"></i>
+                            </el-button>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
   <img width="100%" :src="editShop.shopImg" alt="">
@@ -218,6 +224,7 @@
 						<el-upload
   action="https://jsonplaceholder.typicode.com/posts/"
   list-type="picture-card"
+   ref="shopLicenUpload"
   :on-preview="handlePictureCardPreview"
   :on-success="handUploadSuccess">
   <i class="el-icon-plus"></i>
@@ -244,6 +251,7 @@
   list-type="picture-card"
   :on-preview="handlePictureCardPreview"
   :on-success="onUploadSuccess"
+   ref="shopUpload"
   >
   <i class="el-icon-plus"></i>
 </el-upload>
@@ -287,8 +295,8 @@ import { mapActions, mapState, mapMutations } from "vuex";
         shopTel: "",
         shopFeature: "",
         shopCorporate:"",
-        shopImg:"",
-        shopLicenceImg:"",
+        shopImg:[],
+        shopLicenceImg:[],
         shopLocation:'',
         shopVip:""
         },
@@ -310,8 +318,8 @@ import { mapActions, mapState, mapMutations } from "vuex";
         shopTel: "",
         shopFeature: "",
         shopCorporate:"",
-        shopImg:"",
-        shopLicenceImg:"",
+        shopImg:[],
+        shopLicenceImg:[],
         shopVip:""
       }
      }
@@ -348,9 +356,9 @@ import { mapActions, mapState, mapMutations } from "vuex";
       this.asyncGetShopByPage()
     },
       // 图片
-       onUploadSuccess(response, file, fileList) {
-                this.form.shopImg.push(...response.path);
-                this.$refs.shopAddForm.validateField("shopImg");
+       onUploadSuccess(response) {
+          this.form.shopImg.push(...response.path);
+           this.$refs.shopAddForm.validateField("shopImg");
             },
       handlePictureCardPreview(file, fileList){
          console.log(file, fileList)
@@ -358,6 +366,9 @@ import { mapActions, mapState, mapMutations } from "vuex";
         handUploadSuccess(response, file, fileList) {
                 this.form.shopImg.push(...response.path);
                 this.$refs.shopAddForm.validateField("shopImg");
+            },
+             onClickUpload() {
+                this.$refs.shopUpload.submit();
             },
       // 删除
       handleDelete(index, row){
