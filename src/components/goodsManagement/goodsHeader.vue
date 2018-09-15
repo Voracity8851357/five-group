@@ -4,7 +4,7 @@
             新增商品
         </el-button>
         <el-autocomplete
-                v-model="searchText"
+                v-model="tempSearchText"
                 :fetch-suggestions="querySearchAsync"
                 placeholder="请输入商品名称"
                 prefix-icon="el-icon-search"
@@ -33,7 +33,9 @@
                 //扩展列表展开状态
                 expandTrigger: false,
                 //搜索框文本
-                searchText: "",
+                tempSearchText: "",
+                //
+                firstSearch: true,
             }
         },
         methods: {
@@ -46,10 +48,14 @@
                 const results = await fetch(`/goodsManagement/getNames/?text=${queryString}`)
                     .then(res => res.json());
                 callback(results);
+                if (this.firstSearch) return;
+                else if (this.firstSearch && queryString) this.firstSearch = false;
+                if (queryString === this.tempSearchText) return;
                 this.handleSearchSelect({value: queryString});
             },
             //点击搜索字段触发store数据刷新
             handleSearchSelect: debounce(function ({value}) {
+                this.firstSearch = false;
                 this.setSearchText(value);
                 this.getGoodsAsync();
             }, 800),

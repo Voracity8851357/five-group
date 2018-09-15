@@ -1,25 +1,40 @@
 <template>
-    <el-container>
+    <el-container class="login-outer">
         <el-main style="display: flex;justify-content: center;align-items: center">
-            <el-card class="box-card" style="width: 800px;display: flex;flex-direction: column;align-items: center">
-                <el-form label-width="80px">
-                    <el-form-item label="账号">
-                        <el-input v-model="userAcount" style="width: 300px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="密码">
-                        <el-input v-model="password" type="password" style="width: 300px"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="login">登录</el-button>
-                        <el-button @click="reg">注册</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-card>
+            <el-row class="login-container">
+                <el-col class="login-left" :xs="24" :md="8" :lg="8">
+                    <el-form size="small">
+                        <p class="login-prompt">请登录</p>
+                        <el-form-item>
+                            <el-input v-model="userAcount" style="width: 300px">
+                                <template slot="prepend">帐号</template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-input v-model="password" type="password" style="width: 300px">
+                                <template slot="prepend">密码</template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button class="login-btn" type="primary" @click="login">登录</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="text" @click="reg">还没有帐号？</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-col>
+                <el-col :md="16" :lg="16" class="login-right hidden-xs-only">
+                    <h1>后 台 管 理</h1>
+                    <p>五 组</p>
+                </el-col>
+            </el-row>
         </el-main>
     </el-container>
 </template>
 
 <script>
+    import 'element-ui/lib/theme-chalk/display.css';
+
     import {mapState, mapMutations, mapActions} from 'vuex';
 
     export default {
@@ -77,5 +92,56 @@
 </script>
 
 <style scoped>
+    .login-outer {
+        height: 100%;
+        background: #F3F5F8;
+    }
 
+    .login-container {
+        position: relative;
+        top: -50px;
+        display: flex;
+        align-items: center;
+        width: 1200px;
+        min-width: 500px;
+        border-radius: 5px;
+        box-shadow: 1px 2px 10px 0 rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .login-left {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 350px;
+        background: #fff;
+    }
+
+    .login-left .el-form {
+        text-align: center;
+    }
+
+    .login-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 350px;
+        background: linear-gradient(rgba(99, 156, 185, 0.92), rgba(99, 156, 185, 0.92)), url("./images/login-bg.jpg") center;
+        color: #ffffff;
+    }
+
+    .login-right > * {
+        margin-left: 50px;
+    }
+
+    .login-prompt {
+        font-size: 14px;
+        margin: 0 0 50px;
+        text-align: center;
+        color: #aaa;
+    }
+
+    .login-btn {
+        width: 100% !important;
+    }
 </style>
