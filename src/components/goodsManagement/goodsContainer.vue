@@ -1,35 +1,81 @@
 <template>
     <div>
-        <el-row>
-            <el-col>
-                <edit-header/>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col>
-                <goods-list/>
-            </el-col>
-        </el-row>
+        <edit-header
+                @handleOpenExpand="handleOpenExpand"
+                @handleDialogTrigger="handleDialogTrigger"
+        />
+        <goods-table :expandTrigger="expandTrigger"/>
+        <table-pagination/>
+        <add-dialog
+                :dialogVisible="dialogVisible"
+                @handleDialogTrigger="handleDialogTrigger"
+        />
+        <back-top
+                @handleToTop="handleToTop"
+                @handleToBottom="handleToBottom"
+                :visible="visible"/>
     </div>
 </template>
-
 <script>
-    import {Component, Vue} from 'vue-property-decorator';
-    import editHeader from "./editHeader";
+    import Vue from "vue";
 
-    import goodsList from "./goodsList";
+    import editHeader from "./goodsHeader";
+    import addDialog from "./addDialog";
+    import goodsTable from "./goodsTable";
+    import tablePagination from "./tablePagination";
+    import backTop from "./backTop";
 
-    @Component({
-        components: {
-            goodsList,
-            editHeader,
+    Vue.component("editHeader", editHeader);
+    Vue.component("addDialog", addDialog);
+    Vue.component("goodsTable", goodsTable);
+    Vue.component("tablePagination", tablePagination);
+    Vue.component("backTop", backTop);
+
+    export default {
+        data() {
+            return {
+                //新增对话框显示隐藏
+                dialogVisible: false,
+                //列表是否打开
+                expandTrigger: false,
+                //
+                container: Element,
+                //
+                visible: false,
+            }
+        },
+        methods: {
+            //对话框
+            handleDialogTrigger(state) {
+                this.dialogVisible = state;
+            },
+            //打开或者所有行
+            handleOpenExpand(isOpen) {
+                this.expandTrigger = isOpen;
+            },
+            //
+            handleToTop() {
+                this.container.scrollTop = 0;
+                this.visible = false;
+            },
+            handleToBottom() {
+                this.container.scrollTop = this.container.scrollHeight;
+            },
+            console(event) {
+                console.log("console");
+                console.log(event);
+            }
+        },
+        mounted() {
+            this.container = document.querySelector(".content-container");
+            this.container.addEventListener("wheel", () => {
+                this.visible = this.container.scrollTop > 400;
+            })
         }
-    })
-    export default class goodsContainer extends Vue {
-
     }
 </script>
 
-<style scoped>
+
+<style>
 
 </style>

@@ -1,12 +1,19 @@
 <template>
-    <div>
         <el-table
                 :data="rows"
                 ref="goodsTable"
                 stripe
-                @row-click="console"
-                v-loading="isLoading"
+                type="selection"
+                class="goods-table"
+                @row-click="handleRowClick"
+                header-row-class-name="goods-table-header"
+                v-loading="isRefresh"
                 style="width: 100%">
+            <el-table-column
+                    align="center"
+                    type="index"
+                    width="50">
+            </el-table-column>
             <el-table-column type="expand">
                 <template slot-scope="props">
                     <el-form
@@ -80,13 +87,7 @@
                             </el-button>
                         </el-form-item>
                         <el-form-item class="goods-img-container" label="商品图片:" prop="goodsImg">
-                            <div style="white-space: initial;">
-                                <div class="goods-img-item" v-for="item of tempGood.goodsImg">
-                                    <img class="goods-img" width="100px" :src="item">
-                                    <i class="el-icon-circle-close goods-img-delete"
-                                       @click="onClickImgDelete(item)"></i>
-                                </div>
-                            </div>
+
                             <el-upload
                                     ref="pictureUpload"
                                     class="upload-goods-picture"
@@ -94,13 +95,21 @@
                                     :auto-upload="false"
                                     :multiple="true"
                                     :on-success="onUploadSuccess">
-                                <el-button style="margin-right: 10px;" slot="trigger" size="small" type="primary">
+                                <el-button style="margin-right: 10px;" slot="trigger" size="small"
+                                           type="primary">
                                     浏览<i class="el-icon-document el-icon--right"></i>
                                 </el-button>
                                 <el-button size="small" type="success" @click="onClickUpload">
                                     上传<i class="el-icon-upload el-icon--right"></i>
                                 </el-button>
                             </el-upload>
+                            <div class="picture-list">
+                                <div class="goods-img-item" v-for="item of tempGood.goodsImg">
+                                    <img class="goods-img" width="100px" :src="item">
+                                    <i class="el-icon-circle-close goods-img-delete"
+                                       @click="onClickImgDelete(item)"></i>
+                                </div>
+                            </div>
                         </el-form-item>
                     </el-form>
                     <el-form
@@ -155,13 +164,27 @@
                             </el-tag>
                         </el-form-item>
                         <el-form-item class="goods-img-container" label="商品图片:">
-                            <img class="goods-img" width="100px" v-for="item of props.row.goodsImg" :src="item"/>
+                            <el-popover
+                                    v-for="item of props.row.goodsImg"
+                                    placement="top"
+                                    width="500"
+                                    trigger="hover">
+                                <img width="500" :src="item" alt="">
+                                <img
+                                        slot="reference"
+                                        class="goods-img"
+                                        width="100px"
+                                        :src="item"/>
+                            </el-popover>
                         </el-form-item>
                     </el-form>
-                    <el-button-group>
+                    <el-button-group class="edit-btn-group">
                         <el-button @click="enableEdit(props.$index)">修改</el-button>
-                        <el-button v-show="editable" :loading="submitLoading" @click="onSubmit">提交</el-button>
-                        <el-button v-show="editable" @click="disableEdit">取消</el-button>
+                        <template v-if="isAllowEdit(props.$index)">
+                            <el-button @click="onSubmit">提交
+                            </el-button>
+                            <el-button @click="disableEdit">取消</el-button>
+                        </template>
                     </el-button-group>
                 </template>
             </el-table-column>
@@ -174,29 +197,38 @@
                     prop="goodsType">
             </el-table-column>
             <el-table-column
+                    label="商品特色">
+                <template slot-scope="scope">
+                    <el-tag
+                            class="show-tags"
+                            :key="index"
+                            v-for="(tag,index) in scope.row.goodsIntro"
+                            :disable-transitions="true">
+                        {{tag}}
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    align="center"
                     label="价格(元)"
                     prop="goodsPrice">
             </el-table-column>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button size="small" circle class="delete-btn" @click="handleDeleteClick(scope.row)">
+                    <i class="delete-btn-icon el-icon-delete"></i>
+                    </el-button>
+                </template>
+            </el-table-column>
         </el-table>
-        <el-pagination
-                class="goods-pagination"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="curpage"
-                :page-sizes="[10, 20, 30]"
-                :page-size="eachpage"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="total">
-        </el-pagination>
-    </div>
 </template>
 
 <script>
+    import rules from "./rules";
+
     import {createNamespacedHelpers} from "vuex";
 
-    const {mapState, mapActions, mapMutations} = createNamespacedHelpers("goodsManagement");
-
-    import {debounce} from "lodash";
+    const {mapState, mapActions} = createNamespacedHelpers("goodsManagement");
 
     export default {
         data() {
@@ -204,9 +236,6 @@
                 //修改
                 editIndex: -1,
                 editable: false,
-                //是否载入
-                isLoading: true,
-                submitLoading: false,
                 //tag标签控制
                 tagInputVisible: false,
                 tagInputValue: '',
@@ -228,78 +257,28 @@
                     goodsImg: [],
                 },
                 //修改验证规则
-                rules: {
-                    goodsName: [
-                        {required: true, message: '请输入商品', trigger: 'blur'},
-                        {min: 2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur'},
-                    ],
-                    goodsType: [
-                        {required: true, message: '请输入种类', trigger: 'blur'},
-                    ],
-                    goodsCanFor: [
-                        {required: true, message: '请输入规格', trigger: 'blur'},
-                    ],
-                    goodsSize: [
-                        {required: true, message: '请输入规格', trigger: 'blur'},
-                        {type: 'number', min: 0.1, message: '规格不能为 0',},
-                    ],
-                    goodsPrice: [
-                        {
-                            required: true,
-                            validator: (rule, value, callback) => {
-                                if (value.match(/\s/g)) {
-                                    return callback(new Error('格式不正确'));
-                                }
-                                if (+value < 0) {
-                                    return callback(new Error('请输入正确的价格'));
-                                }
-                                else if (+value === 0) {
-                                    if (value === "")
-                                        return callback(new Error('价格不能为空'));
-                                    else
-                                        return callback(new Error('价格不能为 0'));
-                                }
-                                callback();
-                            },
-                            trigger: 'blur',
-                        },
-                    ],
-                    goodsImg: [
-                        {
-                            required: true,
-                            validator: (rule, value, callback) => {
-                                if (value.length === 0) {
-                                    return callback(new Error("请上传商品图片"))
-                                }
-                                callback();
-                            },
-                        },
-                    ],
-                },
+                rules,
+            }
+        },
+        props: {
+            expandTrigger: {
+                type: Boolean,
+                default: false,
+            }
+        },
+        watch: {
+            expandTrigger(oldValue) {
+                this.rows.forEach(row => {
+                    this.$refs.goodsTable.toggleRowExpansion(row, oldValue);
+                });
             }
         },
         computed: {
             //商品列表state属性
-            ...mapState(["rows", "curpage", "eachpage", "maxpage", "total"]),
+            ...mapState(["rows", "curpage", "eachpage", "maxpage", "total", "isRefresh"]),
         },
         methods: {
-            //设置页数，设置每页显示
-            ...mapMutations(["setCurrentPage", "setPageSize"]),
-            ...mapActions(["getGoodsAsync", "updateGoodsAsync"]),
-            handleSizeChange(pageSize) {
-                this.isLoading = true;
-                this.setPageSize(pageSize);
-                this.getGoodsAsync(this.loadingCompleted);
-            },
-            handleCurrentChange: debounce(function (currentPage) {
-                this.isLoading = true;
-                this.setCurrentPage(currentPage);
-                this.getGoodsAsync(this.loadingCompleted);
-            }, 300),
-            //修改载入状态
-            loadingCompleted() {
-                this.isLoading = false
-            },
+            ...mapActions(["getGoodsAsync", "updateGoodsAsync", "deleteGoodsAsync"]),
             //是否允许修改
             isAllowEdit(index) {
                 return this.editIndex === index && this.editable;
@@ -308,14 +287,24 @@
             enableEdit(index) {
                 const row = this.rows.find((value, rowIndex) => rowIndex === index);
                 Object.assign(this.tempGood, JSON.parse(JSON.stringify(row)));
-                // this.$refs.goodsTable.toggleRowExpansion(row, true);
                 this.editIndex = index;
                 this.editable = true;
             },
-            //关闭修改
-            disableEdit() {
-                this.editIndex = -1;
-                this.editable = false;
+            //展开点击行
+            handleRowClick(row, event) {
+                if (event.target.nodeName.includes("BUTTON")) return;
+                this.$refs.goodsTable.toggleRowExpansion(row);
+            },
+            //删除行
+            handleDeleteClick({_id, goodsName}) {
+                this.$confirm(`确认删除商品 "${goodsName}"?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteGoodsAsync(_id);
+                }).catch(() => {
+                });
             },
             //tag标签关闭
             handleTagClose(tag) {
@@ -352,25 +341,32 @@
             },
             // 修改提交
             async onSubmit() {
-                this.submitLoading = true;
+                this.disableEdit();
                 await this.updateGoodsAsync(this.tempGood);
-                this.submitLoading = false;
+                const lastId = this.tempGood._id;
+                if (!this.expandTrigger)
+                    this.rows.forEach(row => {
+                        this.$refs.goodsTable.toggleRowExpansion(row, row._id === lastId)
+                    });
             },
-            console() {
-                console.log(arguments);
-            }
+            //关闭修改
+            disableEdit() {
+                this.editIndex = -1;
+                this.editable = false;
+            },
+        },
+        updated() {
+            this.rows.forEach(row => {
+                this.$refs.goodsTable.toggleRowExpansion(row, this.expandTrigger);
+            });
         },
         mounted() {
-            this.getGoodsAsync(this.loadingCompleted);
+            this.getGoodsAsync();
         }
     }
 </script>
 
 <style>
-    .goods-pagination {
-        text-align: center;
-    }
-
     .goods-table-expand {
         font-size: 0;
     }
@@ -408,6 +404,11 @@
         user-select: none;
     }
 
+    .goods-table-expand .goods-tags .el-form-item__content {
+        width: calc(100% - 120px) !important;
+        white-space: initial !important;
+    }
+
     .goods-table-expand .goods-img-container {
         display: block !important;
         white-space: nowrap;
@@ -441,6 +442,7 @@
         border: 1px solid #eee;
         margin-right: 10px;
         padding: 10px;
+        cursor: pointer;
     }
 
     .goods-table-expand .goods-img .el-form-item__content {
@@ -449,13 +451,61 @@
     }
 
     .goods-table-expand .upload-goods-picture {
+    }
+
+    .goods-table-expand + .edit-btn-group {
+        margin-top: 40px;
+        margin-left: 110px;
+    }
+
+    .goods-table-expand .picture-list {
+        white-space: initial;
+        margin-top: 20px;
         display: block !important;
     }
 
-    @media screen and (max-width: 1100px) {
+    .goods-table-expand.delete-btn {
+        transition: all 50ms;
+    }
+
+    .delete-btn:hover {
+        background: #F56C6C !important;
+        border-color: #F56C6C !important;
+        border-radius: 16px !important;
+        color: #ffffff;
+    }
+
+    .delete-btn:hover .delete-btn-icon {
+        display: none;
+    }
+
+    .delete-btn:hover:before {
+        content: "删 除";
+        color: #fff;
+    }
+
+    .show-tags {
+        margin-left: 10px;
+        margin-bottom: 4px;
+    }
+
+    @media screen and (max-width: 1200px) {
         .goods-table-expand .el-form-item {
             width: 100% !important;
             min-width: 500px;
         }
+    }
+
+    .goods-table .el-table__header-wrapper {
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 8px 10px 0 rgba(0, 0, 0, .2);
+        margin-bottom: 4px;
+    }
+
+    .goods-table-header th {
+        text-align: center !important;
+        background: #FAFAFA !important;
+        height: 80px;
     }
 </style>
