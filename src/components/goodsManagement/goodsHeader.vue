@@ -34,8 +34,6 @@
                 expandTrigger: false,
                 //搜索框文本
                 tempSearchText: "",
-                //
-                firstSearch: true,
             }
         },
         methods: {
@@ -48,14 +46,10 @@
                 const results = await fetch(`/goodsManagement/getNames/?text=${queryString}`)
                     .then(res => res.json());
                 callback(results);
-                if (this.firstSearch) return;
-                else if (this.firstSearch && queryString) this.firstSearch = false;
-                if (queryString === this.tempSearchText) return;
                 this.handleSearchSelect({value: queryString});
             },
             //点击搜索字段触发store数据刷新
             handleSearchSelect: debounce(function ({value}) {
-                this.firstSearch = false;
                 this.setSearchText(value);
                 this.getGoodsAsync();
             }, 800),
