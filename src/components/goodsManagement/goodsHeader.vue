@@ -4,7 +4,7 @@
             新增商品
         </el-button>
         <el-autocomplete
-                v-model="searchText"
+                v-model="tempSearchText"
                 :fetch-suggestions="querySearchAsync"
                 placeholder="请输入商品名称"
                 prefix-icon="el-icon-search"
@@ -33,7 +33,7 @@
                 //扩展列表展开状态
                 expandTrigger: false,
                 //搜索框文本
-                searchText: "",
+                tempSearchText: "",
             }
         },
         methods: {
