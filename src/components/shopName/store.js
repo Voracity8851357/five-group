@@ -16,10 +16,10 @@ export default {
         addShop(state,payload){
           Object.assign(state, payload)
         },
-        delete_shop(state,payload){
-          Object.assign(state,payload)
-        },
         edit_shop(state,payload){
+          Object.assign(state, payload)
+        },
+        delete_shop(state,payload){
           Object.assign(state,payload)
         },
         setState(state, payload) {
@@ -42,13 +42,14 @@ export default {
           }).then(response => {
             return response.json();
           });
+          console.log(data)
           data.rows.map((item) => {
-            if (item.userStatus === '0') {
-                item.userStatus = '申请中'
-            } else if (item.userStatus === '1') {
-                item.userStatus = '可用'
-            } else if (item.userStatus === '2') {
-                item.userStatus = '不可用'
+            if (item.shopStatus === '0') {
+                item.shopStatus = '待审核'
+            } else if (item.shopStatus === '1') {
+                item.shopStatus = '审核通过'
+            } else if (item.shopStatus === '2') {
+                item.shopStatus = '审核未通过'
             }
         });
           context.commit("getShopByPage",data)
@@ -70,31 +71,32 @@ export default {
           async deleteShop(context,id){
             const data= await fetch(`http://localhost:8081/shopManagement/`+id, {
               method: "delete",
-              headers: {
-                "Content-Type": "application/json"
-              },
               body: JSON.stringify({
                 page:context.state.curPage,
                 rows:context.state.eachPage
-              })
-            }).then(response => {
-              return response.json();
-            });
+              }),
+              headers: {
+                "Content-Type": "application/json"
+              },
+            })
             context.commit('delete_shop',data)
           },
           // 修改门店
           async editShops(context, payload) {
-           let data=await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
+         let data= await fetch(`http://localhost:8081/shopManagement/`+payload._id, {
                 method: 'PUT',
+                body: JSON.stringify({
+                  editShop: payload,
+                  pageObj: {
+                      page: context.state.curpage,
+                      rows: context.state.eachpage
+                  }
+              }),
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
+                  'Content-Type': 'application/json',
+              },
             })
-            .then(response => {
-              return response.json();
-          })
-           context.commit('edit_shop', data)
+            context.commit('edit_shop', data)
            
         },
      //获取审核数据
@@ -106,14 +108,14 @@ export default {
       return 'success'
   },
   //审核
-  async async_putAudit(context, {shopStatus, _id} = {}) {
-      await fetch('http://localhost:8081/shopManagement/audit', {
+  async async_putAudit(context,{shopStatus,_id}={}) {
+    await fetch('http://localhost:8081/shopManagement/audit', {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-              shopStatus, _id
+            shopStatus, _id
           })
       });
       return 'success'

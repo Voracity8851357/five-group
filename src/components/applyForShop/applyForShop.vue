@@ -78,6 +78,14 @@
   <img width="100%" :src="formData.shopLicenceImg" alt="">
 </el-dialog>
 					</el-form-item>
+            <el-form-item label="Vip等级">
+    <el-select v-model="formData.shopVip" placeholder="请选择VIP等级">
+      <el-option label="VIP1" value="VIP1"></el-option>
+      <el-option label="VIP2" value="VIP2"></el-option>
+      <el-option label="VIP3" value="VIP3"></el-option>
+      <el-option label="VIP4" value="VIP4"></el-option>
+    </el-select>
+  </el-form-item>
 					<el-form-item class="button_submit">
 						<el-button @click="addShop">立即申请</el-button>
 					</el-form-item>
@@ -106,8 +114,9 @@ export default {
         shopLicenceImg: [],
         shopImg:[],
         shopLocation:'',
-        userType: '0',
-        shopStatus: '1'
+        shopVip:'',
+        userName:'',
+        shopStatus: '0'
       },
     dialogVisible: false,
      fileLists: [], 
@@ -144,7 +153,8 @@ export default {
         shopLicenceImg:this.formData.shopLicenceImg,
         shopImg:this.formData.shopImg,
         shopLocation:this.formData.shopLocation,
-        shopStatus:this.formData.shopStatus
+        shopStatus:this.formData.shopStatus,
+        userName:this.formData.userName
       });
     }, 
   }

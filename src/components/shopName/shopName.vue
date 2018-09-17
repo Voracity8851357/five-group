@@ -55,7 +55,7 @@
 					</el-form-item>
           <el-form-item label="上传店铺头像">
 							<el-upload
-  action="http://localhost:8081/shopManagement/uploadPrice"
+  action="http://localhost:8081/shopManagement/upload"
   list-type="picture-card"
    :auto-upload="false"
    :multiple="true"
@@ -309,6 +309,7 @@
     <el-button type="primary" @click="()=>{
       deleteDialogVisible=false;
       deleteShop(deleteID);
+       this.asyncGetShopByPage();
       }">确 定</el-button>
   </span>
 </el-dialog>
@@ -386,13 +387,13 @@
 </template>
 <script>
 import { mapActions, mapState, mapMutations } from "vuex";
-  export default {
-     name:"shopName",
-     created() {
+export default {
+  name: "shopName",
+  created() {
     this.asyncGetShopByPage();
   },
-     data(){
-       return{
+  data() {
+    return {
       form: {
         shopName: "", //店铺名称
         shopAdd: "", //地址
@@ -400,62 +401,82 @@ import { mapActions, mapState, mapMutations } from "vuex";
         description: "", //介绍
         shopTel: "",
         shopFeature: "",
-        shopCorporate:"",
-        shopImg:[],
-        shopLicenceImg:[],
-        shopLocation:'',
-        shopVip:"",
-        shopStatus: '1'
-        },
-         deleteID: "",
-         editID: "",
-         search: "",
-         select: "",
-         activeName: 'first',
-        formLabelWidth: '120px',
-        dialogTableVisible: false,
-        addFormVisible: false,
-        dialogVisible: false,
-        editFormVisible:false,
-        deleteDialogVisible:false,
-        restaurants: [], 
-        editShop: {
+        shopCorporate: "",
+        shopImg: [],
+        shopLicenceImg: [],
+        shopLocation: "",
+        shopVip: "",
+        shopStatus: "1"
+      },
+      deleteID: "",
+      editID: "",
+      search: "",
+      select: "",
+      activeName: "first",
+      formLabelWidth: "120px",
+      dialogTableVisible: false,
+      addFormVisible: false,
+      dialogVisible: false,
+      editFormVisible: false,
+      deleteDialogVisible: false,
+      restaurants: [],
+      editShop: {
         shopName: "", //店铺名称
         shopAdd: "", //地址
         shopLicenceNum: "",
         description: "", //介绍
         shopTel: "",
         shopFeature: "",
-        shopCorporate:"",
-        shopImg:[],
-        shopLicenceImg:[],
-        shopVip:"",
-        shopStatus: '1',
-        _id: ''
+        shopCorporate: "",
+        shopImg: [],
+        shopLicenceImg: [],
+        shopVip: "",
+        shopStatus: "1",
+        _id: ""
       }
-     }
-     },
-     computed: {
-    ...mapState("shopName", ["curPage", "eachPage", "maxPage", "total", "rows","audit"])
+    };
   },
-   mounted: function () {
-            this.asyncGetShopByPage();
-            this.async_getAudit();
-        },
-    methods:{
-      ...mapActions('shopName',["asyncGetAddShop","asyncGetShopByPage","deleteShop","editShops",'async_getAudit',"async_putAudit"]),
-      ...mapMutations('shopName',['getShopByPage',"addShop","delete_shop","edit_shop"]),
-      // 分页
-      handleSizeChange(val) {
-       this.asyncGetShopByPage({eachPage:val})
-      },
-      handleCurrentChange(val) {
-       this.asyncGetShopByPage({curPage:val})
-      },
-     handleClick(tab, event) {
-                this.activeName = tab.name;
-            },
-      // 增加
+  computed: {
+    ...mapState("shopName", [
+      "curPage",
+      "eachPage",
+      "maxPage",
+      "total",
+      "rows",
+      "audit"
+    ])
+  },
+  mounted: function() {
+    this.asyncGetShopByPage();
+    this.async_getAudit();
+  },
+  methods: {
+    ...mapActions("shopName", [
+      "asyncGetAddShop",
+      "asyncGetShopByPage",
+      "deleteShop",
+      "editShops",
+      "async_getAudit",
+      "async_putAudit"
+    ]),
+    ...mapMutations("shopName", [
+      "getShopByPage",
+      "addShop",
+      "delete_shop",
+      "edit_shop",
+      "setState"
+    ]),
+    // 分页
+    handleSizeChange(val) {
+      this.asyncGetShopByPage({ eachPage: val });
+    },
+    handleCurrentChange(val) {
+      this.asyncGetShopByPage({ curPage: val });
+    },
+    handleClick(tab, event) {
+      this.activeName = tab.name;
+    },
+    // 增加
     addShop: function() {
       this.asyncGetAddShop({
         shopName: this.form.shopName,
@@ -464,106 +485,85 @@ import { mapActions, mapState, mapMutations } from "vuex";
         description: this.form.delivery_mode, //介绍
         shopTel: this.form.shopTel,
         shopFeature: this.form.shopFeature,
-        shopCorporate:this.form.shopCorporate,
-        shopImg:this.form.shopImg,
-        shopLicenceImg:this.form.shopLicenceImg,
-        shopLocation:this.form.shopLocation,
-        shopVip:this.form.shopVip,
-        shopStatus: '1'
-      })
-      this.asyncGetShopByPage()
+        shopCorporate: this.form.shopCorporate,
+        shopImg: this.form.shopImg,
+        shopLicenceImg: this.form.shopLicenceImg,
+        shopLocation: this.form.shopLocation,
+        shopVip: this.form.shopVip,
+        shopStatus: "1"
+      });
+      this.asyncGetShopByPage();
     },
-     async putShop() {
-                switch (this.editShop.shopStatus) {
-                    case "申请中":
-                        this.editShop.shopStatus = "0";
-                        break;
-                    case "可用":
-                        this.editShop.shopStatus = "1";
-                        break;
-                    default:
-                        this.editShop.shopStatus = "2";
-                        break;
-                }
-                await this.async_putshop({
-                    _id: this.editShop._id,
+    async putShop() {
+      switch (this.editShop.shopStatus) {
+        case "待审核":
+          this.editShop.shopStatus = "0";
+          break;
+        case "审核通过":
+          this.editShop.shopStatus = "1";
+          break;
+        default:
+          this.editShop.shopStatus = "2";
+          break;
+      }
+      await this.editShops({
+        _id: this.editShop._id,
         shopName: this.editShop.shopName,
         shopAdd: this.editShop.shopAdd, //地址
         shopLicenceNum: this.editShop.shopLicenceNum,
-        description: this.editShop.delivery_mode, //介绍
+        description: this.editShop.description, //介绍
         shopTel: this.editShop.shopTel,
         shopFeature: this.editShop.shopFeature,
-        shopCorporate:this.editShop.shopCorporate,
-        shopImg:this.editShop.shopImg,
-        shopLicenceImg:this.editShop.shopLicenceImg,
-        shopLocation:this.editShop.shopLocation,
-        shopVip:this.editShop.shopVip,
-        shopStatus:this.editShop.shopStatus
-                });
-                this.editFormVisible= false;
-               this.asyncGetShopByPage()
-            },
-      // 图片
-       onUploadSuccess(response) {
-          this.form.shopImg.push(...response.path);
-           this.$refs.shopAddForm.validateField("shopImg");
-            },
-      handlePictureCardPreview(file, fileList){
-         console.log(file, fileList)
-      },
-        handUploadSuccess(response, file, fileList) {
-                this.form.shopImg.push(...response.path);
-                this.$refs.shopAddForm.validateField("shopImg");
-            },
-             onClickUpload() {
-                this.$refs.shopUpload.submit();
-            },
-      // 删除
-      handleDelete(index, row){
-       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          center: true
-        }).then(() => {
-          this.deleteShop(row)
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-        this.asyncGetShopByPage()
-      },
-      // 审核
-      async handleAllow(index, row) {
-                this.async_putAudit({
-                    ShopStatus: '1',
-                    _id: row._id
-                });
-                this.async_getAudit();
-               this.asyncGetShopByPage()
-            },
-            async handleDeny(index, row) {
-                this.async_putAudit({
-                    ShopStatus: '2',
-                    _id: row._id
-                });
-                this.async_getAudit();
-              this.asyncGetShopByPage()
-            },
-      // 修改
-      handleEdit(index, row) {
-        console.log(row,index)
-         this.editFormVisible = true;
-         this.editShop = Object.assign({}, row);
-            },
-             //确认修改
-      saveEdit() {
+        shopCorporate: this.editShop.shopCorporate,
+        shopImg: this.editShop.shopImg,
+        shopLicenceImg: this.editShop.shopLicenceImg,
+        shopLocation: this.editShop.shopLocation,
+        shopVip: this.editShop.shopVip,
+        shopStatus: this.editShop.shopStatus
+      });
+      this.editFormVisible = false;
+      this.asyncGetShopByPage();
+    },
+    // 图片
+    onUploadSuccess(response) {
+      this.form.shopImg.push(...response.path);
+      this.$refs.shopAddForm.validateField("shopImg");
+    },
+    handlePictureCardPreview(file, fileList) {
+      console.log(file, fileList);
+    },
+    handUploadSuccess(response, file, fileList) {
+      this.form.shopImg.push(...response.path);
+      this.$refs.shopAddForm.validateField("shopImg");
+    },
+    onClickUpload() {
+      this.$refs.shopUpload.submit();
+    },
+    // 审核
+    handleAllow(index, row) {
+      this.async_putAudit({
+        shopStatus: "1",
+        _id: row._id
+      });
+      this.async_getAudit();
+      this.asyncGetShopByPage();
+    },
+     handleDeny(index, row) {
+      this.async_putAudit({
+        shopStatus: "2",
+        _id: row._id
+      });
+      this.async_getAudit();
+      this.asyncGetShopByPage();
+    },
+    // 修改
+    handleEdit(index, row) {
+      console.log(row, index);
+      this.editFormVisible = true;
+      this.editShop = Object.assign({}, row);
+    },
+    //确认修改
+    saveEdit() {
       this.editFormVisible = false;
       this.editShops({
         _id: this.editShop._id,
@@ -573,16 +573,16 @@ import { mapActions, mapState, mapMutations } from "vuex";
         description: this.editShop.delivery_mode, //介绍
         shopTel: this.editShop.shopTel,
         shopFeature: this.editShop.shopFeature,
-        shopCorporate:this.editShop.shopCorporate,
-        shopImg:this.editShop.shopImg,
-        shopLicenceImg:this.editShop.shopLicenceImg,
-        shopLocation:this.editShop.shopLocation,
-        shopVip:this.editShop.shopVip
+        shopCorporate: this.editShop.shopCorporate,
+        shopImg: this.editShop.shopImg,
+        shopLicenceImg: this.editShop.shopLicenceImg,
+        shopLocation: this.editShop.shopLocation,
+        shopVip: this.editShop.shopVip
       });
-      this.asyncGetShopByPage()
-    },
+      this.asyncGetShopByPage();
     }
-  };
+  }
+};
 </script>
 <style scope>
 .button_submit {
@@ -611,7 +611,7 @@ import { mapActions, mapState, mapMutations } from "vuex";
   height: 178px;
   display: block;
 }
-.formTable{
+.formTable {
   margin-left: 20px;
   margin-top: 20px;
   width: 100%;
