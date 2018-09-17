@@ -1,7 +1,8 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="padding: 20px">
         <el-tab-pane label="用户管理" name="first">
-            <el-button type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">添加</el-button>
+            <el-button type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">添加
+            </el-button>
             <!--搜索-->
             <div style="margin-top: 15px;">
                 <el-input placeholder="请输入内容" v-model="search" class="input-with-select" style="width: 500px">
@@ -137,7 +138,7 @@
         </el-tab-pane>
         <el-tab-pane label="门店管理员审核" name="second">
             <el-table
-                    :data="form"
+                    :data="audit"
                     border
                     style="width: 100%;margin-top: 20px">
                 <el-table-column
@@ -225,6 +226,10 @@
         mounted: function () {
             this.async_getUsers();
             this.async_getAudit();
+
+        },
+        created: function () {
+            console.log(this)
         },
         computed: {
             ...mapState('userAccount', ['list', 'audit'])

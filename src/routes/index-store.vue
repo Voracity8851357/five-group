@@ -16,7 +16,7 @@
                         text-color="#fff"
                         active-text-color="#409EFF"
                         router>
-                    <template v-if="userType">
+                    <template v-if="userType==='0'">
                         <el-menu-item index="/index/userAccount">
                             <i class="el-icon-menu"></i>
                             <span slot="title">用户管理</span>
