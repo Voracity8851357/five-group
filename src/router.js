@@ -11,7 +11,7 @@ import ServiceManage from './components/serviceManage/serviceManage.vue'
 
 import ApplyForShop from './components/applyForShop/applyForShop.vue';
 import ShopName from './components/shopName/shopName.vue'
-import UserAccount from './components/userAccount/userAccount';     
+import UserAccount from './components/userAccount/userAccount';
 
 import GoodsContainer from "./components/goodsManagement/goodsContainer";
 
@@ -36,43 +36,37 @@ export default new Router({
             component: reg
         },
         {
-            path: "/indexPlatform",
-            component: IndexPlatform,
-            children: [
-                {
-                    path: '/indexPlatform/userAccount',
-                    component: UserAccount,
-                },
-                {
-                    path: '/indexPlatform/shopName',
-                    component: ShopName,
-                },
-                {
-                    path: '/indexPlatform/petOwners',
-                    // component: PetOwners,
-                },
-            ]
-        },
-        {
-            path: "/indexStore",
+            path: "/index",
             component: IndexStore,
             children: [
                 {
-                    path: '/indexStore/applyForShop',
+                    path: '/index/applyForShop',
                     component: ApplyForShop,
                 },
                 {
-                    path: '/indexStore/goodsName',
+                    path: '/index/goodsName',
                     component: GoodsContainer,
                 },
                 {
-                    path: '/indexStore/serviceManage',
-                    name:'serviceManage',
+                    path: '/index/serviceManage',
+                    name: 'serviceManage',
                     component: ServiceManage,
                 },
                 {
-                    path: '/indexStore/orderManagement',
+                    path: '/index/orderManagement',
                     // component: OrderManagement,
+                },
+                {
+                    path: '/index/userAccount',
+                    component: UserAccount,
+                },
+                {
+                    path: '/index/shopName',
+                    component: ShopName,
+                },
+                {
+                    path: '/index/petOwners',
+                    // component: PetOwners,
                 },
             ]
         }

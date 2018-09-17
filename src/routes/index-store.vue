@@ -16,19 +16,33 @@
                         text-color="#fff"
                         active-text-color="#409EFF"
                         router>
-                    <el-menu-item index="/indexStore/applyForShop">
+                    <template v-if="userType">
+                        <el-menu-item index="/index/userAccount">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">用户管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/shopName">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">门店管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/petOwners">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">宠主管理</span>
+                        </el-menu-item>
+                    </template>
+                    <el-menu-item index="/index/applyForShop">
                         <i class="el-icon-menu"></i>
                         <span slot="title">门店申请</span>
                     </el-menu-item>
-                    <el-menu-item index="/indexStore/goodsName">
+                    <el-menu-item index="/index/goodsName">
                         <i class="el-icon-menu"></i>
                         <span slot="title">商品管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/indexStore/serviceManage">
+                    <el-menu-item index="/index/serviceManage">
                         <i class="el-icon-menu"></i>
                         <span slot="title">服务管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/indexStore/orderManagement">
+                    <el-menu-item index="/index/orderManagement">
                         <i class="el-icon-menu"></i>
                         <span slot="title">订单管理</span>
                     </el-menu-item>
@@ -47,6 +61,7 @@
                 collapseBtnClick: false,
                 isCollapse: true,
                 collapseBtnIcon: "el-icon-arrow-right",
+                userType: "1",
             }
         },
         watch: {
@@ -70,6 +85,9 @@
                 if (this.collapseBtnClick) return;
                 this.isCollapse = true;
             });
+        },
+        beforeMount() {
+            this.userType = this.$store.state.app.userType;
         }
     };
 </script>
@@ -105,6 +123,8 @@
         background: #fff content-box;
         padding: 0;
         margin: 20px;
+        box-shadow: 1px 2px 10px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 2px;
     }
 
     .el-menu-item:hover {
