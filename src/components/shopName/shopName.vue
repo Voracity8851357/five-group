@@ -49,8 +49,8 @@
      <el-form-item label="法人" :label-width="formLabelWidth">
       <el-input v-model="form.shopCorporate" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="联系电话" prop="phone">
-						<el-input maxLength="11"></el-input>
+    <el-form-item label="联系电话" prop="shopTel">
+						<el-input maxLength="11" v-model="form.shopTel"></el-input>
 					</el-form-item>
           <el-form-item label="上传店铺头像">
 							<el-upload
@@ -94,45 +94,6 @@
        }"
     border
     class="formTable">
-    <el-table-column type="expand">
-      <template slot-scope="props">
-        <el-form label-position="left" inline class="demo-table-expand">
-          <el-form-item label="店名:">
-            <span>{{ props.row.shopName }}</span>
-          </el-form-item>
-          <el-form-item label="营业执照号：">
-            <span>{{ props.row.shopLicenceNum }}</span>
-          </el-form-item>
-          <el-form-item label="营业执照图片：">
-            <img :src="props.row.shopLicenceImg" alt="" style="width:100px">
-          </el-form-item>
-          <el-form-item label="营业地点：">
-            <span>{{ props.row.shopAdd }}</span>
-          </el-form-item>
-          <el-form-item label="定位:">
-            <span>{{ props.row.shopLocation }}</span>
-          </el-form-item>
-          <el-form-item label="法人">
-            <span>{{ props.row.shopCorporate }}</span>
-          </el-form-item>
-           <el-form-item label="联系电话：">
-            <span>{{ props.row.shopTel }}</span>
-          </el-form-item>
-          <el-form-item label="营业地点：">
-            <span>{{ props.row.shopAdd }}</span>
-          </el-form-item>
-          <el-form-item label="头图:" >            
-            <img :src="props.row.shopImg" alt="" style="width:100px">
-          </el-form-item>
-          <el-form-item label="特色">
-            <span>{{ props.row.shopFeature }}</span>
-          </el-form-item>
-           <el-form-item label="shopVip">
-            <span>{{ props.row.shopVip }}</span>
-          </el-form-item>
-        </el-form>
-      </template>
-    </el-table-column>
     <el-table-column
       fixed
       prop="shopName"
@@ -350,8 +311,8 @@
      <el-form-item label="法人" :label-width="formLabelWidth">
       <el-input v-model="editShop.shopCorporate" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="联系电话" prop="phone">
-						<el-input maxLength="11"></el-input>
+    <el-form-item label="联系电话" prop="shopTel">
+						<el-input maxLength="11" v-model="editShop.shopTel" ></el-input>
 					</el-form-item>
           <el-form-item label="上传店铺头像">
 								<el-upload
@@ -481,8 +442,8 @@ export default {
       this.activeName = tab.name;
     },
     // 增加
-   async addShop() {
-      await this.asyncGetAddShop({
+    addShop:function() {
+       this.asyncGetAddShop({
         shopName: this.form.shopName,
         shopAdd: this.form.shopAdd, //地址
         shopLicenceNum: this.form.shopLicenceNum,
@@ -537,17 +498,17 @@ export default {
       this.dialogVisible = true;
     },
     handlePictureSuccess(response, file, fileList) {
-      this.form.shopImg = file.url;
+      this.form.shopImg = response.url;
     },
     handlePictureLicenceSuccess(response, file, fileList) {
-      this.form.shopLicenceImg = file.url;
+      this.form.shopLicenceImg = response.url;
     },
     // 图片修改
     handlePictureLicenceEditSuccess(response, file, fileList) {
-      this.editShop.shopLicenceImg = file.url;
+      this.editShop.shopLicenceImg = response.url;
     },
     handlePictureEditSuccess(response, file, fileList) {
-      this.editShop.shopImg = file.url;
+      this.editShop.shopImg = response.url;
     },
     // 审核
     async handleAllow(index, row) {
@@ -626,6 +587,7 @@ export default {
   margin-left: 20px;
   margin-top: 20px;
   width: 100%;
+  text-align: center
 }
 .shopImg {
   width: 50px;

@@ -111,7 +111,6 @@ export default {
       context.commit('setState', {
         audit: data
       });
-      console.log(data)
       return 'success'
     },
     //审核

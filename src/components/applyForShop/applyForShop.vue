@@ -152,13 +152,13 @@ export default {
       },
       handlePictureSuccess(response,file,fileList){
         console.log(file)
-        this.formData.shopImg=file.url
+        this.formData.shopImg=response.url
       },
       handlePictureLicenceSuccess(response,file,fileList){
-        this.formData.shopLicenceImg=file.url
+        this.formData.shopLicenceImg=response.url
       },
-    addShop: function() {
-      this.getAddShop({
+   async addShop() {
+     await this.getAddShop({
         shopName: this.formData.shopName,
         shopAdd: this.formData.shopAdd, //地址
         shopLicenceNum: this.formData.shopLicenceNum,
@@ -175,7 +175,9 @@ export default {
         shopVip:this.formData.shopVip,
         shopCorporate:this.formData.shopCorporate,
       });
+      this.$refs.formData.resetFields()
     }, 
+   
   }
 };
 </script>
