@@ -19,6 +19,7 @@
                     <el-button slot="append" icon="el-icon-search" @click="on(select,input5)"></el-button>
                 </el-input>
             </el-menu-item>
+            <el-menu-item index="1" @click="posts">新增订单</el-menu-item>
         </el-menu>
         x
         <el-table
@@ -71,7 +72,7 @@
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="handleClick(scope.row)">修改订单
                     </el-button>
-                    <el-button type="text" size="small" @click="handle(scope.row)">删除订单</el-button>
+                    <el-button type="text" size="small" @click="handle(scope.row,obj._id)">删除订单</el-button>
                 </template>
             </el-table-column>
             <el-table-column
@@ -165,7 +166,7 @@
         //方法
         methods: {
             ...mapMutations("orderManagement", ["setCurPage", "setEachPage"]),
-            ...mapActions('orderManagement', ["PostEmpByPage", "GetEmpByPage", 'asyncGetEmpByPage', 'dels', 'modifys']),
+            ...mapActions('orderManagement', ["PostEmpByPage", "GetEmpByPage", 'asyncGetEmpByPage', 'dels', 'modifys', 'post']),
 
             //修改
             handleClick(row) {
@@ -181,19 +182,40 @@
                 this.obj.number = row.number;
                 this.obj.type = row.type;
             },
+            //新增
+            posts() {
+                this.dialogVisible = true;
+            },
+
+
             //修改提交
-            modify(row,id) {
-                console.log(row,id);
-                this.modifys({row,id});
+            modify(obj,id) {
+                console.log(obj,id);
+                if (!Object.keys(id).length) {
+                    console.log("1")
+                    this.post({obj});
+                    this.obj = {};
+                }
+                else{
+                    console.log("2");
+                    this.modifys({obj, id});
+                }
                 this.dialogVisible = false;
             },
             //删除
             handle(row) {
-                this.dels(row)
+                console.log(row)
+                this.$confirm('此操作将删除文件, 是否继续?', '提示删除', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.dels({row})
+                }).catch(() => {
+                });
             },
             //查询
             on(select, input5) {
-                console.log(select, input5);
                 let objs = {};
                 if (select === 'memberName') {
                     objs = {memberName: input5}
@@ -206,7 +228,6 @@
                     objs = {ordernumber: input5}
                 }
                 this.asyncGetEmpByPage({objs});
-
                 // this.as(arr)
             }
             ,

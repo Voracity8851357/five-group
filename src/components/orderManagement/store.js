@@ -39,7 +39,26 @@ export default {
             context.commit("getEmpByPage", data);
             // console.log(data);
         },
-// //查询
+        //新增
+        async post(context, {curPage, eachPage,obj} = {}) {
+            const data = await fetch("http://localhost:8081/post", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    curPage: curPage || context.state.curPage,
+                    eachPage: eachPage || context.state.eachPage,
+                    obj
+                })
+            }).then(response => {
+                return response.json();
+            });
+            context.commit("getEmpByPage", data);
+            // console.log(data);
+        },
+
+//查询
 //         async as(context, obj) {
 //             console.log(obj);
 //             const data = await fetch(`http://localhost:8081/err?type=${obj.type}&text=${obj.text}`, {
@@ -57,15 +76,17 @@ export default {
 //             // console.log(data);
 //         },
         //修改
-        async modifys(context,arr) {
-            console.log(arr);
+        async modifys(context,{curPage, eachPage,obj} = {}) {
+            console.log("xiu",obj)
             const data = await fetch("http://localhost:8081/modify:id", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    arr
+                    curPage: curPage || context.state.curPage,
+                    eachPage: eachPage || context.state.eachPage,
+                    obj
                 })
             }).then(response => {
                 return response.json();
@@ -74,15 +95,17 @@ export default {
             console.log(data)
         },
         //删除
-        async dels(context, del) {
-            console.log(del)
+        async dels(context, {curPage, eachPage, row} = {}) {
+            console.log("删除",row)
             const data = await fetch("http://localhost:8081/delete", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    del
+                    curPage: curPage || context.state.curPage,
+                    eachPage: eachPage || context.state.eachPage,
+                    row
                 })
             }).then(response => {
                 return response.json();

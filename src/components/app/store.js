@@ -6,6 +6,7 @@ export default {
         isLogin: false,
         userType: '',
         userStatus: '',
+        _id: ''
     },
     mutations: {
         setState(state, payload) {
@@ -23,7 +24,8 @@ export default {
                 context.commit('setState', {
                     isLogin: true,
                     userType: data[0].userType,
-                    userStatus: data[0].userStatus
+                    userStatus: data[0].userStatus,
+                    _id: data[0]._id
                 });
             } else {
                 context.commit('setState', {

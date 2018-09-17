@@ -1,7 +1,8 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="padding: 20px">
         <el-tab-pane label="用户管理" name="first">
-            <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">添加</el-button>
+            <el-button type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">添加
+            </el-button>
             <!--搜索-->
             <div style="margin-top: 15px;">
                 <el-input placeholder="请输入内容" v-model="search" class="input-with-select" style="width: 500px">
@@ -227,6 +228,9 @@
             this.async_getAudit();
 
         },
+        created: function () {
+            console.log(this)
+        },
         computed: {
             ...mapState('userAccount', ['list', 'audit'])
         },
@@ -236,14 +240,16 @@
                     userStatus: '1',
                     _id: row._id
                 });
-                this.async_getUsers()
+                this.async_getAudit();
+                this.async_getUsers();
             },
             async handleDeny(index, row) {
                 this.async_putAudit({
                     userStatus: '2',
                     _id: row._id
                 });
-                this.async_getUsers()
+                this.async_getAudit();
+                this.async_getUsers();
             },
             async searchBtn() {
                 console.log(this.search, this.searchSelect);
@@ -292,7 +298,7 @@
                 this.async_getUsers()
             },
             handleClick(tab, event) {
-                console.log(tab, event);
+                this.activeName = tab.name;
             },
             handleEdit(index, row) {
                 this.amend.userName = row.userName;

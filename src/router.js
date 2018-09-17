@@ -7,11 +7,15 @@ import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
 import petOwners from './components/petowners/pet';
+
+import ServiceManage from './components/serviceManage/serviceManage.vue'
+
+import ApplyForShop from './components/applyForShop/applyForShop.vue';
+import ShopName from './components/shopName/shopName.vue'
 import UserAccount from './components/userAccount/userAccount';
 import GoodsContainer from "./components/goodsManagement/goodsContainer";
 import orderManagement from './components/orderManagement/orderManagement'
 Vue.use(Router);
-
 export default new Router({
     routes: [
         {
@@ -49,19 +53,21 @@ export default new Router({
         },
         {
             path: "/indexStore",
+            path: "/index",
             component: IndexStore,
             children: [
                 {
                     path: '/index/applyForShop',
-                    // component: ApplyForShop,
+                    component: ApplyForShop,
                 },
                 {
                     path: '/index/goodsName',
                     component: GoodsContainer,
                 },
                 {
-                    path: '/index/serviceName',
-                    // component: ServiceName,
+                    path: '/index/serviceManage',
+                    name: 'serviceManage',
+                    component: ServiceManage,
                 },
                 {
                     path: '/index/petOwners',
@@ -70,6 +76,18 @@ export default new Router({
                 {
                     path: '/index/orderManagement',
                     component: orderManagement,
+                },
+                {
+                    path: '/index/userAccount',
+                    component: UserAccount,
+                },
+                {
+                    path: '/index/shopName',
+                    component: ShopName,
+                },
+                {
+                    path: '/index/petOwners',
+                    // component: PetOwners,
                 },
             ]
         }

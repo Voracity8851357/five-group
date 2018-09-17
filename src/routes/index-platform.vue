@@ -4,15 +4,15 @@
         <el-container>
             <el-aside width="200px">
                 <el-menu class="aside-menu" router>
-                    <el-menu-item index="/index/userAccount">
+                    <el-menu-item index="/indexPlatform/userAccount">
                         <i class="el-icon-menu"></i>
                         <span slot="title">用户管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/index/shopName">
+                    <el-menu-item index="/indexPlatform/shopName">
                         <i class="el-icon-menu"></i>
                         <span slot="title">门店管理</span>
                     </el-menu-item>
-                    <el-menu-item index="/index/petOwners">
+                    <el-menu-item index="/indexPlatform/petOwners">
                         <i class="el-icon-menu"></i>
                         <span slot="title">宠主管理</span>
                     </el-menu-item>
