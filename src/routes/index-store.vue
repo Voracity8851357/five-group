@@ -7,7 +7,10 @@
             后台管理
         </el-header>
         <el-container>
-            <el-aside width="auto">
+            <el-aside
+                    width="auto"
+                    @mouseenter.native="collapseOpen"
+                    @mouseleave.native="collapseClose">
                 <el-menu
                         :default-active="$route.path"
                         :collapse="isCollapse"
@@ -16,22 +19,38 @@
                         text-color="#fff"
                         active-text-color="#409EFF"
                         router>
-                    <el-menu-item index="/indexStore/applyForShop">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">门店申请</span>
-                    </el-menu-item>
-                    <el-menu-item index="/indexStore/goodsName">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">商品管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="/indexStore/serviceManage">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">服务管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="/indexStore/orderManagement">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">订单管理</span>
-                    </el-menu-item>
+                    <template v-if="userType==='0'">
+                        <el-menu-item index="/index/userAccount">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">用户管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/shopName">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">门店管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/petOwners">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">宠主管理</span>
+                        </el-menu-item>
+                    </template>
+                    <template v-else>
+                        <el-menu-item index="/index/applyForShop">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">门店申请</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/goodsName">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">商品管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/serviceManage">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">服务管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/orderManagement">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">订单管理</span>
+                        </el-menu-item>
+                    </template>
                 </el-menu>
             </el-aside>
             <el-main class="content-container">
@@ -47,6 +66,7 @@
                 collapseBtnClick: false,
                 isCollapse: true,
                 collapseBtnIcon: "el-icon-arrow-right",
+                userType: "1",
             }
         },
         watch: {
@@ -58,18 +78,18 @@
             collapseStatus() {
                 this.collapseBtnClick = this.isCollapse;
                 this.isCollapse = !this.isCollapse;
-            }
-        },
-        mounted() {
-            const aside = document.querySelector(".el-aside");
-            aside.addEventListener("mouseenter", () => {
+            },
+            collapseOpen() {
                 if (this.collapseBtnClick) return;
                 this.isCollapse = false;
-            });
-            aside.addEventListener("mouseleave", () => {
+            },
+            collapseClose() {
                 if (this.collapseBtnClick) return;
                 this.isCollapse = true;
-            });
+            }
+        },
+        beforeMount() {
+            this.userType = this.$store.state.app.userType;
         }
     };
 </script>
@@ -105,6 +125,8 @@
         background: #fff content-box;
         padding: 0;
         margin: 20px;
+        box-shadow: 1px 2px 10px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 2px;
     }
 
     .el-menu-item:hover {
