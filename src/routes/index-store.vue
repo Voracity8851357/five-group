@@ -19,7 +19,7 @@
                         text-color="#fff"
                         active-text-color="#409EFF"
                         router>
-                    <template v-if="userType">
+                    <template v-if="userType==='0'">
                         <el-menu-item index="/index/userAccount">
                             <i class="el-icon-menu"></i>
                             <span slot="title">用户管理</span>
@@ -33,22 +33,24 @@
                             <span slot="title">宠主管理</span>
                         </el-menu-item>
                     </template>
-                    <el-menu-item index="/index/applyForShop">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">门店申请</span>
-                    </el-menu-item>
-                    <el-menu-item index="/index/goodsName">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">商品管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="/index/serviceManage">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">服务管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="/index/orderManagement">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">订单管理</span>
-                    </el-menu-item>
+                    <template v-else>
+                        <el-menu-item index="/index/applyForShop">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">门店申请</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/goodsName">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">商品管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/serviceManage">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">服务管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="/index/orderManagement">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">订单管理</span>
+                        </el-menu-item>
+                    </template>
                 </el-menu>
             </el-aside>
             <el-main class="content-container">
