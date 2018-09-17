@@ -165,20 +165,6 @@
                         value11: '',
                         ter: '',
                     }],
-                    // rules: {
-                    //     memberImg: [
-                    //         {
-                    //             required: true,
-                    //             validator: (rule, value, callback) => {
-                    //                 if (value.length === 0) {
-                    //                     return callback(new Error("请上传商品图片"))
-                    //                 }
-                    //                 callback();
-                    //             },
-                    //             trigger: 'change',
-                    //         },
-                    //     ],
-                    // }
 
                 }
             }

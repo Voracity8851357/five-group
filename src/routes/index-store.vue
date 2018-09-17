@@ -46,16 +46,13 @@
     .aside-menu {
         height: 100%;
     }
-<<<<<<< HEAD:src/routes/index.vue
-    .content-container{
+    .content-container {
         background: #fff;
         padding: 0px;
-=======
-
+    }
     .content-container {
         background: #fff content-box;
         padding: 0;
->>>>>>> 597f7460db875b7ae832bdcde02ba3ac68429ba0:src/routes/index-store.vue
         margin: 20px;
     }
 </style>

@@ -6,14 +6,10 @@ import IndexStore from "./routes/index-store";
 import store from './store.js';
 import login from './components/app/login.vue';
 import reg from './components/app/reg.vue';
-<<<<<<< HEAD
 import petOwners from './components/petowners/pet';
-=======
 import UserAccount from './components/userAccount/userAccount';
-
 import GoodsContainer from "./components/goodsManagement/goodsContainer";
-
->>>>>>> 597f7460db875b7ae832bdcde02ba3ac68429ba0
+import orderManagement from './components/orderManagement/orderManagement'
 Vue.use(Router);
 
 export default new Router({
@@ -47,7 +43,7 @@ export default new Router({
                 },
                 {
                     path: '/index/petOwners',
-                    // component: PetOwners,
+                    component: petOwners,
                 },
             ]
         },
@@ -68,15 +64,12 @@ export default new Router({
                     // component: ServiceName,
                 },
                 {
-<<<<<<< HEAD
                     path: '/index/petOwners',
-                    component: petOwners,
+                    // component: petOwners,
                 },
                 {
-=======
->>>>>>> 597f7460db875b7ae832bdcde02ba3ac68429ba0
                     path: '/index/orderManagement',
-                    // component: OrderManagement,
+                    component: orderManagement,
                 },
             ]
         }

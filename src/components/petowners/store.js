@@ -13,7 +13,7 @@ export default {
         },
         setCurPage(state, payload) {
             state.curPage = payload
-            // console.log(state.curPage)
+            console.log(state.curPage)
         },
         setEachPage(state, payload) {
             state.eachPage = payload
@@ -35,14 +35,7 @@ export default {
             });
             context.commit("getEmpByPage", data);
         },
-        //取
-        // async GetEmpByPage(context) {const data = await fetch('http://localhost:8081/index')
-        //         .then(function(response) {
-        //             return response.json();
-        //         });
-        //     context.commit("getEmpByPage", data);
-        //     console.log(data)
-        // },
+
         //删除
         async deleve(context, del) {
             console.log(del, '参数')
