@@ -2,37 +2,60 @@ export default {
     namespaced: true,
     // 门店管理列表
     state: {
-      _id:0,
       curPage:1,
       eachPage:10,
       maxPage:0, 
       total:0, 
       rows:[],
-      seachType:'',
-      seachText:''
+      audit: []
       },
       mutations: {
         getShopByPage(state, payload) {
           Object.assign(state, payload)
         },
-        getEitShop(state, payload){
+        addShop(state,payload){
           Object.assign(state, payload)
-        }
+        },
+        delete_shop(state,payload){
+          Object.assign(state,payload)
+        },
+        edit_shop(state,payload){
+          Object.assign(state,payload)
+        },
+        setState(state, payload) {
+          Object.assign(state, payload);
+      }
       },
       actions: {
-        async asyncGetShopByPage(context,{curPage=1, eachPage=10}={}) {
-         let data=await fetch(`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}`, {
+        // 分页及搜索
+        async asyncGetShopByPage(context,{curPage=1, eachPage=10,searchType="",searchText=""}={}) {
+          let url="";
+          if(searchType!=''&searchText!=''){
+            url=`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}&type=${searchType}&text=${searchText}`
+          }else{
+            url=`http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}`
+          }
+          const data=await fetch(url, {
             headers: {
               "Content-Type": "application/json"
             },
           }).then(response => {
             return response.json();
           });
+          data.rows.map((item) => {
+            if (item.userStatus === '0') {
+                item.userStatus = '申请中'
+            } else if (item.userStatus === '1') {
+                item.userStatus = '可用'
+            } else if (item.userStatus === '2') {
+                item.userStatus = '不可用'
+            }
+        });
           context.commit("getShopByPage",data)
-          console.log(data)
         },
-        async getAddShop(context,payload){
-            fetch("http://localhost:8081/shopManagement/add", {
+        // 增加门店
+        async asyncGetAddShop(context,payload){
+         const data=await fetch("http://localhost:8081/shopManagement/add", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json"
@@ -41,42 +64,59 @@ export default {
             }).then(response => {
               return response.json();
             });
-            context.commit("addShop")
+            context.commit("addShop",data)
           },
-          async deleteShop(context,payload){
-          await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
-              method: "DELETE",
+          // 删除门店
+          async deleteShop(context,id){
+            const data= await fetch(`http://localhost:8081/shopManagement/`+id, {
+              method: "delete",
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify(payload)
+              body: JSON.stringify({
+                page:context.state.curPage,
+                rows:context.state.eachPage
+              })
             }).then(response => {
               return response.json();
             });
+            context.commit('delete_shop',data)
           },
-          async getShopId(context,payload){
+          // 修改门店
+          async editShops(context, payload) {
            let data=await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
-              headers: {
-                "Content-Type": "application/json"
-              },
-            }).then(response => {
-              return response.json();
-            });
-            context.commit("getEitShop",data)
-            console.log(data)
-          },
-          async eitShop(context,payload){
-            let data=await fetch(`http://localhost:8081/shopManagement/${payload._id}`, {
-                method: "PUT",
+                method: 'PUT',
                 headers: {
-                  "Content-Type": "application/json"
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(payload)
-              }).then(response => {
-                return response.json();
-              });
-              context.commit("eitShop",data)
-            }
-    
+            })
+            .then(response => {
+              return response.json();
+          })
+           context.commit('edit_shop', data)
+           
+        },
+     //获取审核数据
+     async async_getAudit(context) {
+      const data = await fetch('http://localhost:8081/shopManagement/getAudit').then(response => {
+          return response.json()
+      });
+      context.commit('setState', {audit: data});
+      return 'success'
+  },
+  //审核
+  async async_putAudit(context, {shopStatus, _id} = {}) {
+      await fetch('http://localhost:8081/shopManagement/audit', {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              shopStatus, _id
+          })
+      });
+      return 'success'
+  },
       }
 }
