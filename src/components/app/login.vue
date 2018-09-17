@@ -126,7 +126,7 @@
         flex-direction: column;
         justify-content: center;
         height: 350px;
-        background: linear-gradient(rgba(99, 156, 185, 0.92), rgba(99, 156, 185, 0.92)), url("./images/login-bg.jpg") center;
+        background: linear-gradient(rgba(99, 156, 185, 0.92), rgba(99, 156, 185, 0.92)), url("images/login-bg1.jpg") center;
         color: #ffffff;
     }
 

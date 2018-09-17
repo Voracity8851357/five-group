@@ -174,7 +174,6 @@
 
     .reg-container {
         position: relative;
-        top: -150px;
         height: 780px;
         width: 450px;
         display: flex;
