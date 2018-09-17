@@ -189,10 +189,28 @@
                 this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
             },
             ...mapActions('store', ["PostEmpByPage", "GetEmpByPage",'asyncGetEmpByPage','deleve']),
+            //存
             login: function () {
-                this.PostEmpByPage(this.obj);
+                this.PostEmpByPage({obj:this.obj});
+                this.obj={
+                    memberPhone: '',
+                    memberAcount: '',
+                    memberName: '',
+                    memberCard: '',
+                    memberImg: [],
+                    memberAdd: '',
+                    memberArea: '',
+                    memberPoint: '',
+                    pet: [{
+                        namepet: "",
+                        value8: '',
+                        value9: '',
+                        color: '',
+                        value11: '',
+                        ter: '',
+                    }],
+                };
                 this.dialogVisible = false;
-                console.log(this.obj);
             },
             onClickUpload() {
                 this.$refs.pictureUpload.submit();

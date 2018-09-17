@@ -21,13 +21,15 @@ export default {
     },
     actions: {
         //存
-        async PostEmpByPage(context, obj) {
+        async PostEmpByPage(context, { curPage, eachPage,obj } = {}) {
             const data = await fetch("http://localhost:8081/pet", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    curPage: curPage || context.state.curPage,
+                    eachPage: eachPage || context.state.eachPage,
                     obj
                 })
             }).then(response => {
@@ -37,14 +39,16 @@ export default {
         },
 
         //删除
-        async deleve(context, del) {
-            console.log(del, '参数')
+        async deleve(context, { curPage, eachPage,del} = {}) {
+            console.log(del, '参数');
             const data = await fetch('http://localhost:8081/del', {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    curPage: curPage || context.state.curPage,
+                    eachPage: eachPage || context.state.eachPage,
                     del
                 })
             })
@@ -63,7 +67,7 @@ export default {
                 },
                 body: JSON.stringify({
                     curPage: curPage || context.state.curPage,
-                    eachPage: eachPage || context.state.eachPage
+                    eachPage: eachPage || context.state.eachPage,
                 })
             }).then(response => {
                 return response.json();

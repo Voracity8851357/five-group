@@ -101,8 +101,10 @@
             lastPage() {
                 this.asyncGetEmpByPage({curPage: this.maxPage});
             },
-            handleClick(row) {
-                this.deleve(row)
+            //删除
+            handleClick(del) {
+                // console.log(del)
+                this.deleve({del})
             },
             open5(memberImg) {
                 console.log(memberImg[0])
