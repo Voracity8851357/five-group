@@ -1,7 +1,7 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="padding: 20px">
         <el-tab-pane label="用户管理" name="first">
-            <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">添加</el-button>
+            <el-button type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">添加</el-button>
             <!--搜索-->
             <div style="margin-top: 15px;">
                 <el-input placeholder="请输入内容" v-model="search" class="input-with-select" style="width: 500px">
