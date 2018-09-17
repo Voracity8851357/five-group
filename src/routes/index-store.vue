@@ -7,7 +7,10 @@
             后台管理
         </el-header>
         <el-container>
-            <el-aside width="auto">
+            <el-aside
+                    width="auto"
+                    @mouseenter.native="collapseOpen"
+                    @mouseleave.native="collapseClose">
                 <el-menu
                         :default-active="$route.path"
                         :collapse="isCollapse"
@@ -73,18 +76,15 @@
             collapseStatus() {
                 this.collapseBtnClick = this.isCollapse;
                 this.isCollapse = !this.isCollapse;
-            }
-        },
-        mounted() {
-            const aside = document.querySelector(".el-aside");
-            aside.addEventListener("mouseenter", () => {
+            },
+            collapseOpen() {
                 if (this.collapseBtnClick) return;
                 this.isCollapse = false;
-            });
-            aside.addEventListener("mouseleave", () => {
+            },
+            collapseClose() {
                 if (this.collapseBtnClick) return;
                 this.isCollapse = true;
-            });
+            }
         },
         beforeMount() {
             this.userType = this.$store.state.app.userType;
