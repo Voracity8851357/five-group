@@ -1,5 +1,6 @@
 <template>
-<div style="width:100%">
+   <el-tabs v-model="activeName" @tab-click="handleClick" style="padding: 20px">
+        <el-tab-pane label="门店管理" name="first">
   <!-- 增加按钮 -->
  <el-button type="success" @click="addFormVisible = true" style=" margin-left: 20px;margin-top: 10px;">增加</el-button>
    <el-button style="margin-top: 10px;" type="primary" @click="()=>{
@@ -190,18 +191,103 @@
       label="VIP等级"
       width="120">
     </el-table-column>
+     <el-table-column
+      prop="shopStatus"
+      label="状态"
+      width="120">
+                </el-table-column>
    <el-table-column label="操作"  width="200">
       <template slot-scope="scope">
         <el-button
           size="mini"
+          icon="el-icon-edit"
           @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         <el-button
           size="mini"
           type="danger"
-          @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          icon="el-icon-delete"
+          @click="deleteDialogVisible=true" >删除</el-button>
       </template>
     </el-table-column>
   </el-table>
+   </el-tab-pane>
+   <el-tab-pane label="门店管理审核" name="second">
+            <el-table
+                   :data="rows"
+                    border
+                    style="width: 100%;margin-top: 20px">
+                <el-table-column
+                        fixed
+                        prop="_id"
+                        label="ID"
+                        width="150">
+                </el-table-column>
+                <el-table-column
+      fixed
+      prop="shopName"
+      label="店名"
+      width="120px">
+    </el-table-column>
+    <el-table-column
+      prop="shopLicenceNum"
+      label="营业执照号码"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="shopLicenceImg"
+      label="营业执照图片"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="shopAdd"
+      label="营业地点"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="shopLocation"
+      label="定位"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="shopCorporate"
+      label="法人"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="shopTel"
+      label="联系电话"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="shopImg"
+      label="头图"
+      width="120">
+    </el-table-column>
+     <el-table-column
+      prop="shopFeature"
+      label="特色"
+      width="120">
+    </el-table-column>
+      <el-table-column
+      prop="shopVip"
+      label="VIP等级"
+      width="120">
+    </el-table-column>
+                <el-table-column label="操作" width="200" >
+                    <template slot-scope="scope">
+                        <el-button
+                                size="mini"
+                                @click="handleAllow(scope.$index, scope.row)">通过
+                        </el-button>
+                        <el-button
+                                size="mini"
+                                type="danger"
+                                @click="handleDeny(scope.$index, scope.row)">拒绝
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-tab-pane>
    <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -211,6 +297,21 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
+    <!-- 删除弹出框 -->
+ <el-dialog
+  title="提示"
+  :visible.sync="deleteDialogVisible"
+  width="30%"
+  >
+  <span>你确定要删除吗？</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="deleteDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="()=>{
+      deleteDialogVisible=false;
+      deleteShop(deleteID);
+      }">确 定</el-button>
+  </span>
+</el-dialog>
     <!-- 编辑弹框 -->
     <el-dialog title="编辑" :visible.sync="editFormVisible">
             <el-form :model="editShop" label-width="110px" class="demo-formData">
@@ -253,7 +354,12 @@
   :on-success="onUploadSuccess"
    ref="shopUpload"
   >
-  <i class="el-icon-plus"></i>
+    <el-button style="margin-right: 10px;" slot="trigger" size="small" type="primary">
+                                浏览<i class="el-icon-document el-icon--right"></i>
+                            </el-button>
+                            <el-button size="small" type="success" @click="onClickUpload">
+                                上传<i class="el-icon-upload el-icon--right"></i>
+                            </el-button>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
   <img width="100%" :src="editShop.shopImg" alt="">
@@ -273,10 +379,10 @@
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button  @click="editFormVisible = false" >取 消</el-button>
-    <el-button type="primary" @click="confirmEdit">确 定</el-button>
+    <el-button type="primary" @click="saveEdit">确 定</el-button>
   </div>
         </el-dialog>
-  </div>
+  </el-tabs>
 </template>
 <script>
 import { mapActions, mapState, mapMutations } from "vuex";
@@ -298,17 +404,20 @@ import { mapActions, mapState, mapMutations } from "vuex";
         shopImg:[],
         shopLicenceImg:[],
         shopLocation:'',
-        shopVip:""
+        shopVip:"",
+        shopStatus: '1'
         },
          deleteID: "",
          editID: "",
          search: "",
          select: "",
+         activeName: 'first',
         formLabelWidth: '120px',
         dialogTableVisible: false,
         addFormVisible: false,
         dialogVisible: false,
         editFormVisible:false,
+        deleteDialogVisible:false,
         restaurants: [], 
         editShop: {
         shopName: "", //店铺名称
@@ -320,15 +429,21 @@ import { mapActions, mapState, mapMutations } from "vuex";
         shopCorporate:"",
         shopImg:[],
         shopLicenceImg:[],
-        shopVip:""
+        shopVip:"",
+        shopStatus: '1',
+        _id: ''
       }
      }
      },
      computed: {
-    ...mapState("shopName", ["curPage", "eachPage", "maxPage", "total", "rows"])
+    ...mapState("shopName", ["curPage", "eachPage", "maxPage", "total", "rows","audit"])
   },
+   mounted: function () {
+            this.asyncGetShopByPage();
+            this.async_getAudit();
+        },
     methods:{
-      ...mapActions('shopName',["asyncGetAddShop","asyncGetShopByPage","deleteShop","asyncEditShop"]),
+      ...mapActions('shopName',["asyncGetAddShop","asyncGetShopByPage","deleteShop","editShops",'async_getAudit',"async_putAudit"]),
       ...mapMutations('shopName',['getShopByPage',"addShop","delete_shop","edit_shop"]),
       // 分页
       handleSizeChange(val) {
@@ -337,7 +452,9 @@ import { mapActions, mapState, mapMutations } from "vuex";
       handleCurrentChange(val) {
        this.asyncGetShopByPage({curPage:val})
       },
-    
+     handleClick(tab, event) {
+                this.activeName = tab.name;
+            },
       // 增加
     addShop: function() {
       this.asyncGetAddShop({
@@ -351,10 +468,41 @@ import { mapActions, mapState, mapMutations } from "vuex";
         shopImg:this.form.shopImg,
         shopLicenceImg:this.form.shopLicenceImg,
         shopLocation:this.form.shopLocation,
-        shopVip:this.form.shopVip
+        shopVip:this.form.shopVip,
+        shopStatus: '1'
       })
       this.asyncGetShopByPage()
     },
+     async putShop() {
+                switch (this.editShop.shopStatus) {
+                    case "申请中":
+                        this.editShop.shopStatus = "0";
+                        break;
+                    case "可用":
+                        this.editShop.shopStatus = "1";
+                        break;
+                    default:
+                        this.editShop.shopStatus = "2";
+                        break;
+                }
+                await this.async_putshop({
+                    _id: this.editShop._id,
+        shopName: this.editShop.shopName,
+        shopAdd: this.editShop.shopAdd, //地址
+        shopLicenceNum: this.editShop.shopLicenceNum,
+        description: this.editShop.delivery_mode, //介绍
+        shopTel: this.editShop.shopTel,
+        shopFeature: this.editShop.shopFeature,
+        shopCorporate:this.editShop.shopCorporate,
+        shopImg:this.editShop.shopImg,
+        shopLicenceImg:this.editShop.shopLicenceImg,
+        shopLocation:this.editShop.shopLocation,
+        shopVip:this.editShop.shopVip,
+        shopStatus:this.editShop.shopStatus
+                });
+                this.editFormVisible= false;
+               this.asyncGetShopByPage()
+            },
       // 图片
        onUploadSuccess(response) {
           this.form.shopImg.push(...response.path);
@@ -378,9 +526,7 @@ import { mapActions, mapState, mapMutations } from "vuex";
           type: 'warning',
           center: true
         }).then(() => {
-          this.deleteShop({
-            _id:row._id
-          })
+          this.deleteShop(row)
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -393,16 +539,33 @@ import { mapActions, mapState, mapMutations } from "vuex";
         });
         this.asyncGetShopByPage()
       },
+      // 审核
+      async handleAllow(index, row) {
+                this.async_putAudit({
+                    ShopStatus: '1',
+                    _id: row._id
+                });
+                this.async_getAudit();
+               this.asyncGetShopByPage()
+            },
+            async handleDeny(index, row) {
+                this.async_putAudit({
+                    ShopStatus: '2',
+                    _id: row._id
+                });
+                this.async_getAudit();
+              this.asyncGetShopByPage()
+            },
       // 修改
       handleEdit(index, row) {
         console.log(row,index)
          this.editFormVisible = true;
-         this.editShop= Object.assign({}, row); 
+         this.editShop = Object.assign({}, row);
             },
              //确认修改
-       confirmEdit() {
+      saveEdit() {
       this.editFormVisible = false;
-      this.asyncEditShop({
+      this.editShops({
         _id: this.editShop._id,
         shopName: this.editShop.shopName,
         shopAdd: this.editShop.shopAdd, //地址
