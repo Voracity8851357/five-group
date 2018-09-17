@@ -137,7 +137,7 @@
         </el-tab-pane>
         <el-tab-pane label="门店管理员审核" name="second">
             <el-table
-                    :data="audit"
+                    :data="form"
                     border
                     style="width: 100%;margin-top: 20px">
                 <el-table-column

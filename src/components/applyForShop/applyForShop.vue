@@ -13,23 +13,11 @@
 							<el-form-item label="法人" prop="shopCorporate" :model="formData">
 						<el-input  v-model="formData.shopCorporate"></el-input>
 					</el-form-item>
-					<el-form-item label="详细地址" prop="shopAdd" :model="formData">
-						<el-autocomplete
-                             popper-class="my-autocomplete"
-                              v-model="formData.shopAdd"
-                            :fetch-suggestions="querySearch"
-                            placeholder="请输入内容"
-                             @select="handleSelect">
-                         <i
-                        class="el-icon-edit el-input__icon"
-                       slot="suffix"
-                    @click="handleIconClick">
-                      </i>
-                    <template slot-scope="{ item }">
-                    <div class="name">{{ item.shopAdd }}</div>
-                              </template>
-                   </el-autocomplete>
-						<span>当前城市</span>
+					<el-form-item label="营业地址" prop="shopAdd" :model="formData">
+						<el-input  v-model="formData.shopAdd"></el-input>
+					</el-form-item>
+          <el-form-item label="定位" prop="shopLocation" :model="formData">
+						<el-input  v-model="formData.shopLocation"></el-input>
 					</el-form-item>
 					<el-form-item label="联系电话" prop="shopTel" :model="formData">
 						<el-input maxLength="11" v-model="formData.shopTel"></el-input>
@@ -63,28 +51,31 @@
 							>
 						</el-time-select>
 					</el-form-item>
-                   <el-form-item label="上传头图">
-			<el-upload
-  action="http://localhost:8081//shopManagement/upload"
-  list-type="picture-card"
-  :on-preview="handlePictureCardPreview"
-  :on-remove="handleRemove">
-  <i class="el-icon-plus"></i>
-</el-upload>
-<el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="shopImg" alt="">
-</el-dialog>
+                   <el-form-item label="上传头图" v-model="formData.shopImg" prop="shopImg">
+		<el-upload
+                                list-type="picture-card" 
+                                ref="pictureUpload"
+                                action="http://localhost:8081/shopManagement/upload"
+                                :auto-upload="false"
+                                :multiple="true"
+                                :on-success="onUploadSuccess">
+                            <el-button style="margin-right: 10px;" slot="trigger" size="small" type="primary">
+                                浏览<i class="el-icon-document el-icon--right"></i>
+                            </el-button>
+                            <el-button size="small" type="success" @click="onClickUpload">
+                                上传<i class="el-icon-upload el-icon--right"></i>
+                            </el-button>
+                        </el-upload>
                    </el-form-item>
-					<el-form-item label="上传营业执照">
+					<el-form-item label="上传营业执照" v-model="formData.shopLicenceImg">
 					<el-upload
   action="http://localhost:8081//shopManagement/upload"
   list-type="picture-card"
-  :on-preview="handlePictureCardPreview"
-  :on-remove="handleRemove">
+ >
   <i class="el-icon-plus"></i>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="shopLicenceImg" alt="">
+  <img width="100%" :src="formData.shopLicenceImg" alt="">
 </el-dialog>
 					</el-form-item>
 					<el-form-item class="button_submit">
@@ -111,12 +102,15 @@ export default {
         shopTel: "",
         startTime: "",
         endTime: "",
-        shopFeature: ""
+        shopFeature: "",
+        shopLicenceImg: [],
+        shopImg:[],
+        shopLocation:'',
+        userType: '0',
+        shopStatus: '1'
       },
-     shopLicenceImg: '',
-     shopImg:'',
     dialogVisible: false,
-      restaurants: [],
+     fileLists: [], 
       rules: {
         name: [{ required: true, message: "请输入店铺名称", trigger: "blur" }],
         phone: [
@@ -126,83 +120,17 @@ export default {
       }
     };
   },
-  mounted() {
-    this.restaurants = this.loadAll();
-  },
   methods: {
     ...mapActions("applyForShop", ["getAddShop"]),
-     handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
-      var results = queryString
-        ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    createFilter(queryString) {
-      return restaurant => {
-        return (
-          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        );
-      };
-    },
-    loadAll() {
-      return [
-        { "shopAdd": "长宁区新渔路144号" },
-        { "shopAdd": "上海市长宁区淞虹路661号" },
-        { "shopAdd": "上海市普陀区真北路988号创邑金沙谷6号楼113" },
-        { "shopAdd": "天山西路438号" },
-        { "shopAdd": "上海市长宁区金钟路968号1幢18号楼一层商铺18-101" },
-        { "shopAdd": "上海市长宁区金钟路633号" },
-        { "shopAdd": "上海市嘉定区曹安公路曹安路1685号" },
-        { "shopAdd": "上海市普陀区同普路1435号" },
-        { "shopAdd": "上海市北翟路1444弄81号B幢-107" },
-        { "shopAdd": "上海市嘉定区新郁路817号" },
-        { "shopAdd": "嘉定区曹安路1611号" },
-        { "shopAdd": "嘉定区曹安公路2383弄55号" },
-        { "shopAdd": "嘉定区江桥镇曹安公路2409号1F，2383弄62号1F" },
-        { "shopAdd": "上海长宁区金钟路968号9号楼地下一层" },
-        { "shopAdd": "上海市长宁区天山西路119号" },
-        { "shopAdd": "上海市长宁区仙霞西路" },
-        { "shopAdd": "上海市长宁区天山西路567号1层R117号店铺" },
-        { "shopAdd": "上海市普陀区光复西路丹巴路28弄6号楼819" },
-        { "shopAdd": "上海市长宁区仙霞西路88号第一层G05-F01-1-306" },
-        { "shopAdd": "上海市普陀区棕榈路" },
-        { "shopAdd": "元丰天山花园(东门) 双流路267号" },
-        { "shopAdd": "上海市长宁区天山西路" },
-        { "shopAdd": "上海市长宁区通协路" },
-        { "shopAdd": "上海市长宁区新泾镇金钟路999号2幢（B幢）第01层第1-02A单元" },
-        { "shopAdd": "长宁区仙霞西路88号1305室" },
-        {
-          "shopAdd":
-            "上海市普陀区真北路818号近铁城市广场北区地下二楼N-B2-O2-C商铺"
-        },
-        { "shopAdd": "普陀区金沙江路2239号金沙和美广场B1-10-6" },
-        { "shopAdd": "上海市长宁区威宁路天山路341号" },
-        { "shopAdd": "上海市嘉定区丰庄路240号" },
-        { "shopAdd": "长宁区新渔路144号" },
-        { "shopAdd": "长宁区淞虹路148号" },
-        { "shopAdd": "上海市普陀区老真北路160号" },
-        { "shopAdd": "上海市长宁区金钟路968号15楼15-105室" },
-        { "shopAdd": "剑河路443-1" },
-        { "shopAdd": "长宁区北新泾街道天山西路490-1号" },
-        { "shopAdd": "上海市长宁区金钟路968号9号楼地下一层9-83室" }
-      ];
-    },
-    handleSelect(item) {
-      this.formData.shopAdd = item.shopAdd;
-    },
-    handleIconClick(ev) {
-      console.log(ev);
-    },
+            //图片上传
+            onClickUpload() {
+                this.$refs.pictureUpload.submit();
+            },
+            //上传成功
+            onUploadSuccess(response) {
+                this.formData.shopImg.push(...response.path);
+                this.$refs.formData.validateField("shopImg");
+            },
     addShop: function() {
       this.getAddShop({
         shopName: this.formData.shopName,
@@ -213,11 +141,12 @@ export default {
         startTime: this.formData.startTime,
         endTime: this.formData.endTime,
         shopFeature: this.formData.shopFeature,
-        shopLicenceImg:this.shopLicenceImg.src,
-         shopImg:this.shopImg.src
+        shopLicenceImg:this.formData.shopLicenceImg,
+        shopImg:this.formData.shopImg,
+        shopLocation:this.formData.shopLocation,
+        shopStatus:this.formData.shopStatus
       });
     }, 
-  
   }
 };
 </script>
