@@ -28,17 +28,16 @@
     </el-form-item>
     	<el-form-item label="营业执照图片">
 						<el-upload
-  action="https://localhost:8081/shopManagement/upload"
+            :limit=1
+  action="/shopManagement/upload"
   list-type="picture-card"
-  :auto-upload="false"
-   :multiple="true"
-    ref="shopLicenUpload"
+  :on-success="handlePictureLicenceSuccess"
   :on-preview="handlePictureCardPreview"
-  :on-success="handUploadSuccess">
+  :on-remove="handleRemove">
   <i class="el-icon-plus"></i>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="form.shopLicenceImg" alt="">
+  <img width="100%" :src="dialogImageUrl" alt="">
 </el-dialog>
 					</el-form-item>
            <el-form-item label="营业地址" :label-width="formLabelWidth">
@@ -55,21 +54,15 @@
 					</el-form-item>
           <el-form-item label="上传店铺头像">
 							<el-upload
-  action="http://localhost:8081/shopManagement/upload"
+  action="/shopManagement/upload"
   list-type="picture-card"
-   :auto-upload="false"
-   :multiple="true"
-    ref="shopUpload"
- :on-success="onUploadSuccess">
-    <el-button style="margin-right: 10px;" slot="trigger" size="small" type="primary">
-                                浏览<i class="el-icon-document el-icon--right"></i>
-                            </el-button>
-                            <el-button size="small" type="success" @click="onClickUpload">
-                                上传<i class="el-icon-upload el-icon--right"></i>
-                            </el-button>
+  :on-success="handlePictureSuccess"
+  :on-preview="handlePictureCardPreview"
+  :on-remove="handleRemove">
+  <i class="el-icon-plus"></i>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="editShop.shopImg" alt="">
+  <img width="100%" :src="dialogImageUrl" alt="">
 </el-dialog>
 					</el-form-item>
           	<el-form-item label="店铺特点" style="white-space: nowrap;" prop="shopFeature">
@@ -111,7 +104,7 @@
             <span>{{ props.row.shopLicenceNum }}</span>
           </el-form-item>
           <el-form-item label="营业执照图片：">
-            <span>{{ props.row.shopLicenceImg }}</span>
+            <img :src="props.row.shopLicenceImg" alt="" style="width:100px">
           </el-form-item>
           <el-form-item label="营业地点：">
             <span>{{ props.row.shopAdd }}</span>
@@ -128,8 +121,8 @@
           <el-form-item label="营业地点：">
             <span>{{ props.row.shopAdd }}</span>
           </el-form-item>
-          <el-form-item label="头图:">
-            <span>{{ props.row.shopImg }}</span>
+          <el-form-item label="头图:" >            
+            <img :src="props.row.shopImg" alt="" style="width:100px">
           </el-form-item>
           <el-form-item label="特色">
             <span>{{ props.row.shopFeature }}</span>
@@ -155,6 +148,9 @@
       prop="shopLicenceImg"
       label="营业执照图片"
       width="120">
+      <template slot-scope="scope">
+               <img :src="scope.row.shopLicenceImg" alt=""  style="width:100px">
+             </template> 
     </el-table-column>
     <el-table-column
       prop="shopAdd"
@@ -180,6 +176,9 @@
       prop="shopImg"
       label="头图"
       width="120">
+       <template slot-scope="scope">
+               <img :src="scope.row.shopImg" alt=""  style="width:100px">
+             </template>   
     </el-table-column>
      <el-table-column
       prop="shopFeature"
@@ -213,7 +212,7 @@
    </el-tab-pane>
    <el-tab-pane label="门店管理审核" name="second">
             <el-table
-                   :data="rows"
+                   :data="audit"
                     border
                     style="width: 100%;margin-top: 20px">
                 <el-table-column
@@ -237,6 +236,9 @@
       prop="shopLicenceImg"
       label="营业执照图片"
       width="120">
+       <template slot-scope="scope">
+               <img :src="scope.row.shopLicenceImg" alt=""  style="width:100px">
+             </template> 
     </el-table-column>
     <el-table-column
       prop="shopAdd"
@@ -262,6 +264,9 @@
       prop="shopImg"
       label="头图"
       width="120">
+       <template slot-scope="scope">
+               <img :src="scope.row.shopImg" alt=""  style="width:100px">
+             </template> 
     </el-table-column>
      <el-table-column
       prop="shopFeature"
@@ -324,15 +329,16 @@
     </el-form-item>
     	<el-form-item label="营业执照图片">
 						<el-upload
-  action="https://jsonplaceholder.typicode.com/posts/"
+            :limit=1
+  action="/shopManagement/upload"
   list-type="picture-card"
-   ref="shopLicenUpload"
+  :on-success="handlePictureLicenceEditSuccess"
   :on-preview="handlePictureCardPreview"
-  :on-success="handUploadSuccess">
+  :on-remove="handleRemove">
   <i class="el-icon-plus"></i>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="editShop.shopLicenceImg" alt="">
+  <img width="100%" :src="dialogImageUrl" alt="">
 </el-dialog>
 					</el-form-item>
            <el-form-item label="营业地址" :label-width="formLabelWidth">
@@ -348,22 +354,16 @@
 						<el-input maxLength="11"></el-input>
 					</el-form-item>
           <el-form-item label="上传店铺头像">
-							<el-upload
-  action="https://jsonplaceholder.typicode.com/posts/"
+								<el-upload
+  action="/shopManagement/upload"
   list-type="picture-card"
+  :on-success="handlePictureEditSuccess"
   :on-preview="handlePictureCardPreview"
-  :on-success="onUploadSuccess"
-   ref="shopUpload"
-  >
-    <el-button style="margin-right: 10px;" slot="trigger" size="small" type="primary">
-                                浏览<i class="el-icon-document el-icon--right"></i>
-                            </el-button>
-                            <el-button size="small" type="success" @click="onClickUpload">
-                                上传<i class="el-icon-upload el-icon--right"></i>
-                            </el-button>
+  :on-remove="handleRemove">
+  <i class="el-icon-plus"></i>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="editShop.shopImg" alt="">
+  <img width="100%" :src="dialogImageUrl" alt="">
 </el-dialog>
 					</el-form-item>
           	<el-form-item label="店铺特点" style="white-space: nowrap;" prop="shopFeature">
@@ -402,9 +402,10 @@ export default {
         shopTel: "",
         shopFeature: "",
         shopCorporate: "",
-        shopImg: [],
-        shopLicenceImg: [],
+        shopImg: "",
+        shopLicenceImg: "",
         shopLocation: "",
+        shopCorporate: "",
         shopVip: "",
         shopStatus: "1"
       },
@@ -420,6 +421,8 @@ export default {
       editFormVisible: false,
       deleteDialogVisible: false,
       restaurants: [],
+      dialogImageUrl: "",
+      dialogVisible: false,
       editShop: {
         shopName: "", //店铺名称
         shopAdd: "", //地址
@@ -428,11 +431,12 @@ export default {
         shopTel: "",
         shopFeature: "",
         shopCorporate: "",
-        shopImg: [],
-        shopLicenceImg: [],
+        shopImg: "",
+        shopLicenceImg: "",
         shopVip: "",
         shopStatus: "1",
-        _id: ""
+        _id: "",
+        shopLocation: ""
       }
     };
   },
@@ -477,20 +481,20 @@ export default {
       this.activeName = tab.name;
     },
     // 增加
-    addShop: function() {
-      this.asyncGetAddShop({
+   async addShop() {
+      await this.asyncGetAddShop({
         shopName: this.form.shopName,
         shopAdd: this.form.shopAdd, //地址
         shopLicenceNum: this.form.shopLicenceNum,
         description: this.form.delivery_mode, //介绍
         shopTel: this.form.shopTel,
         shopFeature: this.form.shopFeature,
-        shopCorporate: this.form.shopCorporate,
-        shopImg: this.form.shopImg,
         shopLicenceImg: this.form.shopLicenceImg,
+        shopImg: this.form.shopImg,
         shopLocation: this.form.shopLocation,
+        shopStatus: "1",
         shopVip: this.form.shopVip,
-        shopStatus: "1"
+        shopCorporate: this.form.shopCorporate
       });
       this.asyncGetShopByPage();
     },
@@ -525,32 +529,39 @@ export default {
       this.asyncGetShopByPage();
     },
     // 图片
-    onUploadSuccess(response) {
-      this.form.shopImg.push(...response.path);
-      this.$refs.shopAddForm.validateField("shopImg");
-    },
-    handlePictureCardPreview(file, fileList) {
+    handleRemove(file, fileList) {
       console.log(file, fileList);
     },
-    handUploadSuccess(response, file, fileList) {
-      this.form.shopImg.push(...response.path);
-      this.$refs.shopAddForm.validateField("shopImg");
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
     },
-    onClickUpload() {
-      this.$refs.shopUpload.submit();
+    handlePictureSuccess(response, file, fileList) {
+      this.form.shopImg = file.url;
+    },
+    handlePictureLicenceSuccess(response, file, fileList) {
+      this.form.shopLicenceImg = file.url;
+    },
+    // 图片修改
+    handlePictureLicenceEditSuccess(response, file, fileList) {
+      this.editShop.shopLicenceImg = file.url;
+    },
+    handlePictureEditSuccess(response, file, fileList) {
+      this.editShop.shopImg = file.url;
     },
     // 审核
-    handleAllow(index, row) {
-      this.async_putAudit({
+    async handleAllow(index, row) {
+      console.log(row)
+      await this.async_putAudit({
         shopStatus: "1",
         _id: row._id
       });
       this.async_getAudit();
       this.asyncGetShopByPage();
     },
-     handleDeny(index, row) {
-      this.async_putAudit({
-        shopStatus: "2",
+    async handleDeny(index, row) {
+     await this.async_putAudit({
+       shopStatus: "2",
         _id: row._id
       });
       this.async_getAudit();
@@ -615,5 +626,9 @@ export default {
   margin-left: 20px;
   margin-top: 20px;
   width: 100%;
+}
+.shopImg {
+  width: 50px;
+  height: 50px;
 }
 </style>

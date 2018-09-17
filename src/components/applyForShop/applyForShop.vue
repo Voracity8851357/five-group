@@ -53,29 +53,29 @@
 					</el-form-item>
                    <el-form-item label="上传头图" v-model="formData.shopImg" prop="shopImg">
 		<el-upload
-                                list-type="picture-card" 
-                                ref="pictureUpload"
-                                action="http://localhost:8081/shopManagement/upload"
-                                :auto-upload="false"
-                                :multiple="true"
-                                :on-success="onUploadSuccess">
-                            <el-button style="margin-right: 10px;" slot="trigger" size="small" type="primary">
-                                浏览<i class="el-icon-document el-icon--right"></i>
-                            </el-button>
-                            <el-button size="small" type="success" @click="onClickUpload">
-                                上传<i class="el-icon-upload el-icon--right"></i>
-                            </el-button>
-                        </el-upload>
-                   </el-form-item>
-					<el-form-item label="上传营业执照" v-model="formData.shopLicenceImg">
-					<el-upload
-  action="http://localhost:8081//shopManagement/upload"
+  action="/shopManagement/upload"
   list-type="picture-card"
- >
+  :on-success="handlePictureSuccess"
+  :on-preview="handlePictureCardPreview"
+  :on-remove="handleRemove">
   <i class="el-icon-plus"></i>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="formData.shopLicenceImg" alt="">
+  <img width="100%" :src="dialogImageUrl" alt="">
+</el-dialog>
+                   </el-form-item>
+					<el-form-item label="上传营业执照" v-model="formData.shopLicenceImg">
+						<el-upload
+            :limit=1
+  action="/shopManagement/upload"
+  list-type="picture-card"
+  :on-success="handlePictureLicenceSuccess"
+  :on-preview="handlePictureCardPreview"
+  :on-remove="handleRemove">
+  <i class="el-icon-plus"></i>
+</el-upload>
+<el-dialog :visible.sync="dialogVisible">
+  <img width="100%" :src="dialogImageUrl" alt="">
 </el-dialog>
 					</el-form-item>
             <el-form-item label="Vip等级">
@@ -116,8 +116,10 @@ export default {
         shopLocation:'',
         shopVip:'',
         userName:'',
-        shopStatus: '0'
+        shopStatus: '0',
+        shopCorporate:''
       },
+    dialogImageUrl: '',
     dialogVisible: false,
      fileLists: [], 
       rules: {
@@ -140,6 +142,21 @@ export default {
                 this.formData.shopImg.push(...response.path);
                 this.$refs.formData.validateField("shopImg");
             },
+             // 图片
+    handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      handlePictureSuccess(response,file,fileList){
+        console.log(file)
+        this.formData.shopImg=file.url
+      },
+      handlePictureLicenceSuccess(response,file,fileList){
+        this.formData.shopLicenceImg=file.url
+      },
     addShop: function() {
       this.getAddShop({
         shopName: this.formData.shopName,
@@ -154,7 +171,9 @@ export default {
         shopImg:this.formData.shopImg,
         shopLocation:this.formData.shopLocation,
         shopStatus:this.formData.shopStatus,
-        userName:this.formData.userName
+        userName:this.formData.userName,
+        shopVip:this.formData.shopVip,
+        shopCorporate:this.formData.shopCorporate,
       });
     }, 
   }
