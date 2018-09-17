@@ -1,231 +1,227 @@
 <template>
-        <el-table
-                :data="rows"
-                ref="goodsTable"
-                stripe
-                type="selection"
-                class="goods-table"
-                @row-click="handleRowClick"
-                header-row-class-name="goods-table-header"
-                v-loading="isRefresh"
-                style="width: 100%">
-            <el-table-column
-                    align="center"
-                    type="index"
-                    width="50">
-            </el-table-column>
-            <el-table-column type="expand">
-                <template slot-scope="props">
-                    <el-form
-                            label-width="110px"
-                            inline
-                            class="goods-table-expand"
-                            size="small"
-                            key="inputForm"
-                            ref="goodEidtForm"
-                            :rules="rules"
-                            :model="tempGood"
-                            v-if="isAllowEdit(props.$index)">
-                        <el-form-item label="商品名称:" prop="goodsName">
-                            <el-input v-model="tempGood.goodsName"/>
-                        </el-form-item>
-                        <el-form-item label="商品种类:" prop="goodsType">
-                            <el-input v-model="tempGood.goodsType"/>
-                        </el-form-item>
-                        <el-form-item label="商品材质:">
-                            <el-input v-model="tempGood.goodsMaterial"/>
-                        </el-form-item>
-                        <el-form-item label="适用规格:" prop="goodsCanFor">
-                            <el-input v-model="tempGood.goodsCanFor"/>
-                        </el-form-item>
-                        <el-form-item label="专属规格:">
-                            <el-input v-model="tempGood.goodsOnlyFor"/>
-                        </el-form-item>
-                        <el-form-item label="包装规格(kg):" prop="goodsSize">
-                            <el-input-number controls-position="right"
-                                             v-model="tempGood.goodsSize"
-                                             :precision="1"
-                                             :step="0.1" :min="0" :max="12"/>
-                        </el-form-item>
-                        <el-form-item label="口味:">
-                            <el-input v-model="tempGood.goodsTaste"/>
-                        </el-form-item>
-                        <el-form-item label="特殊功能:">
-                            <el-input v-model="tempGood.goodsSpecial"/>
-                        </el-form-item>
-                        <el-form-item label="出厂日期:">
-                            <span>{{ props.row.goodsDate }}</span>
-                        </el-form-item>
-                        <el-form-item label="保质期:">
-                            <span>{{ props.row.goodsTime }}</span>
-                        </el-form-item>
-                        <el-form-item label="产地:">
-                            <span>{{ props.row.goodsRegion.join(" / ") }}</span>
-                        </el-form-item>
-                        <el-form-item label="价格(元):" prop="goodsPrice">
-                            <el-input v-model="tempGood.goodsPrice"/>
-                        </el-form-item>
-                        <el-form-item class="goods-tags" label="商品特色:">
-                            <el-tag
-                                    :key="index"
-                                    v-for="(tag,index) in tempGood.goodsIntro"
-                                    closable
-                                    :disable-transitions="true"
-                                    @close="handleTagClose(tag)">
-                                {{tag}}
-                            </el-tag>
-                            <el-input
-                                    class="input-new-tag"
-                                    v-if="tagInputVisible"
-                                    v-model="tagInputValue"
-                                    ref="saveTagInput"
-                                    size="small"
-                                    @keyup.enter.native="handleTagInputConfirm"
-                                    @blur="handleTagInputConfirm">
-                            </el-input>
-                            <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ 新特色
+    <el-table
+            :data="rows"
+            ref="goodsTable"
+            stripe
+            type="selection"
+            class="goods-table"
+            @row-click="handleRowClick"
+            header-row-class-name="goods-table-header"
+            v-loading="isRefresh"
+            style="width: 100%">
+        <el-table-column
+                align="center"
+                type="index"
+                width="50">
+        </el-table-column>
+        <el-table-column type="expand">
+            <template slot-scope="props">
+                <el-form
+                        label-width="110px"
+                        inline
+                        class="goods-table-expand"
+                        size="small"
+                        key="inputForm"
+                        ref="goodEidtForm"
+                        :rules="rules"
+                        :model="tempGood"
+                        v-if="isAllowEdit(props.$index)">
+                    <el-form-item label="商品名称:" prop="goodsName">
+                        <el-input v-model="tempGood.goodsName"/>
+                    </el-form-item>
+                    <el-form-item label="商品种类:" prop="goodsType">
+                        <el-input v-model="tempGood.goodsType"/>
+                    </el-form-item>
+                    <el-form-item label="商品材质:">
+                        <el-input v-model="tempGood.goodsMaterial"/>
+                    </el-form-item>
+                    <el-form-item label="适用规格:" prop="goodsCanFor">
+                        <el-input v-model="tempGood.goodsCanFor"/>
+                    </el-form-item>
+                    <el-form-item label="专属规格:">
+                        <el-input v-model="tempGood.goodsOnlyFor"/>
+                    </el-form-item>
+                    <el-form-item label="包装规格(kg):" prop="goodsSize">
+                        <el-input-number controls-position="right"
+                                         v-model="tempGood.goodsSize"
+                                         :precision="1"
+                                         :step="0.1" :min="0" :max="12"/>
+                    </el-form-item>
+                    <el-form-item label="口味:">
+                        <el-input v-model="tempGood.goodsTaste"/>
+                    </el-form-item>
+                    <el-form-item label="特殊功能:">
+                        <el-input v-model="tempGood.goodsSpecial"/>
+                    </el-form-item>
+                    <el-form-item label="出厂日期:">
+                        <span>{{ props.row.goodsDate }}</span>
+                    </el-form-item>
+                    <el-form-item label="保质期:">
+                        <span>{{ props.row.goodsTime }}</span>
+                    </el-form-item>
+                    <el-form-item label="产地:">
+                        <span>{{ props.row.goodsRegion.join(" / ") }}</span>
+                    </el-form-item>
+                    <el-form-item label="价格(元):" prop="goodsPrice">
+                        <el-input v-model="tempGood.goodsPrice"/>
+                    </el-form-item>
+                    <el-form-item class="goods-tags" label="商品特色:">
+                        <el-tag
+                                :key="index"
+                                v-for="(tag,index) in tempGood.goodsIntro"
+                                closable
+                                :disable-transitions="true"
+                                @close="handleTagClose(tag)">
+                            {{tag}}
+                        </el-tag>
+                        <el-input
+                                class="input-new-tag"
+                                v-if="tagInputVisible"
+                                v-model="tagInputValue"
+                                ref="saveTagInput"
+                                size="small"
+                                @keyup.enter.native="handleTagInputConfirm"
+                                @blur="handleTagInputConfirm">
+                        </el-input>
+                        <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ 新特色
+                        </el-button>
+                    </el-form-item>
+                    <el-form-item class="goods-img-container" label="商品图片:" prop="goodsImg">
+                        <el-upload
+                                ref="pictureUpload"
+                                class="upload-goods-picture"
+                                action="http://localhost:8081/goodsManagement/uploadPictures"
+                                :auto-upload="false"
+                                :multiple="true"
+                                :on-success="onUploadSuccess">
+                            <el-button style="margin-right: 10px;" slot="trigger" size="small"
+                                       type="primary">
+                                浏览<i class="el-icon-document el-icon--right"></i>
                             </el-button>
-                        </el-form-item>
-                        <el-form-item class="goods-img-container" label="商品图片:" prop="goodsImg">
-
-                            <el-upload
-                                    ref="pictureUpload"
-                                    class="upload-goods-picture"
-                                    action="http://localhost:8081/goodsManagement/uploadPictures"
-                                    :auto-upload="false"
-                                    :multiple="true"
-                                    :on-success="onUploadSuccess">
-                                <el-button style="margin-right: 10px;" slot="trigger" size="small"
-                                           type="primary">
-                                    浏览<i class="el-icon-document el-icon--right"></i>
-                                </el-button>
-                                <el-button size="small" type="success" @click="onClickUpload">
-                                    上传<i class="el-icon-upload el-icon--right"></i>
-                                </el-button>
-                            </el-upload>
-                            <div class="picture-list">
-                                <div class="goods-img-item" v-for="item of tempGood.goodsImg">
-                                    <img class="goods-img" width="100px" :src="item">
-                                    <i class="el-icon-circle-close goods-img-delete"
-                                       @click="onClickImgDelete(item)"></i>
-                                </div>
+                            <el-button size="small" type="success" @click="onClickUpload">
+                                上传<i class="el-icon-upload el-icon--right"></i>
+                            </el-button>
+                        </el-upload>
+                        <div class="picture-list">
+                            <div class="goods-img-item" v-for="item of tempGood.goodsImg">
+                                <img class="goods-img" width="100px" :src="item">
+                                <i class="el-icon-circle-close goods-img-delete"
+                                   @click="onClickImgDelete(item)"></i>
                             </div>
-                        </el-form-item>
-                    </el-form>
-                    <el-form
-                            label-width="110px"
-                            inline
-                            key="showForm"
-                            class="goods-table-expand"
-                            size="small"
-                            v-else>
-                        <el-form-item label="商品名称:">
-                            <span>{{ props.row.goodsName }}</span>
-                        </el-form-item>
-                        <el-form-item label="商品种类:">
-                            <span>{{ props.row.goodsType }}</span>
-                        </el-form-item>
-                        <el-form-item label="商品材质:">
-                            <span>{{ props.row.goodsMaterial }}</span>
-                        </el-form-item>
-                        <el-form-item label="适用规格:">
-                            <span>{{ props.row.goodsCanFor }}</span>
-                        </el-form-item>
-                        <el-form-item label="专属规格:">
-                            <span>{{ props.row.goodsOnlyFor }}</span>
-                        </el-form-item>
-                        <el-form-item label="包装规格(kg):">
-                            <span>{{ props.row.goodsSize }}</span>
-                        </el-form-item>
-                        <el-form-item label="口味:">
-                            <span>{{ props.row.goodsTaste }}</span>
-                        </el-form-item>
-                        <el-form-item label="特殊功能:">
-                            <span>{{ props.row.goodsSpecial }}</span>
-                        </el-form-item>
-                        <el-form-item label="出厂日期:">
-                            <span>{{ props.row.goodsDate }}</span>
-                        </el-form-item>
-                        <el-form-item label="保质期:">
-                            <span>{{ props.row.goodsTime }}</span>
-                        </el-form-item>
-                        <el-form-item label="产地:">
-                            <span>{{ props.row.goodsRegion.join(" / ") }}</span>
-                        </el-form-item>
-                        <el-form-item label="价格(元):">
-                            <span>{{ props.row.goodsPrice }}</span>
-                        </el-form-item>
-                        <el-form-item class="goods-tags" label="商品特色:">
-                            <el-tag
-                                    :key="index"
-                                    :disable-transitions="true"
-                                    v-for="(tag,index) in props.row.goodsIntro">
-                                {{tag}}
-                            </el-tag>
-                        </el-form-item>
-                        <el-form-item class="goods-img-container" label="商品图片:">
-                            <el-popover
-                                    v-for="item of props.row.goodsImg"
-                                    placement="top"
-                                    width="500"
-                                    trigger="hover">
-                                <img width="500" :src="item" alt="">
-                                <img
-                                        slot="reference"
-                                        class="goods-img"
-                                        width="100px"
-                                        :src="item"/>
-                            </el-popover>
-                        </el-form-item>
-                    </el-form>
-                    <el-button-group class="edit-btn-group">
-                        <el-button @click="enableEdit(props.$index)">修改</el-button>
-                        <template v-if="isAllowEdit(props.$index)">
-                            <el-button @click="onSubmit">提交
-                            </el-button>
-                            <el-button @click="disableEdit">取消</el-button>
-                        </template>
-                    </el-button-group>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="商品名称"
-                    prop="goodsName">
-            </el-table-column>
-            <el-table-column
-                    label="商品种类"
-                    prop="goodsType">
-            </el-table-column>
-            <el-table-column
-                    label="商品特色">
-                <template slot-scope="scope">
-                    <el-tag
-                            class="show-tags"
-                            :key="index"
-                            v-for="(tag,index) in scope.row.goodsIntro"
-                            :disable-transitions="true">
-                        {{tag}}
-                    </el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    align="center"
-                    label="价格(元)"
-                    prop="goodsPrice">
-            </el-table-column>
-            <el-table-column label="操作" align="center">
-                <template slot-scope="scope">
-                    <el-button size="small" circle class="delete-btn" @click="handleDeleteClick(scope.row)">
+                        </div>
+                    </el-form-item>
+                </el-form>
+                <el-form
+                        label-width="110px"
+                        inline
+                        key="showForm"
+                        class="goods-table-expand"
+                        size="small"
+                        v-else>
+                    <el-form-item label="商品名称:">
+                        <span>{{ props.row.goodsName }}</span>
+                    </el-form-item>
+                    <el-form-item label="商品种类:">
+                        <span>{{ props.row.goodsType }}</span>
+                    </el-form-item>
+                    <el-form-item label="商品材质:">
+                        <span>{{ props.row.goodsMaterial }}</span>
+                    </el-form-item>
+                    <el-form-item label="适用规格:">
+                        <span>{{ props.row.goodsCanFor }}</span>
+                    </el-form-item>
+                    <el-form-item label="专属规格:">
+                        <span>{{ props.row.goodsOnlyFor }}</span>
+                    </el-form-item>
+                    <el-form-item label="包装规格(kg):">
+                        <span>{{ props.row.goodsSize }}</span>
+                    </el-form-item>
+                    <el-form-item label="口味:">
+                        <span>{{ props.row.goodsTaste }}</span>
+                    </el-form-item>
+                    <el-form-item label="特殊功能:">
+                        <span>{{ props.row.goodsSpecial }}</span>
+                    </el-form-item>
+                    <el-form-item label="出厂日期:">
+                        <span>{{ props.row.goodsDate }}</span>
+                    </el-form-item>
+                    <el-form-item label="保质期:">
+                        <span>{{ props.row.goodsTime }}</span>
+                    </el-form-item>
+                    <el-form-item label="产地:">
+                        <span>{{ props.row.goodsRegion.join(" / ") }}</span>
+                    </el-form-item>
+                    <el-form-item label="价格(元):">
+                        <span>{{ props.row.goodsPrice }}</span>
+                    </el-form-item>
+                    <el-form-item class="goods-tags" label="商品特色:">
+                        <el-tag
+                                :key="index"
+                                :disable-transitions="true"
+                                v-for="(tag,index) in props.row.goodsIntro">
+                            {{tag}}
+                        </el-tag>
+                    </el-form-item>
+                    <el-form-item class="goods-img-container" label="商品图片:">
+                        <el-popover
+                                v-for="item of props.row.goodsImg"
+                                placement="top"
+                                width="500"
+                                trigger="hover">
+                            <img width="500" :src="item" alt="">
+                            <img
+                                    slot="reference"
+                                    class="goods-img"
+                                    width="100px"
+                                    :src="item"/>
+                        </el-popover>
+                    </el-form-item>
+                </el-form>
+                <el-button-group class="edit-btn-group">
+                    <el-button @click="enableEdit(props.$index)">修改</el-button>
+                    <el-button v-if="isAllowEdit(props.$index)&&!deepCompare(tempGood,props.row)" @click="onSubmit">提交</el-button>
+                    <el-button v-if="isAllowEdit(props.$index)" @click="disableEdit">取消</el-button>
+                </el-button-group>
+            </template>
+        </el-table-column>
+        <el-table-column
+                label="商品名称"
+                prop="goodsName">
+        </el-table-column>
+        <el-table-column
+                label="商品种类"
+                prop="goodsType">
+        </el-table-column>
+        <el-table-column
+                label="商品特色">
+            <template slot-scope="scope">
+                <el-tag
+                        class="show-tags"
+                        :key="index"
+                        v-for="(tag,index) in scope.row.goodsIntro"
+                        :disable-transitions="true">
+                    {{tag}}
+                </el-tag>
+            </template>
+        </el-table-column>
+        <el-table-column
+                align="center"
+                label="价格(元)"
+                prop="goodsPrice">
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+                <el-button size="small" circle class="delete-btn" @click="handleDeleteClick(scope.row)">
                     <i class="delete-btn-icon el-icon-delete"></i>
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+                </el-button>
+            </template>
+        </el-table-column>
+    </el-table>
 </template>
 
 <script>
     import rules from "./rules";
-
+    import deepCompare from "./utils/deepCompare";
     import {createNamespacedHelpers} from "vuex";
 
     const {mapState, mapActions} = createNamespacedHelpers("goodsManagement");
@@ -279,6 +275,8 @@
         },
         methods: {
             ...mapActions(["getGoodsAsync", "updateGoodsAsync", "deleteGoodsAsync"]),
+            //
+            deepCompare,
             //是否允许修改
             isAllowEdit(index) {
                 return this.editIndex === index && this.editable;
