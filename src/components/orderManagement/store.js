@@ -1,13 +1,13 @@
 export default {
     namespaced: true,
-    state: {
+    state: {//储存初始化数据
         curPage: 1,
         eachPage: 10,
         rows: [],
         maxPage: 0,
         count: 0,
     },
-    mutations: {
+    mutations: {//对数据进行计算的方法全部写在里面
         getEmpByPage(state, payload) { //state 自己的store的state ---paload 自己的参数
             Object.assign(state, payload)
         },
@@ -19,11 +19,11 @@ export default {
             state.eachPage = payload
         }
     },
-    actions: {
+    actions: {//处理Mutations中已经写好的方法
         //获取
         async asyncGetEmpByPage(context, {curPage, eachPage, objs,_id} = {}) {
             console.log(objs,_id);
-            const data = await fetch("http://localhost:8081/ord", {
+            const data = await fetch("orderManagement/ord", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -42,7 +42,7 @@ export default {
         },
         //新增
         async post(context, {curPage, eachPage,obj} = {}) {
-            const data = await fetch("http://localhost:8081/post", {
+            const data = await fetch("orderManagement/post", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -78,7 +78,7 @@ export default {
         //修改
         async modifys(context,{curPage, eachPage,obj} = {}) {
             console.log("xiu",obj)
-            const data = await fetch("http://localhost:8081/modify:id", {
+            const data = await fetch("orderManagement/modify:id", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -97,7 +97,7 @@ export default {
         //删除
         async dels(context, {curPage, eachPage, row} = {}) {
             console.log("删除",row)
-            const data = await fetch("http://localhost:8081/delete", {
+            const data = await fetch("orderManagement/delete", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"

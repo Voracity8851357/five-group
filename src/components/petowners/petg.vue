@@ -4,7 +4,7 @@
                 :data="rows"
                 border
                 :key="rows._id"
-                style="width: 100%;text-align: center">
+                style="width: 100%;text-align: center;margin-top: 20px">
             <el-table-column
                     prop="memberPhone"
                     label="电话号码">

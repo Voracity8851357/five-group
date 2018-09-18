@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="top">
         <el-button type="primary" icon="el-icon-plus" @click="handleDialogOpen">新增商品</el-button>
         <el-dialog
                 :visible.sync="dialogVisible"
@@ -76,7 +76,7 @@
                 <el-form-item label="出生日期：">
                     <div class="block" >
                         <el-date-picker
-                                style="width: 300px"
+                                style="width: 300px;margin-left: 80px"
                                 v-model="obj.pet[0].value11"
                                 type="date"
                                 placeholder="选择日期"
@@ -224,5 +224,7 @@
 </script>
 
 <style scoped>
+.top{padding: 20px}
+
 
 </style>

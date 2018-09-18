@@ -21,7 +21,6 @@
             </el-menu-item>
             <el-menu-item index="1" @click="posts">新增订单</el-menu-item>
         </el-menu>
-        x
         <el-table
                 :data="rows"
                 border
@@ -141,7 +140,10 @@
     export default {
         name: "orderManagement",
         created() {
-            this.asyncGetEmpByPage({_id:this._id});
+            console.log(this._id)
+            if(!this._id===""){
+                this.asyncGetEmpByPage({_id:this._id});
+            }
         },
         data() {
             return {
