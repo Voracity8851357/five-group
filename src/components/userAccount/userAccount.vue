@@ -1,19 +1,18 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="padding: 20px">
         <el-tab-pane label="用户管理" name="first">
-            <el-button type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">添加
+            <el-button type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true"
+                       style="margin-right: 20px">添加
             </el-button>
             <!--搜索-->
-            <div style="margin-top: 15px;">
-                <el-input placeholder="请输入内容" v-model="search" class="input-with-select" style="width: 500px">
-                    <el-select v-model="searchSelect" slot="prepend" placeholder="请选择" style="width: 100px">
-                        <el-option label="账号" value="userAcount"></el-option>
-                        <el-option label="手机" value="userPhone"></el-option>
-                        <el-option label="邮箱" value="userMail"></el-option>
-                    </el-select>
-                    <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
-                </el-input>
-            </div>
+            <el-input placeholder="请输入搜索内容" v-model="search" class="input-with-select" style="width: 500px">
+                <el-select v-model="searchSelect" slot="prepend" placeholder="请选择" style="width: 100px">
+                    <el-option label="账号" value="userAcount"></el-option>
+                    <el-option label="手机" value="userPhone"></el-option>
+                    <el-option label="邮箱" value="userMail"></el-option>
+                </el-select>
+                <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+            </el-input>
 
             <!--添加窗口-->
             <el-dialog title="添加用户" :visible.sync="dialogFormVisible">
