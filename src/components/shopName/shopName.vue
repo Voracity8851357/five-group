@@ -368,8 +368,7 @@ export default {
         shopLocation: "",
         shopCorporate: "",
         shopVip: "",
-        shopStatus: "1",
-        userId:""
+        shopStatus: "1"
       },
       deleteID: "",
       editID: "",
@@ -411,7 +410,7 @@ export default {
       "rows",
       "audit"
     ]),
-     ...mapState("app",["_id"])
+    ...mapState("app", ["_id"])
   },
   mounted: function() {
     this.asyncGetShopByPage();
@@ -444,8 +443,8 @@ export default {
       this.activeName = tab.name;
     },
     // 增加
-    addShop:function() {
-       this.asyncGetAddShop({
+    addShop: function() {
+      this.asyncGetAddShop({
         shopName: this.form.shopName,
         shopAdd: this.form.shopAdd, //地址
         shopLicenceNum: this.form.shopLicenceNum,
@@ -514,7 +513,7 @@ export default {
     },
     // 审核
     async handleAllow(index, row) {
-      console.log(row)
+      console.log(row);
       await this.async_putAudit({
         shopStatus: "1",
         _id: row._id
@@ -523,8 +522,8 @@ export default {
       this.asyncGetShopByPage();
     },
     async handleDeny(index, row) {
-     await this.async_putAudit({
-       shopStatus: "2",
+      await this.async_putAudit({
+        shopStatus: "2",
         _id: row._id
       });
       this.async_getAudit();
@@ -589,7 +588,7 @@ export default {
   margin-left: 20px;
   margin-top: 20px;
   width: 100%;
-  text-align: center
+  text-align: center;
 }
 .shopImg {
   width: 50px;

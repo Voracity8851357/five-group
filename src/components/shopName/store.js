@@ -9,7 +9,6 @@ export default {
     total: 0,
     rows: [],
     audit: [],
-    userId:""
   },
   mutations: {
     getShopByPage(state, payload) {
