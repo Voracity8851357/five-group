@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions ,mapState} from "vuex";
 export default {
   name: "applyForShop",
   data() {
@@ -117,7 +117,8 @@ export default {
         shopVip:'',
         userId:'',
         shopStatus: '0',
-        shopCorporate:''
+        shopCorporate:'',
+        userId:this._id
       },
     dialogImageUrl: '',
     dialogVisible: false,
@@ -130,6 +131,9 @@ export default {
         ]
       }
     };
+  },
+  computed:{
+          ...mapState("app",["_id"])
   },
   methods: {
     ...mapActions("applyForShop", ["getAddShop"]),
@@ -174,6 +178,7 @@ export default {
         userId:this.formData.userId,
         shopVip:this.formData.shopVip,
         shopCorporate:this.formData.shopCorporate,
+        userId:this.formData.userId
       });
       this.$refs.formData.resetFields()
     }, 

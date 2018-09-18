@@ -22,8 +22,8 @@ export default new Vuex.Store({
         userAccount,
         orderManagement,
         serviceManage,
+        shopName,
         applyForShop,
-        goodsManagement,
         app,
         userAccount,
     }

@@ -351,7 +351,7 @@ import { mapActions, mapState, mapMutations } from "vuex";
 export default {
   name: "shopName",
   created() {
-    this.asyncGetShopByPage();
+    this.asyncGetShopByPage({userId:this.userId});
   },
   data() {
     return {
@@ -410,7 +410,8 @@ export default {
       "total",
       "rows",
       "audit"
-    ])
+    ]),
+    ...mapState("app",["_id"])
   },
   mounted: function() {
     this.asyncGetShopByPage();

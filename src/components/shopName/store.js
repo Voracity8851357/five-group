@@ -1,3 +1,4 @@
+
 export default {
   namespaced: true,
   // 门店管理列表
@@ -8,7 +9,7 @@ export default {
     total: 0,
     rows: [],
     audit: [],
-    userId: "",
+    userId:""
   },
   mutations: {
     getShopByPage(state, payload) {
@@ -34,7 +35,7 @@ export default {
       eachPage = 10,
       searchType = "",
       searchText = "",
-      userId
+      userId=""
     } = {}) {
       let url = "";
       if (searchType != '' & searchText != '') {
