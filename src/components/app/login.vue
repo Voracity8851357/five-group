@@ -46,7 +46,7 @@
             }
         },
         computed: {
-            ...mapState('app', ['isLogin', 'userType', 'userStatus'])
+            ...mapState('app', ['isLogin', 'userType', 'userStatus', '_id'])
         },
         methods: {
             reg() {
@@ -74,6 +74,7 @@
                             this.$alert('登陆成功！', '登录', {
                                 confirmButtonText: '确定',
                                 callback: action => {
+                                    localStorage.setItem('id', this._id);
                                     this.$router.push('index')
                                 }
                             });

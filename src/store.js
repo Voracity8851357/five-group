@@ -2,12 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import store from '../src/components/petowners/store'    //引入自己的store
 
+
 import goodsManagement from "./components/goodsManagement/store";
 import serviceManage from './components/serviceManage/store'
-
 import applyForShop from './components/applyForShop/store'
-
-
 import app from './components/app/store';
 import userAccount from './components/userAccount/store';
 import orderManagement from './components/orderManagement/store'
@@ -24,7 +22,5 @@ export default new Vuex.Store({
         serviceManage,
         shopName,
         applyForShop,
-        app,
-        userAccount,
     }
 });

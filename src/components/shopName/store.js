@@ -35,7 +35,6 @@ export default {
       eachPage = 10,
       searchType = "",
       searchText = "",
-
     } = {}) {
       let url = "";
       if (searchType != '' & searchText != '') {

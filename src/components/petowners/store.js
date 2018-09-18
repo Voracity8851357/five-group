@@ -22,7 +22,7 @@ export default {
     actions: {
         //存
         async PostEmpByPage(context, { curPage, eachPage,obj } = {}) {
-            const data = await fetch("http://localhost:8081/pet", {
+            const data = await fetch("petOwners/pet", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -41,7 +41,7 @@ export default {
         //删除
         async deleve(context, { curPage, eachPage,del} = {}) {
             console.log(del, '参数');
-            const data = await fetch('http://localhost:8081/del', {
+            const data = await fetch('petOwners/del', {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -60,7 +60,7 @@ export default {
         },
         //获取
         async asyncGetEmpByPage(context, { curPage, eachPage } = {}) {
-            const data = await fetch("http://localhost:8081/out", {
+            const data = await fetch("petOwners/out", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -96,13 +96,13 @@
 </template>
 
 <script>
-import { mapActions ,mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
+
 export default {
   name: "applyForShop",
   data() {
     return {
-      ctiy: {},
-      formData: {
+        formData: {
         shopName: "", //店铺名称
         shopAdd: "", //地址
         shopLicenceNum: "",
@@ -112,17 +112,17 @@ export default {
         endTime: "",
         shopFeature: "",
         shopLicenceImg: [],
-        shopImg:[],
-        shopLocation:'',
-        shopVip:'',
-        shopStatus: '0',
-        shopCorporate:'',
-        userId:`${this._id}`,
+        shopImg: [],
+        shopLocation: "",
+        shopVip: "",
+        shopStatus: "0",
+        shopCorporate: "",
+        userId:localStorage.getItem("id")
       },
-    dialogImageUrl: '',
-    dialogVisible: false,
-     fileLists: [], 
-      rules: {
+        dialogImageUrl: "",
+        dialogVisible: false,
+        fileLists: [],
+        rules: {
         name: [{ required: true, message: "请输入店铺名称", trigger: "blur" }],
         phone: [
           { required: true, message: "请输入联系电话" },
@@ -131,37 +131,37 @@ export default {
       }
     };
   },
-  computed:{
-          ...mapState("app",["_id"])
+  computed: {
+    ...mapState("app", ["_id"])
   },
   methods: {
     ...mapActions("applyForShop", ["getAddShop"]),
-            //图片上传
-            onClickUpload() {
-                this.$refs.pictureUpload.submit();
-            },
-            //上传成功
-            onUploadSuccess(response) {
-                this.formData.shopImg.push(...response.path);
-                this.$refs.formData.validateField("shopImg");
-            },
-             // 图片
+    //图片上传
+    onClickUpload() {
+      this.$refs.pictureUpload.submit();
+    },
+    //上传成功
+    onUploadSuccess(response) {
+      this.formData.shopImg.push(...response.path);
+      this.$refs.formData.validateField("shopImg");
+    },
+    // 图片
     handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
-      handlePictureSuccess(response,file,fileList){
-        console.log(file)
-        this.formData.shopImg=response.url
-      },
-      handlePictureLicenceSuccess(response,file,fileList){
-        this.formData.shopLicenceImg=response.url
-      },
-   async addShop() {
-     await this.getAddShop({
+      console.log(file, fileList);
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handlePictureSuccess(response, file, fileList) {
+      console.log(file);
+      this.formData.shopImg = response.url;
+    },
+    handlePictureLicenceSuccess(response, file, fileList) {
+      this.formData.shopLicenceImg = response.url;
+    },
+    async addShop() {
+      await this.getAddShop({
         shopName: this.formData.shopName,
         shopAdd: this.formData.shopAdd, //地址
         shopLicenceNum: this.formData.shopLicenceNum,
@@ -170,18 +170,16 @@ export default {
         startTime: this.formData.startTime,
         endTime: this.formData.endTime,
         shopFeature: this.formData.shopFeature,
-        shopLicenceImg:this.formData.shopLicenceImg,
-        shopImg:this.formData.shopImg,
-        shopLocation:this.formData.shopLocation,
-        shopStatus:this.formData.shopStatus,
-        userId:this.formData.userId,
-        shopVip:this.formData.shopVip,
-        shopCorporate:this.formData.shopCorporate,
-        userId:this.formData.userId
+        shopLicenceImg: this.formData.shopLicenceImg,
+        shopImg: this.formData.shopImg,
+        shopLocation: this.formData.shopLocation,
+        shopStatus: this.formData.shopStatus,
+        userId: this.formData.userId,
+        shopVip: this.formData.shopVip,
+        shopCorporate: this.formData.shopCorporate
       });
-      this.$refs.formData.resetFields()
-    }, 
-   
+        this.$refs.formData.resetFields();
+    }
   }
 };
 </script>

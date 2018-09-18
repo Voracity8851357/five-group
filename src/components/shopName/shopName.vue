@@ -351,7 +351,7 @@ import { mapActions, mapState, mapMutations } from "vuex";
 export default {
   name: "shopName",
   created() {
-    this.asyncGetShopByPage({userId:this.userId});
+    this.asyncGetShopByPage();
   },
   data() {
     return {
