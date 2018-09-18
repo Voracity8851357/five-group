@@ -115,10 +115,9 @@ export default {
         shopImg:[],
         shopLocation:'',
         shopVip:'',
-        userId:'',
         shopStatus: '0',
         shopCorporate:'',
-        userId:this._id
+        userId:`${this._id}`,
       },
     dialogImageUrl: '',
     dialogVisible: false,

@@ -5,9 +5,9 @@
                 :default-active="activeIndex2"
                 class="el-menu-demo"
                 mode="horizontal"
-                background-color="#545c64"
-                text-color="#fff"
-                active-text-color="#ffd04b">
+                background-color="#FFF"
+                text-color="#000000"
+                active-text-color="#000000">
             <el-menu-item index="1">客户订单</el-menu-item>
             <el-menu-item index="2">
                 <el-input placeholder="请输入内容" v-model="input5" class="input-with-select">
@@ -141,7 +141,7 @@
     export default {
         name: "orderManagement",
         created() {
-            this.asyncGetEmpByPage();
+            this.asyncGetEmpByPage({_id:this._id});
         },
         data() {
             return {
@@ -151,6 +151,7 @@
                 activeIndex: '1',
                 activeIndex2: '1',
                 obj: {
+                    id:`${this._id}`,
                     _id: '',
                     memberName: '',
                     ordernumber: '',
@@ -192,12 +193,12 @@
             modify(obj,id) {
                 console.log(obj,id);
                 if (!Object.keys(id).length) {
-                    console.log("1")
+                    // console.log("1")
                     this.post({obj});
                     this.obj = {};
                 }
                 else{
-                    console.log("2");
+                    // console.log("2");
                     this.modifys({obj, id});
                 }
                 this.dialogVisible = false;
@@ -223,7 +224,6 @@
                 }
                 else if (select === 'memberPhone') {
                     objs = {memberPhone: input5}
-
                 } else {
                     objs = {ordernumber: input5}
                 }
@@ -251,7 +251,8 @@
         },
         //计算属性
         computed: {
-            ...mapState("orderManagement", ["curPage", "eachPage", "maxPage", "count", "rows"])
+            ...mapState("orderManagement", ["curPage", "eachPage", "maxPage", "count", "rows"]),
+            ...mapState('app',["_id"]),
         },
 
     }
@@ -263,6 +264,6 @@
     }
 
     .input-with-select .el-input-group__prepend {
-        background-color: #fff;
+        background-color: white;
     }
 </style>

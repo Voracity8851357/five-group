@@ -16,7 +16,7 @@ export default {
     actions: {
         //登录
         async async_login(context, {userAcount, password}) {
-            const data = await fetch(`/users/login?userAcount=${userAcount}&password=${password}`)
+            const data = await fetch(`/users/login?userAcount=${userAcount}&userPwd=${password}`)
                 .then(response => {
                     return response.json()
                 });

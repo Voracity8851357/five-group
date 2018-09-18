@@ -35,13 +35,13 @@ export default {
       eachPage = 10,
       searchType = "",
       searchText = "",
-      userId=""
+
     } = {}) {
       let url = "";
       if (searchType != '' & searchText != '') {
-        url = `http://localhost:8081/shopManagement/getShopByPage?userId=${userId}&page=${curPage}&rows=${eachPage}&type=${searchType}&text=${searchText}`
+        url = `http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}&type=${searchType}&text=${searchText}`
       } else {
-        url = `http://localhost:8081/shopManagement/getShopByPage?userId=${userId}&page=${curPage}&rows=${eachPage}`
+        url = `http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}`
       }
       const data = await fetch(url, {
         headers: {
@@ -59,7 +59,7 @@ export default {
           item.shopStatus = '审核未通过'
         }
       });
-      context.commit("getShopByPage", {rows:data.rows})
+      context.commit("getShopByPage",data)
     },
     // 增加门店
     async asyncGetAddShop(context, payload) {

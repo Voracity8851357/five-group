@@ -411,7 +411,7 @@ export default {
       "rows",
       "audit"
     ]),
-    ...mapState("app",["_id"])
+     ...mapState("app",["_id"])
   },
   mounted: function() {
     this.asyncGetShopByPage();
