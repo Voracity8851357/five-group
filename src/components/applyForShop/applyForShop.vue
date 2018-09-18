@@ -115,7 +115,7 @@ export default {
         shopImg:[],
         shopLocation:'',
         shopVip:'',
-        userName:'',
+        userId:'',
         shopStatus: '0',
         shopCorporate:''
       },
@@ -171,7 +171,7 @@ export default {
         shopImg:this.formData.shopImg,
         shopLocation:this.formData.shopLocation,
         shopStatus:this.formData.shopStatus,
-        userName:this.formData.userName,
+        userId:this.formData.userId,
         shopVip:this.formData.shopVip,
         shopCorporate:this.formData.shopCorporate,
       });
