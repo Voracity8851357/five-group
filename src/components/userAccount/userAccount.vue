@@ -281,6 +281,7 @@
                     _id: this.amend._id
                 });
                 this.dialogAmendVisible = false;
+                this.$message('修改成功');
                 this.async_getUsers()
             },
             async postUser() {
@@ -294,6 +295,7 @@
                     userStatus: '1'
                 });
                 this.dialogFormVisible = false;
+                this.$message('添加成功');
                 this.async_getUsers()
             },
             handleClick(tab, event) {
@@ -314,6 +316,7 @@
                 await this.async_DeleteUsers({
                     _id: row._id
                 });
+                this.$message('删除成功');
                 this.async_getUsers();
             },
             ...mapActions('userAccount', [
