@@ -244,6 +244,7 @@
                 this.async_getUsers();
             },
             async handleDeny(index, row) {
+               
                 this.async_putAudit({
                     userStatus: '2',
                     _id: row._id

@@ -55,7 +55,7 @@ export default {
             commit("refreshStart");
             const uid = rootState.app._id || "5b98b13a2e5e7559506c0d95";
             let {curpage, eachpage, searchText} = state;
-            const tempData = await fetch(`/goodsManagement?uid=${uid}&page=${curpage}&rows=${eachpage}&goodsName=${searchText}`).then(res => res.json());
+            const tempData = await fetch(`/goodsManagement?uid=${uid}&page=${curpage}&rows=${eachpage}&goodsName=${encodeURIComponent(searchText)}`).then(res => res.json());
             commit("addGoods", tempData);
             commit("refreshEnd");
         },
