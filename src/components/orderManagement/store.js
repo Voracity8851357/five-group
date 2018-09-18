@@ -21,8 +21,8 @@ export default {
     },
     actions: {
         //获取
-        async asyncGetEmpByPage(context, {curPage, eachPage, objs} = {}) {
-            console.log(objs);
+        async asyncGetEmpByPage(context, {curPage, eachPage, objs,_id} = {}) {
+            console.log(objs,_id);
             const data = await fetch("http://localhost:8081/ord", {
                 method: "POST",
                 headers: {
@@ -31,13 +31,14 @@ export default {
                 body: JSON.stringify({
                     curPage: curPage || context.state.curPage,
                     eachPage: eachPage || context.state.eachPage,
-                    objs
+                    objs,
+                    _id
                 })
             }).then(response => {
                 return response.json();
             });
             context.commit("getEmpByPage", data);
-            // console.log(data);
+            console.log(data);
         },
         //新增
         async post(context, {curPage, eachPage,obj} = {}) {
@@ -57,24 +58,23 @@ export default {
             context.commit("getEmpByPage", data);
             // console.log(data);
         },
-
-//查询
-//         async as(context, obj) {
-//             console.log(obj);
-//             const data = await fetch(`http://localhost:8081/err?type=${obj.type}&text=${obj.text}`, {
-//                 method: "GET",
-//                 headers: {
-//                     "Content-Type": "application/json"
-//                 },
-//                 // body: JSON.stringify({
-//                 //     obj
-//                 // })
-//             }).then(response => {
-//                 return response.json();
-//             });
-//             context.commit("getEmpByPage", data);
-//             // console.log(data);
-//         },
+        //查询
+        //     async as(context, _id) {
+        //     console.log(_id);
+            // const data = await fetch(`http://localhost:8081/err?type=${obj.type}&text=${obj.text}`, {
+            //     method: "GET",
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //     },
+            //     // body: JSON.stringify({
+            //     //     obj
+            //     // })
+            // }).then(response => {
+            //     return response.json();
+            // });
+            // context.commit("getEmpByPage", data);
+            // console.log(data);
+        // },
         //修改
         async modifys(context,{curPage, eachPage,obj} = {}) {
             console.log("xiu",obj)
