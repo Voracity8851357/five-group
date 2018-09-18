@@ -19,7 +19,7 @@
                         text-color="#fff"
                         active-text-color="#409EFF"
                         router>
-                    <template v-if="userType==='0'">
+                    <template >
                         <el-menu-item index="/index/userAccount">
                             <i class="el-icon-menu"></i>
                             <span slot="title">用户管理</span>
@@ -33,7 +33,7 @@
                             <span slot="title">宠主管理</span>
                         </el-menu-item>
                     </template>
-                    <template v-else>
+                    <template >
                         <el-menu-item index="/index/applyForShop">
                             <i class="el-icon-menu"></i>
                             <span slot="title">门店申请</span>
