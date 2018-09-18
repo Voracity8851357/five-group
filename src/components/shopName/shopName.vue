@@ -368,7 +368,8 @@ export default {
         shopLocation: "",
         shopCorporate: "",
         shopVip: "",
-        shopStatus: "1"
+        shopStatus: "1",
+        userId:""
       },
       deleteID: "",
       editID: "",

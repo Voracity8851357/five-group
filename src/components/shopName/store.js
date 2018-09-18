@@ -7,7 +7,8 @@ export default {
     maxPage: 0,
     total: 0,
     rows: [],
-    audit: []
+    audit: [],
+    userId: "",
   },
   mutations: {
     getShopByPage(state, payload) {
@@ -24,21 +25,22 @@ export default {
     },
     setState(state, payload) {
       Object.assign(state, payload);
-    }
+    },
   },
   actions: {
     // 分页及搜索
-    async asyncGetShopByPage(context, {
+    async asyncGetShopByPage( context, {
       curPage = 1,
       eachPage = 10,
       searchType = "",
-      searchText = ""
+      searchText = "",
+      userId
     } = {}) {
       let url = "";
       if (searchType != '' & searchText != '') {
-        url = `http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}&type=${searchType}&text=${searchText}`
+        url = `http://localhost:8081/shopManagement/getShopByPage?userId=${userId}&page=${curPage}&rows=${eachPage}&type=${searchType}&text=${searchText}`
       } else {
-        url = `http://localhost:8081/shopManagement/getShopByPage?page=${curPage}&rows=${eachPage}`
+        url = `http://localhost:8081/shopManagement/getShopByPage?userId=${userId}&page=${curPage}&rows=${eachPage}`
       }
       const data = await fetch(url, {
         headers: {
