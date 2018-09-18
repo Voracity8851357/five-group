@@ -61,7 +61,9 @@
                     if (this.userType === '0') {
                         this.$alert('登陆成功！', '登录', {
                             confirmButtonText: '确定',
-                            callback: this.$router.push('index')
+                            callback: action => {
+                                this.$router.push('index')
+                            }
                         });
                     } else if (this.userType === '1') {
                         if (this.userStatus === '0') {
@@ -71,7 +73,9 @@
                         } else if (this.userStatus === '1') {
                             this.$alert('登陆成功！', '登录', {
                                 confirmButtonText: '确定',
-                                callback: this.$router.push('index')
+                                callback: action => {
+                                    this.$router.push('index')
+                                }
                             });
                         } else if (this.userStatus === '2') {
                             this.$alert('审核失败！请重新注册', '登录', {
