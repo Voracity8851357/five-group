@@ -50,6 +50,9 @@
            <el-form-item label="服务图片:">
             <img width="120px" height="100px" :src="props.row.serviceImageUrl" alt="">
           </el-form-item>
+           <el-form-item label="服务详情介绍图片:">
+            <img width="120px" height="100px" :src="props.row.serviceInfoImageUrl" alt="">
+          </el-form-item>
         </el-form>
       </template>
     </el-table-column>
@@ -122,13 +125,27 @@
     <el-form-item label="价格" label-width="120px">
       <el-input v-model="addService.servicePrice" auto-complete="off"></el-input>
     </el-form-item>
-    <!-- 上传图片 -->
-    <el-form-item  label="详情图片" label-width="120px">
+    <!-- 上传详情图片 -->
+    <el-form-item  label="服务图片" label-width="120px">
       <el-upload
         :limit=1
-        action="/serviceManage/upload"
+        action="/serviceManage/uploads"
         list-type="picture-card"
         :on-success="handlePictureSuccess"
+        :on-preview="handlePicturePreview"
+        :on-remove="handleRemove">
+        <i class="el-icon-plus"></i>
+        <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件，且不超过500kb</div>
+      </el-upload>
+    </el-form-item>
+
+    <!-- 上传服务介绍图片 -->
+    <el-form-item  label="服务详情介绍" label-width="120px">
+      <el-upload
+        :limit=1
+        action="/serviceManage/uploads"
+        list-type="picture-card"
+        :on-success="handleInfoPicSuccess"
         :on-preview="handlePicturePreview"
         :on-remove="handleRemove">
         <i class="el-icon-plus"></i>
@@ -237,7 +254,8 @@ export default {
         serverLevel: "",
         servicePrice: "",
         serviceDetails: "",
-        serviceImageUrl:'',
+        serviceImageUrl: "",
+        serviceInfoImageUrl: ""
       },
       editService: {
         serviceType: "",
@@ -248,7 +266,7 @@ export default {
         serviceTime: "",
         serverLevel: "",
         servicePrice: "",
-        serviceDetails: "",
+        serviceDetails: ""
       }
     };
   },
@@ -290,7 +308,8 @@ export default {
         serverLevel: this.addService.serverLevel,
         servicePrice: this.addService.servicePrice,
         serviceDetails: this.addService.serviceDetails,
-        serviceImageUrl:this.addService.serviceImageUrl
+        serviceImageUrl: this.addService.serviceImageUrl,
+        serviceInfoImageUrl: this.addService.serviceInfoImageUrl
       });
     },
     //确认修改
@@ -306,7 +325,7 @@ export default {
         serviceTime: this.editService.serviceTime,
         serverLevel: this.editService.serverLevel,
         servicePrice: this.editService.servicePrice,
-        serviceDetails: this.editService.serviceDetails,
+        serviceDetails: this.editService.serviceDetails
       });
     },
     //图片上传
@@ -317,8 +336,13 @@ export default {
       this.dialogImageUrl = file.url;
       this.imageDialogVisible = true;
     },
-     handlePictureSuccess(response, file, fileList) {
-       this.addService.serviceImageUrl=file.url;
+    //服务图片路径
+    handlePictureSuccess(response, file, fileList) {
+      this.addService.serviceImageUrl = file.url;
+    },
+    //服务详情介绍路径
+    handleInfoPicSuccess(response, file, fileList) {
+      this.addService.serviceInfoImageUrl = file.url;
     },
     //翻页
     handleSizeChange(val) {

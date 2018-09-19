@@ -173,7 +173,6 @@
 
             //修改
             handleClick(row) {
-                console.log(row);
                 this.obj._id = row._id;
                 this.dialogVisible = true;
                 this.obj.memberName = row.memberName;
@@ -193,7 +192,6 @@
 
             //修改提交
             modify(obj,id) {
-                console.log(obj,id);
                 if (!Object.keys(id).length) {
                     // console.log("1")
                     this.post({obj});
@@ -207,7 +205,6 @@
             },
             //删除
             handle(row) {
-                console.log(row)
                 this.$confirm('此操作将删除文件, 是否继续?', '提示删除', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -222,7 +219,6 @@
                 let objs = {};
                 if (select === 'memberName') {
                     objs = {memberName: input5}
-                    console.log(objs)
                 }
                 else if (select === 'memberPhone') {
                     objs = {memberPhone: input5}
@@ -234,11 +230,9 @@
             }
             ,
             handleSizeChange(val) {
-                console.log(val);
                 this.setEachPage(val)
             },
             handleCurrentChange(val) {
-                console.log(val);
                 this.setCurPage(val)
             },
         },
