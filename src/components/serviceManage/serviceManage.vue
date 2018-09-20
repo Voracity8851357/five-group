@@ -238,6 +238,7 @@ export default {
       addDialogVisible: false,
       deleteDialogVisible: false,
       editDialogVisible: false,
+      userId: localStorage.getItem("id"),
       deleteID: "",
       editID: "",
       search: "",
@@ -309,7 +310,8 @@ export default {
         servicePrice: this.addService.servicePrice,
         serviceDetails: this.addService.serviceDetails,
         serviceImageUrl: this.addService.serviceImageUrl,
-        serviceInfoImageUrl: this.addService.serviceInfoImageUrl
+        serviceInfoImageUrl: this.addService.serviceInfoImageUrl,
+        userId: this.userId
       });
     },
     //确认修改
