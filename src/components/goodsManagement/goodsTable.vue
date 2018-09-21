@@ -103,7 +103,7 @@
                             </el-button>
                         </el-upload>
                         <div class="picture-list">
-                            <div class="goods-img-item" v-for="item of tempGood.goodsImg">
+                            <div class="goods-img-item" v-for="(item,index) of tempGood.goodsImg" :key="index">
                                 <img class="goods-img" width="100px" :src="item">
                                 <i class="el-icon-circle-close goods-img-delete"
                                    @click="onClickImgDelete(item)"></i>
@@ -163,8 +163,8 @@
                         </el-tag>
                     </el-form-item>
                     <el-form-item class="goods-img-container" label="商品图片:">
-                        <el-popover
-                                v-for="item of props.row.goodsImg"
+                        <el-popover :key="index"
+                                v-for="(item,index) of props.row.goodsImg"
                                 placement="top"
                                 width="500"
                                 trigger="hover">

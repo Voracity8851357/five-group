@@ -311,7 +311,7 @@
             //提交数据
             onSubmit() {
                 this.$refs.goodAddForm.validate(async state => {
-                    if (!state) {
+                    if (state) {
                         const location = [
                             this.location[this.good.goodsRegion[0]].label,
                             this.location[this.good.goodsRegion[0]].cities[this.good.goodsRegion[1]].label,

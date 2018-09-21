@@ -28,30 +28,29 @@
     style="width: 100%">
     <el-table-column type="expand">
       <template slot-scope="props">
-        <el-form label-position="left" inline class="demo-table-expand">
-          <el-form-item label="服务时长:">
+        <el-form  label-position="left" inline class="detailForm">
+          <el-form-item class='show' label="服务时长:">
             <span>{{ props.row.serviceTime }}</span>
           </el-form-item>
-          <el-form-item label="可预约时间:">
+          <el-form-item class='show' label="可预约时间:">
             <span>{{ props.row.serviceSchedule }}</span>
           </el-form-item>
-          <el-form-item label="服务价格:">
+          <el-form-item class='show' label="服务价格:">
             <span>{{ props.row.servicePrice }}</span>
           </el-form-item>
-          <el-form-item label="服务级别:">
+          <el-form-item class='show' label="服务级别:">
             <span>{{ props.row.serviceClass }}</span>
           </el-form-item>
-          <el-form-item label="服务员等级:">
+          <el-form-item  class='show' label="服务员等级:">
             <span>{{ props.row.serverLevel }}</span>
           </el-form-item>
-          <el-form-item label="服务详情:">
+          <el-form-item class='show' label="服务详情:">
             <span>{{ props.row.serviceDetails }}</span>
           </el-form-item>
-           <el-form-item label="服务图片:">
-            <img width="120px" height="100px" :src="props.row.serviceImageUrl" alt="">
-          </el-form-item>
-           <el-form-item label="服务详情介绍图片:">
-            <img width="120px" height="100px" :src="props.row.serviceInfoImageUrl" alt="">
+           <el-form-item class="showImg" label="服务图片:">
+            <div class="detailImg" v-for="(item,index) of props.row.serviceImageUrl" :key="index">
+                  <img class="service-img" width="100px" :src="item">
+            </div>
           </el-form-item>
         </el-form>
       </template>
@@ -128,31 +127,18 @@
     <!-- 上传详情图片 -->
     <el-form-item  label="服务图片" label-width="120px">
       <el-upload
-        :limit=1
         action="/serviceManage/uploads"
         list-type="picture-card"
         :on-success="handlePictureSuccess"
         :on-preview="handlePicturePreview"
-        :on-remove="handleRemove">
+        :multiple="true"
+        >
         <i class="el-icon-plus"></i>
-        <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件，且不超过500kb</div>
-      </el-upload>
-    </el-form-item>
-
-    <!-- 上传服务介绍图片 -->
-    <el-form-item  label="服务详情介绍" label-width="120px">
-      <el-upload
-        :limit=1
-        action="/serviceManage/uploads"
-        list-type="picture-card"
-        :on-success="handleInfoPicSuccess"
-        :on-preview="handlePicturePreview"
-        :on-remove="handleRemove">
-        <i class="el-icon-plus"></i>
-        <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件，且不超过500kb</div>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
     </el-form-item>
   </el-form>
+
   <div slot="footer" class="dialog-footer">
     <el-button @click="addDialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="confirmAdd">确 定</el-button>
@@ -255,8 +241,7 @@ export default {
         serverLevel: "",
         servicePrice: "",
         serviceDetails: "",
-        serviceImageUrl: "",
-        serviceInfoImageUrl: ""
+        serviceImageUrl: [],
       },
       editService: {
         serviceType: "",
@@ -310,7 +295,6 @@ export default {
         servicePrice: this.addService.servicePrice,
         serviceDetails: this.addService.serviceDetails,
         serviceImageUrl: this.addService.serviceImageUrl,
-        serviceInfoImageUrl: this.addService.serviceInfoImageUrl,
         userId: this.userId
       });
     },
@@ -339,8 +323,8 @@ export default {
       this.imageDialogVisible = true;
     },
     //服务图片路径
-    handlePictureSuccess(response, file, fileList) {
-      this.addService.serviceImageUrl = file.url;
+    handlePictureSuccess(response) {
+      this.addService.serviceImageUrl.push(response.url);
     },
     //服务详情介绍路径
     handleInfoPicSuccess(response, file, fileList) {
@@ -357,5 +341,32 @@ export default {
 };
 </script>
 <style scoped>
+.service-img {
+        border: 1px solid #eee;
+        margin-right: 10px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .show{
+      margin: 20px;
+      width: 100px;
+      height: 50px;
+    }
+    .showImg{
+      margin: 20px;
+      width: 300px;
+      height: 200px;
+    }
+    .detailForm{
+      display: flex;
+      flex-direction: column;
+      height: 450px;
+      flex-wrap: wrap;  
+    }
+    .detailImg{
+      margin-left: 20px;
+     
+    }
+   
 </style>
 

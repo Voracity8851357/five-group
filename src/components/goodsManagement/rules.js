@@ -9,19 +9,19 @@ export default {
         {required: true, message: '请输入种类', trigger: 'blur'},
     ],
     goodsMaterial: [
-        {required: false, min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'},
+        {required: false, min: 2, max: 50, message: '长度在 2 到 10 个字符', trigger: 'blur'},
     ],
     goodsCanFor: [
-        {required: false, min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'},
+        {required: false, min: 2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur'},
     ],
     goodsOnlyFor: [
-        {required: false, min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'},
+        {required: false, min: 2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur'},
     ],
     goodsTaste: [
-        {required: false, min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'},
+        {required: false, min: 2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur'},
     ],
     goodsSpecial: [
-        {required: false, min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'},
+        {required: false, min: 2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur'},
     ],
     goodsIntro: [
         {
@@ -37,7 +37,7 @@ export default {
     ],
     goodsSize: [
         {required: true, message: '请输入规格', trigger: 'blur'},
-        {type: 'number', min: 0.1, message: '规格不能为 0',},
+        {type: 'number', min: 0, message: '',},
     ],
     goodsPrice: [
         {
