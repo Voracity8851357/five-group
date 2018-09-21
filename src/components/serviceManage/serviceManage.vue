@@ -346,11 +346,11 @@ export default {
     }
     .show{
       margin: 20px;
-      width: 500px;
+      width: 650px;
       height: 50px;
     }
     .showImg{
-      margin: 20px;
+      margin: 20px 10px;
       width: 300px;
       height: 200px;
     }
