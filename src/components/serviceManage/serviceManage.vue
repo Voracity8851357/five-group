@@ -86,12 +86,12 @@
               :total="total">
           </el-pagination>
  <!-- 增加对话框 -->
- <el-dialog ref="addform" title="添加服务" :visible.sync="addDialogVisible">
-  <el-form >
-    <el-form-item label="服务名称" label-width="120px">
-      <el-input v-model="addService.serviceName" auto-complete="off"></el-input>
+ <el-dialog  title="添加服务" :visible.sync="addDialogVisible" >
+  <el-form ref="addform" :model="addService" >
+    <el-form-item label="服务名称" label-width="120px" prop='serviceName'>
+      <el-input  v-model="addService.serviceName" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="服务类型" label-width="120px">
+    <el-form-item label="服务类型" label-width="120px" prop='serviceType'>
       <el-select v-model="addService.serviceType" placeholder="请选择服务类型">
         <el-option label="宠物美容" value="宠物美容"></el-option>
          <el-option label="宠物洗浴" value="宠物洗浴"></el-option>
@@ -103,29 +103,29 @@
             <el-option label="宠物殡葬" value="宠物殡葬"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="服务排期" label-width="120px">
+    <el-form-item label="服务排期" label-width="120px" prop='serviceSchedule'>
       <el-input v-model="addService.serviceSchedule" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="服务适用" label-width="120px">
+    <el-form-item label="服务适用" label-width="120px" prop='serviceCanFor'>
       <el-input v-model="addService.serviceCanFor" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="服务级别" label-width="120px">
+    <el-form-item label="服务级别" label-width="120px" prop='serviceClass'>
       <el-input v-model="addService.serviceClass" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="服务时长" label-width="120px">
+    <el-form-item label="服务时长" label-width="120px" prop='serviceTime'>
       <el-input v-model="addService.serviceTime" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="服务员等级" label-width="120px">
+    <el-form-item label="服务员等级" label-width="120px" prop='serviceLevel'>
       <el-input v-model="addService.serverLevel" auto-complete="off"></el-input>
     </el-form-item>
-     <el-form-item label="服务详情" label-width="120px">
+     <el-form-item label="服务详情" label-width="120px" prop='serviceDetails'>
       <el-input v-model="addService.serviceDetails" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="价格" label-width="120px">
+    <el-form-item label="价格" label-width="120px" prop='servicePrice'>
       <el-input v-model="addService.servicePrice" auto-complete="off"></el-input>
     </el-form-item>
     <!-- 上传详情图片 -->
-    <el-form-item  label="服务图片" label-width="120px">
+    <el-form-item  label="服务图片" label-width="120px" prop='serviceImageUrl'>
       <el-upload
         action="/serviceManage/uploads"
         list-type="picture-card"
@@ -297,6 +297,8 @@ export default {
         serviceImageUrl: this.addService.serviceImageUrl,
         userId: this.userId
       });
+      this.addService.serviceImageUrl.length=0;
+      this.$refs.addform.resetFields();
     },
     //确认修改
     confirmEdit: function() {
@@ -315,21 +317,16 @@ export default {
       });
     },
     //图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
+   
     handlePicturePreview(file) {
       this.dialogImageUrl = file.url;
       this.imageDialogVisible = true;
     },
-    //服务图片路径
+    //服务图片上传成功
     handlePictureSuccess(response) {
       this.addService.serviceImageUrl.push(response.url);
     },
-    //服务详情介绍路径
-    handleInfoPicSuccess(response, file, fileList) {
-      this.addService.serviceInfoImageUrl = file.url;
-    },
+  
     //翻页
     handleSizeChange(val) {
       this.asyncgetServiceByPage({ eachpage: val });
@@ -349,7 +346,7 @@ export default {
     }
     .show{
       margin: 20px;
-      width: 100px;
+      width: 500px;
       height: 50px;
     }
     .showImg{
@@ -365,7 +362,6 @@ export default {
     }
     .detailImg{
       margin-left: 20px;
-     
     }
    
 </style>
